@@ -4,7 +4,7 @@ import { Magic } from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
 import { findReference, FindReferenceError } from "@solana/pay";
 import { useWallet } from "@solana/wallet-adapter-react";
-import buyMagic from "./MagicWallet/buy";
+import MagicButton from "./MagicWallet/buy";
 import { createTransaction } from "./MagicWallet/buy"
 // import IPFSDownload from "./IpfsDownload";
 // import Green from '../components/Alert/Green';
@@ -601,9 +601,9 @@ export default function Buy({
           {shipping.international ? shipping.international : null}
         </p>
       ) : null}
-      {item && infoCaptured ? (
+      {!buyWithMagic && item && infoCaptured ? (
         <>
-          {item.product.type != "tipjar" ? (
+          {!buyWithMagic && item.product.type != "tipjar" ? (
             <>
               <h3 className="purchased">Purchase Complete!</h3>
 
@@ -629,7 +629,7 @@ export default function Buy({
         </>
       ) : (
         <>
-          {tipJar && shippingCaptured ? (
+          {!buyWithMagic && tipJar && shippingCaptured ? (
       
               <button
                 disabled={loading || !infoCaptured || !shippingCaptured}
@@ -642,7 +642,7 @@ export default function Buy({
           ) : (
             null
           )}
-            {!tipJar && shippingCaptured && infoCaptured ? (
+            {!buyWithMagic && !tipJar && shippingCaptured && infoCaptured ? (
               <button
               disabled={loading || !infoCaptured || !shippingCaptured}
               className="buy-button"
@@ -652,7 +652,7 @@ export default function Buy({
             </button>
           ): null}
 
-          {buyWithMagic && <buyMagic order={order} />}
+          {buyWithMagic && <MagicButton order={order} />}
         </>
       )}
     </div>

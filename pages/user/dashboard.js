@@ -311,29 +311,11 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      {/* <div className={styles.recent_links_container}> */}
-      {/* SUBSCRIPTION TABLE FOR USER */}
-      {/* {userPublicKey ? <UserSubs publicKey={userPublicKey} /> : null} */}
 
-      {/* NO USER LINKS CREATED */}
-      {userLinks.length > 0 && !loading ? (
-        renderProductLinks()
-      ) : (
-        <p>No Links Created</p>
-      )}
-      {/* {userTipJar.length > 0 && !loading ? (
-          renderTipJar()
-        ) : (
-          <p>No Tip Jar Created</p>
-        )} */}
-      {/* {userLinks.length > 0 && !loading ? (
-        <PayRequests publicKey={userPublicKey}/>
-        ) : (
-          <p>No Links Created</p>
-        )} */}
+      {/* LINKS AND TIP JAR RENDER */}
+      {renderProductLinks()}
+
     </div>
-    //{" "}
-    // </div>
   );
 
   const renderProductLinks = () => {
@@ -502,30 +484,12 @@ function Dashboard() {
             </div>
           ))}
           <div className="btn_container pay_btn">
-            <div className="button_drop">
+            <div onClick={() => setShowCreateLink(true)} className="button_drop">
               <p>Create a Paylink</p>
               <div className="arrow_bg">
                 <IoChevronDown className="arrow_drop" />
               </div>
             </div>
-            {/* <div className="dropdown_drop">
-                        <a href="#" id="adobeXd">
-                          Adobe XD
-                          <span></span>
-                        </a>
-                        <a href="#" id="sketch">
-                          Sketch
-                          <span></span>
-                        </a>
-                        <a href="#" id="figma">
-                          Figma
-                          <span></span>
-                        </a>
-                        <a href="#" id="inVision">
-                          InVision
-                          <span></span>
-                        </a>
-                      </div> */}
           </div>
         </div>
       </div>
@@ -618,6 +582,7 @@ function Dashboard() {
   useEffect(() => {
     if (publicKey) {
       // checkOwnership();
+      console.log('publicKey', publicKey.toString())
       setUserPublicKey(publicKey.toString());
       setCurrentWallet(publicKey.toString());
       const owner = publicKey.toString();
@@ -639,9 +604,9 @@ function Dashboard() {
         }
       };
       getAllProducts();
-      // console.log("these are the owners products", ownerProducts);
-      // console.log("these are the user links", userLinks);
-      // console.log("these are the user tip jar", userTipJar);
+      console.log("these are the owners products", ownerProducts);
+      console.log("these are the user links", userLinks);
+      console.log("these are the user tip jar", userTipJar);
     }
   }, [publicKey]);
 
@@ -686,7 +651,7 @@ function Dashboard() {
     if (window.location.href.includes("?payhub=true")) {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
-  });
+  }, []);
 
   return (
     <div className={styles.parent_container}>

@@ -287,9 +287,36 @@ export default function HeaderComponent() {
   };
 
   useEffect(() => {
-    if (!publicKey) return;
+    if (publicKey) {
     setIsMultiStoreOwner(false);
     setMultiStoreArray(null);
+    setMagicPublicKey(publicKey.toString());
+    async function getBalance(pubKey) {
+
+      const balance = await connection.getBalance(pubKey);
+      console.log('balance: ', balance)
+      const convertedBalance = balance / 1000000000;
+      setMagicBalance(convertedBalance);
+    }
+
+    async function getUsdcBalance(pubKey) {
+      const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+      // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
+      try{
+        const associatedTokenAddress = await getAssociatedTokenAddress(usdcAddress, pubKey);
+        console.log('associatedTokenAddress: ', associatedTokenAddress.toString())
+        const usdcBalance = await connection.getTokenAccountBalance(associatedTokenAddress);
+        console.log('usdcBalance: ', usdcBalance.value.uiAmount)
+        const convertedUsdcBalance = usdcBalance.value.uiAmount;
+        setMagicUsdcBalance(convertedUsdcBalance);
+      } catch (error) {
+        console.log('error: ', error)
+      }
+
+    }
+
+    getBalance(publicKey);
+    getUsdcBalance(publicKey);
     (async () => {
       // check local storage for store_owner_array, if it does not exist then create it
       if (localStorage.getItem("store_owner_array") === null) {
@@ -314,21 +341,8 @@ export default function HeaderComponent() {
         localStorage.setItem("active_store", JSON.stringify(store_symbols[0]));
         setIsMultiStoreOwner(true);
       }
-      const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-        extensions: {
-            solana: new SolanaExtension({
-            rpcUrl
-            })
-        }
-        });
-
-      //check for window.localStorage.getItem('elusivBalance'); if it does not exist then create it and set to 0
-      if (localStorage.getItem("elusivBalance") === null) {
-        localStorage.setItem("elusivBalance", JSON.stringify(0));
-      }
-
-      
     })();
+    }
   }, [publicKey, merchant]);
 
   useEffect(() => {
@@ -503,6 +517,9 @@ export default function HeaderComponent() {
 
                     {!publicKey && (
                       renderMagicLogin()
+                    )}
+                    {publicKey && (
+                      <WalletMultiButton />
                     )}
                   </>
                 )}
