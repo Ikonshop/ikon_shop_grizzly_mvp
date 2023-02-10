@@ -17,7 +17,6 @@ import { LogoDiscord, LogoTwitter } from "react-ionicons";
 import dynamic from "next/dynamic";
 import { getCollectionOwner } from "../lib/api";
 import * as web3 from "@solana/web3.js";
-import { IoSwapHorizontalOutline } from "react-icons/io5";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAssociatedTokenAccount, getMint } from "@solana/spl-token";
 import {
@@ -26,6 +25,12 @@ import {
   PublicKey,
   getTokenAccountsByOwner,
 } from "@solana/web3.js";
+import {
+  IoChevronDown,
+  IoSunnyOutline,
+  IoMoonOutline,
+  IoSwapHorizontalOutline,
+} from "react-icons/io5";
 import LoginMagic from "./MagicWallet/login";
 import LogoutMagic from "./MagicWallet/logout";
 import { MagicConnectPayloadMethod } from "@magic-ext/connect";
@@ -44,6 +49,9 @@ export default function HeaderComponent() {
   const router = useRouter();
   const currentPath = router.pathname;
   const [merchant, setMerchant] = useState(false);
+
+  // THEME
+  const [theme, setTheme] = useState("light");
   
   //MAGIC LINK
   const [showMagicLogin, setShowMagicLogin] = useState(false);
@@ -79,6 +87,35 @@ export default function HeaderComponent() {
     window.dispatchEvent(new CustomEvent("magic-logged-out"));
   };
 
+
+  const toggleTheme = () => {
+    console.log('toggle theme')
+    
+    // :root {
+  // --main-background: #fff;
+  // --main-fonts-color: #fff;
+  // --main-decor-color: -webkit-linear-gradient(left, #06beb6 30%, #48b1bf 60%);
+  // --main-bg-color: #fff;
+
+  // --main-shadow-color: #e91c1c;
+  // --main-header-background: #21252e;
+  // --main-font-family: "Manrope" !important;
+  // overflow-x: hidden;
+
+  if(theme === "light") {
+    setTheme("dark");
+  } else {
+    setTheme("light");
+  }
+
+  const isLightTheme = theme === "light" ? true : false;
+
+  // change :root css variables that are used in App.css
+  document.documentElement.style.setProperty("--main-background", isLightTheme ? "#fff" : "#21252e");
+  document.documentElement.style.setProperty("--main-fonts-color", isLightTheme ? "#fff" : "#fff");  
+};
+
+
     
 
   const renderMagicContainer = () => {
@@ -95,7 +132,6 @@ export default function HeaderComponent() {
         }}
       >
         <p>{magicMetadata.email}</p>
-        <p>Balance: {magicBalance} SOL || {magicUsdcBalance} USDC</p>
         <button
           onClick={() => {
             handleLogout();
@@ -350,45 +386,20 @@ export default function HeaderComponent() {
 
   return (
     <>
-      <Navbar expand="lg">
-        <Container>
-          {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
-          {currentPath === "/merchant/dashboard" && (
-            <>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Navbar.Brand className="menu_link" style={{ border: "none" }}>
-                  <img
-                    src="/newlogo.png"
-                    style={{ cursor: "pointer", maxWidth: "160px" }}
-                    className="logo_header"
-                  />
-                </Navbar.Brand>
-                {isMultiStoreOwner && (
-                  <Navbar.Brand className="" style={{ border: "none" }}>
-                    {renderMultiStoreSelection()}
-                  </Navbar.Brand>
-                )}
-              </div>
-              <Nav
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Nav.Link>
-                  <WalletMultiButton className="disconnect-button wallet_button" />
-                </Nav.Link>
-              </Nav>
-            </>
-          )}
-
-          {currentPath !== "/merchant/dashboard" && (
+      <Navbar 
+        expand="lg"
+        // style={{
+        //   backgroundColor: theme === "dark" ? "navy" : "#fff",
+        // }}
+      >
+        <Container
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
             <>
               <Navbar.Brand
                 onClick={() => router.push("/")}
@@ -396,7 +407,7 @@ export default function HeaderComponent() {
               >
                 <img
                   src="/newlogo.png"
-                  style={{ cursor: "pointer", maxWidth: "160px" }}
+                  style={{ cursor: "pointer", maxWidth: "160px", position: "absolute", top: "15px", left: "60px"}}
                   className="logo_header"
                 />
               </Navbar.Brand>
@@ -405,89 +416,181 @@ export default function HeaderComponent() {
               </Navbar.Toggle>
               <Navbar.Collapse
                 id="basic-navbar-nav"
-                className="justify-content-end"
+                style={{
+                  // space evenly from middle
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+
+         
+                  
+                  
+                }}
               >
+                {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
+                {currentPath === "/merchant/dashboard" && (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {isMultiStoreOwner && (
+                        <Navbar.Brand className="" style={{ border: "none" }}>
+                          {renderMultiStoreSelection()}
+                        </Navbar.Brand>
+                      )}
+                    </div>
+                  </>
+                )}
+                {currentPath === "/user/dashboard" && (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div className="wave">
+                        <img src="/wave.png" />
+                        <p>
+                          Hello Wallet: <strong>{magicPublicKey && magicPublicKey.slice(0, 4)}...{magicPublicKey && magicPublicKey.slice(-4)}</strong>
+                        </p>
+                      </div>
+
+                      <div className="wallet_amount">
+                        <div className="sol">
+                          <img src="/sol.png" />
+                          <p>{magicBalance} SOL</p>
+                        </div>
+                        <div className="usdc">
+                          <img src="/usdc.png" />
+                          <p>{magicUsdcBalance} USDC</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* TOGGLE FOR LIGHT MODE AND DARK MODE */}
+                    <Nav.Link className="menu_link" style={{ border: "none" }}>
+                      <div id="container">
+                        {theme === "light" && (
+                        <div 
+                          onClick={toggleTheme}
+                          id="target" 
+                          class="sun"
+                        > 
+                          <IoSunnyOutline className="sunny_tog" />
+                          <div></div>
+                        </div>
+                        )}
+                        {theme === "dark" && (
+                          <div 
+                            onClick={toggleTheme}
+                            id="target" 
+                            class="moon"
+                          > 
+                            {theme === "dark" && (
+                              <IoMoonOutline className="moon_tog" />
+                            )}
+                          
+                            <div></div>
+                          </div>
+                        )}
+                      </div>
+                    </Nav.Link>
+
+                    {!publicKey && (
+                      renderMagicLogin()
+                    )}
+                  </>
+                )}
                 <Nav
                   style={{
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
                 >
-                  {merchant && (
+                  {currentPath != "/user/dashboard" && currentPath != "/merchant/dashboard" && (
+                  <>
+                    {merchant && (
+                      <Nav.Link
+                        href="/merchant/dashboard"
+                        className="menu_link nav-link nav-link-fade-up"
+                        style={{ border: "none" }}
+                      >
+                        Merchant
+                      </Nav.Link>
+                    )}
                     <Nav.Link
-                      href="/merchant/dashboard"
+                      href="/user/dashboard"
                       className="menu_link nav-link nav-link-fade-up"
                       style={{ border: "none" }}
                     >
-                      Merchant
+                      Dashboard
                     </Nav.Link>
-                  )}
-                  <Nav.Link
-                    href="/user/dashboard"
-                    className="menu_link nav-link nav-link-fade-up"
-                    style={{ border: "none" }}
-                  >
-                    Dashboard
-                  </Nav.Link>
-                  <Nav.Link
-                    href="https://forms.gle/Hufp94teN3h1QdAw5"
-                    className="menu_link nav-link nav-link-fade-up"
-                    style={{ border: "none" }}
-                  >
-                    Apply Now
-                  </Nav.Link>
-                  <Nav.Link
-                    href="https://ikons.io"
-                    className="menu_link nav-link nav-link-fade-up"
-                    style={{ border: "none" }}
-                  >
-                    NFT
-                  </Nav.Link>
+                    <Nav.Link
+                      href="https://forms.gle/Hufp94teN3h1QdAw5"
+                      className="menu_link nav-link nav-link-fade-up"
+                      style={{ border: "none" }}
+                    >
+                      Apply Now
+                    </Nav.Link>
+                    <Nav.Link
+                      href="https://ikons.io"
+                      className="menu_link nav-link nav-link-fade-up"
+                      style={{ border: "none" }}
+                    >
+                      NFT
+                    </Nav.Link>
 
-                  <Nav.Link
-                    href="https://twitter.com/IkonShopApp"
-                    className="menu_link"
-                    style={{ border: "none" }}
-                  >
-                    <LogoTwitter />
-                  </Nav.Link>
+                    <Nav.Link
+                      href="https://twitter.com/IkonShopApp"
+                      className="menu_link"
+                      style={{ border: "none" }}
+                    >
+                      <LogoTwitter />
+                    </Nav.Link>
 
-                  <Nav.Link
-                    href="https://discord.gg/ikons"
-                    className="menu_link"
-                    style={{ border: "none" }}
-                  >
-                    <LogoDiscord />
-                  </Nav.Link>
-                  {/* if page is not /register then display  */}
-                  {/* IF LOGGED IN WITH MAGIC THEN HIDE WALLET MULTI BUTTON */}
-                  {currentPath !== "/register" && (
-                    <>
-                      {!magicUser && (
-                        <Nav.Link>
-                          <WalletMultiButton className="disconnect-button wallet_button" />
-                        </Nav.Link>
-                      )}
-                      {!publicKey && (
-                        renderMagicLogin()
-                      )}
-                      
-                    </>
-                  )}
-                  {currentPath === "/register" && (
-                    <>
-                      
-                      {!publicKey && magicUser && (
-                        renderMagicLogin()
-                      )}
-                      
-                    </>
+                    <Nav.Link
+                      href="https://discord.gg/ikons"
+                      className="menu_link"
+                      style={{ border: "none" }}
+                    >
+                      <LogoDiscord />
+                    </Nav.Link>
+                    {/* if page is not /register then display  */}
+                    {/* IF LOGGED IN WITH MAGIC THEN HIDE WALLET MULTI BUTTON */}
+                    {currentPath !== "/register" && (
+                      <>
+                        {!magicUser && (
+                          <Nav.Link>
+                            <WalletMultiButton className="disconnect-button wallet_button" />
+                          </Nav.Link>
+                        )}
+                        {!publicKey && (
+                          renderMagicLogin()
+                        )}
+                        
+                      </>
+                    )}
+                    {currentPath === "/register" && (
+                      <>
+                        
+                        {!publicKey && magicUser && (
+                          renderMagicLogin()
+                        )}
+                        
+                      </>
+                    )}
+                  </>
                   )}
            
                 </Nav>
               </Navbar.Collapse>
             </>
-          )}
+          
         </Container>
       </Navbar>
     </>

@@ -230,7 +230,6 @@ const LoginMagic = () => {
                         
                     </form>
                 )}
-                Balance: {balance} SOL || {magicUsdcBalance} USDC
             </>
         )
     }
