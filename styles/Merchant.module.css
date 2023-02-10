@@ -25,30 +25,34 @@
 
 .link_button {
   background: transparent;
-  color: black;
+  color: #130b46;
   border: none;
-  font-size: 16px;
+  font-size: 15px;
   font-family: "Manrope";
   cursor: pointer;
   /* center button */
-  margin-left: auto;
+  margin-left: 10px;
   margin-right: auto;
   display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 250px;
 }
 
 .merchant_links_name {
   font-family: "Manrope";
   font-size: 24px;
   text-align: center;
-  
 }
 
 .paylink_container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 30px;
+  width: 420px;
 }
 
 .parent_container {
@@ -338,18 +342,30 @@
 .merchant_containter {
   padding: 40px 20px;
   min-height: 100vh;
+  background: #f6f8fa;
+  display: flex;
+  gap: 20px;
+  width: 80vw;
+  flex-wrap: wrap;
 }
 
 .merchant_containter p {
   font-family: "Manrope" !important;
 }
 
+.paylink_blob {
+  background: #fff;
+  padding: 20px 30px;
+  width: fit-content;
+  border-radius: 20px;
+}
+
 .banner_hero {
-  width: 100%;
+  max-width: 500px;
   height: 300px;
   position: relative;
   overflow: hidden;
-  border-radius: 50px;
+  border-radius: 20px;
   border: none;
   outline: none;
   margin-bottom: 40px;
@@ -360,8 +376,8 @@
 
 .hero_text {
   position: absolute;
-  top: 80px;
-  left: 80px;
+  top: 40px;
+  left: 40px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -371,7 +387,7 @@
   text-align: left;
   color: #fff;
   font-family: "Manrope";
-  font-size: 40px;
+  font-size: 24px;
   line-height: 52px;
   max-width: 500px;
   font-weight: lighter;
@@ -379,6 +395,7 @@
 
 .hero_text h1 span {
   color: #ffd9b5;
+  font-weight: bold;
 }
 .hero_text h3 {
   text-align: left;
@@ -578,27 +595,26 @@
 }
 
 .paylink_header {
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  /* text-transform: uppercase;
+  letter-spacing: 2px; */
   font-family: "Manrope" !important;
-  margin: 2px 0 2px 0;
+  margin: 20px 0 30px 0;
   display: flex;
   flex-direction: row;
-  margin-top: 2px;
-  margin-bottom: 15px;
-  font-size: 16px;
-  justify-content: center;
+  font-size: 14px;
+  color: #9794ae;
 }
 
 .links {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  background-color: #efefef;
+  background: #f2f2f2;
   border-radius: 10px;
   height: 60px;
   padding: 10px 20px;
   width: fit-content;
+  gap: 20px;
 }
 
 .links > img {
@@ -611,6 +627,269 @@
   border-right: 1px solid;
   margin-top: 15px;
 } */
+
+.atadian_credit {
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.paylink_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.atadian_learn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #5ca1fe;
+  font-size: 14px;
+  margin: 30px 0 10px 0;
+  cursor: pointer;
+}
+
+.atadian_report {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.atadian_checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.atadian_checks div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.atadian_checks span {
+  color: #363636;
+  font-family: "Manrope" !important;
+}
+
+.royalties_paid {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.royalties_paid img {
+  width: 20px;
+  margin-top: 20px;
+}
+
+.royalties_paid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.royalties_paid div h3 {
+  font-size: 40px;
+  color: #130b46;
+  font-weight: bold;
+}
+
+.royalties_paid div p {
+  font-size: 16px;
+  color: #7c798f;
+  margin-top: -5px;
+}
+
+.chart1 {
+  max-width: 400px;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dd_button {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 30px 10px 20px;
+  background-color: #f6f8fa;
+  color: #494671;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.dd_button:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  margin-left: 20px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid black;
+}
+
+.dd_button:hover {
+  background-color: rgb(228, 226, 226);
+}
+
+.dd_input {
+  display: none;
+}
+
+.dd_menu {
+  position: absolute;
+  top: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  margin: 2px 0 0 0;
+  /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1); */
+  background-color: #ffffff;
+  list-style-type: none;
+}
+
+.dd_input + .dd_menu {
+  display: none;
+}
+
+.dd_input:checked + .dd_menu {
+  display: block;
+}
+
+.dd_menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dd_menu li:hover {
+  background-color: #f6f6f6;
+}
+
+.dd_menu li a {
+  display: block;
+  margin: -10px -20px;
+  padding: 10px 20px;
+}
+
+.dd_menu li.divider {
+  padding: 0;
+  border-bottom: 1px solid #cccccc;
+}
+
+.total_wrapper {
+  width: 200px;
+  height: 200px;
+  background: #8affcb;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  transform: rotate(108deg);
+  margin-top: 30px;
+}
+.total_wrapper .d1 {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  transform: rotate(0deg);
+}
+.total_wrapper .d1 div {
+  width: 400px;
+  height: 400px;
+}
+.total_wrapper .d1 div:after {
+  content: "";
+  width: 0;
+  height: 0;
+  display: block;
+  border: solid transparent;
+  border-width: 200px;
+  border-top-color: #8affcb;
+  position: relative;
+  transform: scaleX(400 * tan(108 * pi() / 180) / 400);
+}
+.total_wrapper .d1 div span {
+  display: block;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 34%;
+  font-size: 12px;
+  text-align: center;
+  z-index: 100;
+  color: #130b46;
+  transform: rotate(-108deg);
+}
+.total_wrapper .d2 {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  transform: rotate(147.6deg);
+}
+.total_wrapper .d2 div {
+  width: 400px;
+  height: 400px;
+}
+.total_wrapper .d2 div:after {
+  content: "";
+  width: 0;
+  height: 0;
+  display: block;
+  border: solid transparent;
+  border-width: 200px;
+  border-top-color: #ff7fa5;
+  position: relative;
+  transform: scaleX(400 * tan(39.6 * pi() / 180) / 400);
+}
+.total_wrapper .d2 div span {
+  display: block;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 34%;
+  font-size: 12px;
+  text-align: center;
+  z-index: 100;
+  color: #fff;
+  transform: rotate(-255.6deg);
+}
+
+.payreq_chart_explainer1 span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8affcb;
+}
+
+.payreq_chart_explainer2 {
+  margin-top: -20px;
+}
+
+.payreq_chart_explainer2 span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff7fa5;
+}
+
+.payreq_chart_explainer1 p,
+.payreq_chart_explainer2 p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #363636;
+}
 
 .sub_table {
   margin: 30px 0 50px 0;
@@ -760,77 +1039,6 @@
   height: 10px;
   border-radius: 50%;
   background-color: #00ff00;
-}
-
-.links_container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 20px;
-  justify-content: space-between;
-}
-
-.link {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2vh;
-  background-color: #f2f2f2;
-  border-radius: 15px;
-  min-width: 500px;
-  max-width: 40vw;
-  height: 70px;
-  padding: 0 20px;
-}
-
-.payreq_bg {
-  background-color: #14d19e;
-  border-radius: 50px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  margin: 10px 10px 10px 10px;
-}
-
-.tipjar_bg {
-  background-color: #ff7fa5;
-  color: #fff;
-  border-radius: 50px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  margin: 10px 10px 10px 10px;
-}
-
-.icon_cointainer {
-  display: flex;
-  align-self: flex-end;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.link_icon {
-  width: 20px;
-  height: 20px;
-  margin: 10px 10px 10px 10px;
-  /* display at end of parent div */
-  cursor: pointer;
-  color: #676767;
-}
-
-.payreq_col1 {
-  display: flex;
-}
-
-.link_name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #130b46;
-  padding: 5px;
-  margin: 10px 40px 10px 40px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -1313,12 +1521,16 @@
   color: white;
 }
 
-.recent_links_container{
+.recent_links_container {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   width: 80vw;
   height: fit-content;
+  /* background-color: #f6f8fa; */
+  padding: 10px 0;
+}
+
+.payreq_bg {
   background-color: #f6f8fa;
   padding: 10px 30px;
 }
@@ -1357,7 +1569,7 @@
     /* border: 2px solid rgb(104, 104, 104); */
   }
 
-  .recent_links_container{
+  .recent_links_container {
     display: flex;
     flex-direction: column;
     width: 80vw;

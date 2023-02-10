@@ -210,13 +210,15 @@
 
 .form_container {
   background-color: transparent;
-  box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
-  border-radius: 30px;
+  -moz-box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05); */
+  border-radius: 20px;
   padding: 20px 30px;
   display: flex;
   flex-direction: column;
+  max-width: 480px;
+  background: #fff;
 }
 
 .input {

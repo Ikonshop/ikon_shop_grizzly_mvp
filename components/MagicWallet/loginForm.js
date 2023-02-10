@@ -7,7 +7,6 @@ import * as web3 from "@solana/web3.js";
 import Loading from "../Loading";
 
 const LoginForm = () => {
-    const { Magic } = require('magic-sdk');
     const [userName, setUserName] = useState(null);
     const [storeName, setStoreName] = useState(null);
     const [email, setEmail] = useState(null);
@@ -16,7 +15,7 @@ const LoginForm = () => {
     const [loading, setLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
     //main net
-    const rpcUrl = "https://api.mainnet-beta.solana.com";
+    const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,43 +29,33 @@ const LoginForm = () => {
     };
 
 
-    const handleLogin = async (e) => {
-        // const magic = new Magic("pk_test_816925B318CC2CA0");
-        const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-            extensions: {
-                solana: new SolanaExtension({
-                rpcUrl
-                })
-            }
-            });
-            
+    const handleLogin = async (e) => {    
         e.preventDefault();
         
         if (email) {
             setLoading(true);
             console.log('credentials', email, userName, storeName)
+            console.log("starting login for email", email);
+            const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+                extensions: {
+                solana: new SolanaExtension({
+                    rpcUrl
+                })
+                }
+            });
             await magic.auth.loginWithMagicLink({ email });
-            
             const userMetadata = await magic.user.getMetadata();
-            console.log('userMetadata', userMetadata)
-            //set metadata to local storage
-                localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));
-            const magicEmail = userMetadata.email;
-            const publicAddress = userMetadata.publicAddress;
-            console.log('publicAddress', publicAddress)
-            const pubKey = new web3.PublicKey(publicAddress); 
-
-            console.log('pubKey', pubKey.toString())
-            setEmail(magicEmail);
-            setUserPubKey(pubKey);
-            setPublicAddress(pubKey.toString());
+            localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));
+            const pubFromMetadata = new web3.PublicKey(userMetadata.publicAddress);
+            setUserPubKey(pubFromMetadata);
+            setPublicAddress(pubFromMetadata.toString());
             const data = JSON.stringify({
-                email: magicEmail,
-                owner: pubKey.toString(),
+                email: email,
+                owner: pubFromMetadata.toString(),
                 storeName: storeName,
                 name: userName
             });
-            const isCollectionOwner = await CheckForCollectionByOwner(pubKey.toString());
+            const isCollectionOwner = await CheckForCollectionByOwner(pubFromMetadata.toString());
             console.log('isCollectionOwner', isCollectionOwner)
             if (!isCollectionOwner) {
                 CreateCollectionFromMagic(data);

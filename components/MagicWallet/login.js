@@ -30,7 +30,7 @@ const LoginMagic = () => {
   const login = async (e) => {
     e.preventDefault();
     console.log("starting login for email", email);
-    const magic = new Magic("pk_live_FCF04103A9172B45", {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
         extensions: {
         solana: new SolanaExtension({
             rpcUrl
@@ -43,12 +43,13 @@ const LoginMagic = () => {
     const pubFromMetadata = new web3.PublicKey(userMetadata.publicAddress);
     getBalance(pubFromMetadata);
     getUsdcBalance(pubFromMetadata);
+    window.dispatchEvent(new Event('magic-logged-in'));
     setIsLoggedIn(true);
   };
 
   const logout = async (e) => {
     e.preventDefault();
-    const magic = new Magic("pk_live_FCF04103A9172B45", {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
         extensions: {
         solana: new SolanaExtension({
             rpcUrl
@@ -57,6 +58,7 @@ const LoginMagic = () => {
     });
     await magic.user.logout();
     localStorage.removeItem('userMagicMetadata');
+    window.dispatchEvent(new Event('magic-logged-out'));
     setIsLoggedIn(false);
   };
 
@@ -94,7 +96,7 @@ const LoginMagic = () => {
     e.preventDefault();
     setSendingTransaction(true);
 
-    const magic = new Magic("pk_live_FCF04103A9172B45", {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
       extensions: {
       solana: new SolanaExtension({
           rpcUrl
@@ -133,7 +135,7 @@ const LoginMagic = () => {
 
     const tx = web3.Transaction.from(signedTransaction.rawTransaction);
     const signature = await connection.sendRawTransaction(tx.serialize());
-    setTxHash(`https://explorer.solana.com/tx/${signature}?cluster=devnet`);
+    setTxHash(`https://explorer.solana.com/tx/${signature}`);
     setSendingTransaction(false);
   };
 
@@ -257,6 +259,7 @@ const LoginMagic = () => {
                           const pubKey = new web3.PublicKey(user.publicAddress);
                           getBalance(pubKey);
                           getUsdcBalance(pubKey);
+                          setEmail(user.email);
                           window.dispatchEvent(new CustomEvent("magic-logged-in"));
                         });
                       }

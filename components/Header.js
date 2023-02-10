@@ -114,11 +114,7 @@ export default function HeaderComponent() {
     );
   };
 
-  const renderMagicLogout = () => {
-    return (
-      <LogoutMagic />
-    );
-  };
+
   
 
 
@@ -344,10 +340,11 @@ export default function HeaderComponent() {
         }
       });
       window.addEventListener("magic-logged-out", () => {
-        setMagicMetadata(null);
-        setMagicPublicKey(null);
+        setMagicMetadata("");
+        setMagicPublicKey("");
         setMagicUser(false);
       });
+      
     }
   }, []);
 
@@ -471,17 +468,22 @@ export default function HeaderComponent() {
                           <WalletMultiButton className="disconnect-button wallet_button" />
                         </Nav.Link>
                       )}
-                      {!publicKey && !magicUser && (
+                      {!publicKey && (
                         renderMagicLogin()
                       )}
-                      {!publicKey && magicUser && (
-                        renderMagicLogout()
-                      )}
+                      
                     </>
                   )}
-                  {magicUser && (
-                    renderMagicContainer()
+                  {currentPath === "/register" && (
+                    <>
+                      
+                      {!publicKey && magicUser && (
+                        renderMagicLogin()
+                      )}
+                      
+                    </>
                   )}
+           
                 </Nav>
               </Navbar.Collapse>
             </>

@@ -1189,38 +1189,11 @@ p {
   overflow: hidden;
 }
 
-.signup_row2_text {
-  display: flex;
-  flex-direction: column;
-
-}
-@media screen and (max-height: 769px) {
-  .signup_row2_text {
-    position: absolute;
-    top: 20;
-    background-color: rgba(220, 220, 220, 0.774);
-    padding: 20px;
-    margin-right: 20px;
-    border-radius: 15px;
-    z-index: 2;
-  }
-
-  .signup_row2 img {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    max-width: 800px;
-    z-index: 1;
-  }
-}
-
-
 .signup_row2 img {
   position: absolute;
   bottom: 0;
   right: 0;
   max-width: 800px;
-  z-index: 1;
 }
 
 .signup_row2 h4 {
@@ -2777,9 +2750,6 @@ button:disabled {
 
 .wallet_button {
   margin-left: 60px;
-  height: 36px;
-  border: 2px solid #000000;
-  border-radius: 100px;
 }
 
 .beta_open {

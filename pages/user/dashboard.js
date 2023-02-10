@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { getCollectionOrders } from "../../lib/api";
 import { useWallet } from "@solana/wallet-adapter-react";
+// import Link from "next/link";
 import Orders from "../../components/User/Link-Orders";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../../components/Loading";
-import * as web3 from "@solana/web3.js";
-import {
-  faLink,
-  faJar,
-} from "@fortawesome/free-solid-svg-icons";
+
 // USER COMPONENTS
 import UserOrders from "../../components/User/User-Orders";
 import PayRequests from "../../components/Merchant/PayRequests";
 import CreateLink from "../../components/User/Create-Link";
-import {
-  getCollectionOwner,
-  deleteSingleProduct,
-} from "../../lib/api";
+import { getCollectionOwner } from "../../lib/api";
 import {
   IoArrowBackOutline,
   IoBarChartOutline,
@@ -26,32 +20,33 @@ import {
   IoFileTrayFullOutline,
   IoInformationCircleOutline,
   IoLinkOutline,
+  IoChevronDown,
+  IoTrashBin,
   IoCopy,
   IoEye,
-  IoTrashBin,
-  IoLockClosedOutline
+  IoLink,
+  IoGift,
+  IoCheckmark,
+  IoClose,
 } from "react-icons/io5";
-// import ElusivDash from "../../components/Elusiv/dash";
-// import ElusivSetup from "../../components/Elusiv/userSetUp";
-// import RecentTxns from "../../components/Elusiv/recentTxns";
+import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
 
 function Dashboard() {
+  const router = useRouter();
   const [loading, setLoading] = useState(null);
-  const [userPublicKey, setUserPublicKey] = useState(null);
   const [currentWallet, setCurrentWallet] = useState([]);
   const [ownerProducts, setOwnerProducts] = useState([]);
   const [activeMenu, setActiveMenu] = useState();
-  const router = useRouter();
   const { publicKey, connected } = useWallet();
-
+  const [userPublicKey, setUserPublicKey] = useState();
+  const [userEmail, setUserEmail] = useState();
   // USER DASHBOARD CONSTANTS
   const [showUserDash, setShowUserDash] = useState(true);
   const [showUserOrders, setShowUserOrders] = useState(false);
   const [showCreateLink, setShowCreateLink] = useState(false);
   const [showLinkOrders, setShowLinkOrders] = useState(false);
-  // const [showElusivSetup, setShowElusivSetup] = useState(false);
   const [userLinks, setUserLinks] = useState([]);
   const [userTipJar, setUserTipJar] = useState([]);
 
@@ -64,7 +59,7 @@ function Dashboard() {
         <div className={styles.merchant_dashboard}>
           <button
             id="overview"
-            disabled={!publicKey && !userPublicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "overview"
                 ? "active_dash dash-button"
@@ -83,7 +78,7 @@ function Dashboard() {
           </button>
           <button
             id="order"
-            disabled={!publicKey && !userPublicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "order" ? "active_dash dash-button" : "dash-button"
             }
@@ -99,7 +94,7 @@ function Dashboard() {
           </button>
           <button
             id="payreq"
-            disabled={!publicKey && !userPublicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "payreq" ? "active_dash dash-button" : "dash-button"
             }
@@ -114,26 +109,9 @@ function Dashboard() {
 
             <span id={styles.full_screen}>Pay Hub</span>
           </button>
-          {/* <button
-            id="elusiv"
-            disabled={!publicKey}
-            className={
-              activeMenu == "elusiv" ? "active_dash dash-button" : "dash-button"
-            }
-            onClick={() => (
-              setShowUserOrders(false),
-              setShowLinkOrders(false),
-              setShowCreateLink(false),
-              setActiveMenu("elusiv")
-            )}
-          >
-            <IoLockClosedOutline />
-
-            <span id={styles.full_screen}>Elusiv History</span>
-          </button> */}
           <button
             id="link"
-            disabled={!publicKey && !userPublicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "link" ? "active_dash dash-button" : "dash-button"
             }
@@ -186,20 +164,10 @@ function Dashboard() {
     );
   };
 
-  // const renderElusivSetupComponent = () => {
-  //   return (
-  //     <>
-  //       <div className="create-component">
-  //         <ElusivDash />
-  //         <RecentTxns />
-  //       </div>
-  //     </>
-  //   );
-  // };
 
   const renderDisplay = () => (
     <div className={styles.merchant_containter}>
-      <div className={styles.banner_hero}>
+      {/* <div className={styles.banner_hero}>
         <div className={styles.hero_text}>
           <h1>
             Hello Wallet:{" "}
@@ -208,6 +176,7 @@ function Dashboard() {
               {currentWallet.slice(-4)}{" "}
             </span>
           </h1>
+
           <button
             onClick={() => setShowCreateLink(true)}
             id={styles.full_screen}
@@ -217,128 +186,357 @@ function Dashboard() {
           </button>
         </div>
         <div className={styles.hero_overlay}></div>
+      </div> */}
+      <div className={styles.atadian_credit}>
+        <div className={styles.paylink_head}>
+          <h4 className={styles.paylink_header}>Atadian Credit Score</h4>
+          <IoInformationCircleOutline
+            style={{
+              color: "#9794AE",
+              fontSize: "24px",
+              marginTop: "-10px",
+            }}
+          />
+        </div>
+        <div className={styles.atadian_report}>
+          <div className="progress">
+            <span className="progress_title timer">85%</span>
+            <div className="progress_overlay"></div>
+            <div className="progress_left"></div>
+            <div className="progress_right"></div>
+          </div>
+          <div className={styles.atadian_checks}>
+            <div>
+              <IoCheckmark
+                style={{
+                  color: "#14D19E",
+                }}
+              />{" "}
+              <span>NFT Hodl</span>
+            </div>
+            <div>
+              <IoCheckmark
+                style={{
+                  color: "#14D19E",
+                }}
+              />{" "}
+              <span>Lending & Staking</span>
+            </div>
+            <div>
+              <IoClose
+                style={{
+                  color: "#FFD260",
+                }}
+              />{" "}
+              <span>Pooling</span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.atadian_learn}>
+          <IoInformationCircleOutline />
+          <span>Learn more about how its calculated</span>
+        </div>
       </div>
-      {/* <ElusivDash publicKey={publicKey} /> */}
-      <div className={styles.recent_links_container}>
-        {/* NO USER LINKS CREATED */}
-        {userLinks.length > 0 && !loading ? (
-          renderProductLinks()
-        ) : (
-          <h4 className={styles.paylink_header}>Pay Requests</h4>
-        )}
-        {userTipJar.length > 0 && !loading ? (
+      <div className={styles.atadian_credit}>
+        <div className={styles.paylink_head}>
+          <h4 className={styles.paylink_header}>NFT Royalties paid</h4>
+          <label className={styles.dropdown}>
+            <div className={styles.dd_button}>By Quarter </div>
+
+            <input type="checkbox" className={styles.dd_input} id="test" />
+
+            <ul className={styles.dd_menu}>
+              <li>Q1 2022</li>
+              <li>Q2 2022</li>
+              <li>Q3 2022</li>
+              <li>Q4 2022</li>
+              {/* <li className={styles.divider}></li> */}
+            </ul>
+          </label>
+        </div>
+        <div className={styles.royalties_paid}>
+          <img src="/sol.png" />
+          <div>
+            <h3>587</h3>
+            <p>$14,080</p>
+          </div>
+        </div>
+        <img className={styles.chart1} src="/chart1.png" />
+      </div>
+      <div className={styles.atadian_credit}>
+        <div className={styles.paylink_head}>
+          <h4 className={styles.paylink_header}>Total Recieved</h4>
+          <label className={styles.dropdown}>
+            <div className={styles.dd_button}>By Quarter </div>
+
+            <input type="checkbox" className={styles.dd_input} id="test" />
+
+            <ul className={styles.dd_menu}>
+              <li>Q1 2022</li>
+              <li>Q2 2022</li>
+              <li>Q3 2022</li>
+              <li>Q4 2022</li>
+              {/* <li className={styles.divider}></li> */}
+            </ul>
+          </label>
+        </div>
+        <div className={styles.royalties_paid}>
+          <div>
+            <h3>$27,000</h3>
+          </div>
+        </div>
+        <div className={styles.atadian_report}>
+          <div className={styles.total_wrapper}>
+            <div className={styles.d1}>
+              <div>
+                <span>80%</span>
+              </div>
+            </div>
+            <div className={styles.d2}>
+              <div>
+                <span>20%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.atadian_checks}>
+            <div className={styles.payreq_chart_explainer1}>
+              <span></span>
+              <p>Paylink</p>
+            </div>
+            <div className={styles.payreq_chart_explainer2}>
+              <span></span>
+              <p>TipJar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className={styles.recent_links_container}> */}
+      {/* SUBSCRIPTION TABLE FOR USER */}
+      {/* {userPublicKey ? <UserSubs publicKey={userPublicKey} /> : null} */}
+
+      {/* NO USER LINKS CREATED */}
+      {userLinks.length > 0 && !loading ? (
+        renderProductLinks()
+      ) : (
+        <p>No Links Created</p>
+      )}
+      {/* {userTipJar.length > 0 && !loading ? (
           renderTipJar()
         ) : (
-          <h4 className={styles.paylink_header}>Tip Jars</h4>
-        )}
-      </div>
+          <p>No Tip Jar Created</p>
+        )} */}
+      {/* {userLinks.length > 0 && !loading ? (
+        <PayRequests publicKey={userPublicKey}/>
+        ) : (
+          <p>No Links Created</p>
+        )} */}
     </div>
+    //{" "}
+    // </div>
   );
 
   const renderProductLinks = () => {
     return (
-      <div>
-        <h4 className={styles.paylink_header}>Pay Requests</h4>
-        <div className={styles.links_container}>
-          {userLinks.slice(0, 3).map((payRequest, index) => (
-            <div className={styles.link} key={index}>
-              <div className={styles.payreq_col1}>
-                <div className={styles.payreq_bg}>
-                  <IoLinkOutline
-                    style={{
-                      transform: "rotate(-45deg)",
-                      color: "#fff",
-                      fontWeight: "bold",
-                      fontSize: "24px",
-                    }}
-                    className={styles.link_icon}
-                    icon={faLink}
-                  />
-                </div>
-                <div className={styles.link_name}>
-                  {payRequest.name.length > 15
-                    ? payRequest.name.substring(0, 15) + "..."
-                    : payRequest.name}
-                </div>
+      <div className={styles.paylink_blob}>
+        <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
+        <div className={styles.paylink_container}>
+          {/* map the first 3 "products" in userLinks */}
+          {userLinks.slice(0, 2).map((product, index) => (
+            <div key={index} className={styles.links}>
+              <div className="link_tip">
+                <IoLink
+                  style={{
+                    color: "#fff",
+                    fontSize: "20px",
+                    marginTop: "2px",
+                  }}
+                  className="link_icon_tip"
+                  onClick={() => router.push(`/product/${product.id}`)}
+                />
               </div>
-              <div className={styles.icon_container}>
-                <IoCopy
-                  className={styles.link_icon}
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      `https://ikonshop.io/product/${payRequest.id}`
-                    )
-                  }
+              <button
+                className={styles.link_button}
+                onClick={() => {
+                  router.push(`/product/${product.id}`);
+                }}
+              >
+                ikonshop.io/product/{product.id}
+              </button>
+              <div className="pay_icons">
+                {/* <IoCopy
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
                 />
                 <IoEye
-                  className={styles.link_icon}
-                  onClick={() => router.push(`/product/${payRequest.id}`)}
-                />
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
+                /> */}
                 <IoTrashBin
-                  className={styles.link_icon}
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
                   onClick={() => {
-                    deleteSingleProduct(payRequest.id),
-                    setUserLinks(userLinks.filter((_, i) => i !== index));
+                    if (
+                      confirm("Are you sure you want to delete this link?") ==
+                      true
+                    ) {
+                      deleteSingleProduct(product.id),
+                        // delete product from userLinks using it's index position
+                        setUserLinks(userLinks.filter((_, i) => i !== index));
+                    } else {
+                      return;
+                    }
                   }}
                 />
               </div>
-          </div>
+
+              {/* <Clipboard
+                className={styles.copy_icon}
+                icon={faCopy}
+                style={{
+                  color: "#000",
+                  fontSize: "24px",
+                  marginLeft: "6px",
+                  marginTop: "-2px",
+                  cursor: "pointer",
+                  borderLeft: "1px solid #bebebe",
+                  paddingLeft: "10px",
+                }}
+                onClick={() => {
+                  navigator.clipboard.writeText(`https://ikonshop.io/product/${product.id}`),
+                  setShowGreen(true),
+                  console.log("should trigger green");
+                }
+                }
+              /> */}
+            </div>
           ))}
+          {userTipJar.slice(0, 2).map((product, index) => (
+            <div key={index} className={styles.links}>
+              <div className="link_gift">
+                <IoGift
+                  style={{
+                    color: "#fff",
+                    fontSize: "20px",
+                    marginTop: "2px",
+                  }}
+                  className="gift_icon_tip"
+                  onClick={() => router.push(`/product/${product.id}`)}
+                />
+              </div>
+              <button
+                className={styles.link_button}
+                onClick={() => router.push(`/product/${product.id}`)}
+              >
+                ikonshop.io/product/{product.id}
+              </button>
+              <div className="pay_icons">
+                {/* <IoCopy
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
+                />
+                <IoEye
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
+                /> */}
+                <IoTrashBin
+                  style={{
+                    color: "#676767",
+                    fontSize: "20px",
+                    marginLeft: "2px",
+                    marginTop: "-2px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    if (
+                      confirm("Are you sure you want to delete this link?") ==
+                      true
+                    ) {
+                      deleteSingleProduct(product.id),
+                        // delete product from userLinks using it's index position
+                        setUserTipJar(userTipJar.filter((_, i) => i !== index));
+                    } else {
+                      return;
+                    }
+                  }}
+                />
+              </div>
+
+              {/* <Clipboard
+                className={styles.copy_icon}
+                icon={faCopy}
+                style={{
+                  color: "#000",
+                  fontSize: "24px",
+                  marginLeft: "6px",
+                  marginTop: "-2px",
+                  cursor: "pointer",
+                }}
+                onClick={() => navigator.clipboard.writeText(`https://ikonshop.io/product/${product.id}`)}
+              /> */}
+            </div>
+          ))}
+          <div className="btn_container pay_btn">
+            <div className="button_drop">
+              <p>Create a Paylink</p>
+              <div className="arrow_bg">
+                <IoChevronDown className="arrow_drop" />
+              </div>
+            </div>
+            {/* <div className="dropdown_drop">
+                        <a href="#" id="adobeXd">
+                          Adobe XD
+                          <span></span>
+                        </a>
+                        <a href="#" id="sketch">
+                          Sketch
+                          <span></span>
+                        </a>
+                        <a href="#" id="figma">
+                          Figma
+                          <span></span>
+                        </a>
+                        <a href="#" id="inVision">
+                          InVision
+                          <span></span>
+                        </a>
+                      </div> */}
+          </div>
         </div>
       </div>
     );
   };
 
-  const renderTipJar = () => {
-    return (
-      <div>
-        <h4 className={styles.paylink_header}>Tip Jars</h4>
-        <div className={styles.paylink_container}>
-          {userTipJar.slice(0, 2).map((tipJarLink, index) => (
-            <div className={styles.link} key={index}>
-              <div className={styles.payreq_col1}>
-                <div className={styles.tipjar_bg}>
-                  <FontAwesomeIcon
-                    style={{
-                      color: "#fff",
-                    }}
-                    className={styles.link_icon}
-                    icon={faJar}
-                  />
-                </div>
-                <div className={styles.link_name}>
-                  {tipJarLink.name.length > 15
-                    ? tipJarLink.name.substring(0, 15) + "..."
-                    : tipJarLink.name}
-                </div>
-              </div>
-              <div className={styles.icon_container}>
-                <IoCopy
-                  className={styles.link_icon}
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      `https://ikonshop.io/product/${tipJarLink.id}`
-                    )
-                  }
-                />
-                <IoEye
-                  className={styles.link_icon}
-                  onClick={() => router.push(`/product/${tipJarLink.id}`)}
-                />
-                <IoTrashBin
-                  className={styles.link_icon}
-                  onClick={() => {
-                    deleteSingleProduct(tipJarLink.id),
-                    setUserTipJar(userTipJar.filter((_, i) => i !== index));
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  // const renderTipJar = () => {
+  //   return (
+
+  //   );
+  // };
 
   const renderConnectWallet = () => {
     return (
@@ -356,7 +554,7 @@ function Dashboard() {
     );
   };
   const getAllProducts = async () => {
-    const owner = publicKey.toString();
+    const owner = userPublicKey.toString();
     // remove any current data in userLinks, userTipJar, and ownerProducts to avoid duplicates
     const clearLinks = () => {
       setUserLinks([]);
@@ -420,6 +618,7 @@ function Dashboard() {
   useEffect(() => {
     if (publicKey) {
       // checkOwnership();
+      setUserPublicKey(publicKey.toString());
       setCurrentWallet(publicKey.toString());
       const owner = publicKey.toString();
       const getAllProducts = async () => {
@@ -440,76 +639,73 @@ function Dashboard() {
         }
       };
       getAllProducts();
+      // console.log("these are the owners products", ownerProducts);
+      // console.log("these are the user links", userLinks);
+      // console.log("these are the user tip jar", userTipJar);
     }
-    if(!publicKey && userPublicKey){
-      setCurrentWallet(userPublicKey)
-      const owner = userPublicKey;
-      const getAllProducts = async () => {
-          const products = await getCollectionOwner(owner);
-          for (let i = 0; i < products.products.length; i++) {
-            if (products.products[i].type === "link") {
-              userLinks.push(products.products[i]);
-            }
-            if (products.products[i].type === "tipjar") {
-              userTipJar.push(products.products[i]);
-            }
-            if (products.products[i].type === "product") {
-              ownerProducts.push(products.products[i]);
-            }
-            if (i === products.products.length - 1) {
-              setLoading(false);
-            }
-          }
-        };
-        getAllProducts();
+  }, [publicKey]);
+
+  const checkMagicLogin = () => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      console.log("userMagicMetadata", userMagicMetadata);
     }
-  }, [publicKey, userPublicKey]);
+  };
+
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setActiveMenu("home");
+      setShowUserDash(false);
+      setShowUserOrders(false);
+      setShowCreateLink(false);
+      setShowLinkOrders(false);
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
+  }, []);
+
 
 
   useEffect(() => {
     //if the url ends in ?payhub=true, show the payhub
     if (window.location.href.includes("?payhub=true")) {
-      setShowCreateLink(true),
-      setActiveMenu("payreq")
+      setShowCreateLink(true), setActiveMenu("payreq");
     }
-  }, []);
-
-  useEffect(() => {
-    if(publicKey) {
-      setUserPublicKey(publicKey.toString())
-    }
-    if(window){
-      //check local storage for userMagicMetadata and set it to state
-      if(localStorage.getItem('userMagicMetadata')){
-        const publicAddress = JSON.parse(localStorage.getItem('userMagicMetadata')).publicAddress
-        const publicKey = new web3.PublicKey(publicAddress);
-        setUserPublicKey(publicKey.toString())
-        console.log('public key from local storage', publicKey.toString())
-      }
-    }
-  }, [publicKey, userPublicKey])
+  });
 
   return (
     <div className={styles.parent_container}>
-      {showUserDash ? renderUserDashboard() : null}
+      {renderUserDashboard()}
       <div className={styles.main_container}>
         {!userPublicKey ? renderConnectWallet() : null}
 
-        {userPublicKey != null && loading ? renderLoading() : null}
-        
-        {!loading && userPublicKey != null && !showUserOrders && !showCreateLink && !showLinkOrders 
+        {userPublicKey && loading ? renderLoading() : null}
+
+        {!loading &&
+        userPublicKey &&
+        !showUserOrders &&
+        !showCreateLink &&
+        !showLinkOrders 
           ? renderDisplay()
           : null}
-        {/* {publicKey && refreshLinks()} */}
-        
-        
-        {userPublicKey != null && showUserOrders && renderUserOrdersComponent()}
-        
-        {userPublicKey != null && showCreateLink && renderCreateLinkComponent()}
-        
-        {userPublicKey != null && showLinkOrders && renderOrdersComponent()}
-        {/* {publicKey && showElusivSetup && renderElusivSetupComponent()} */}
-        
+        {userPublicKey && showUserOrders && renderUserOrdersComponent()}
+        {userPublicKey && showCreateLink && renderCreateLinkComponent()}
+        {userPublicKey && showLinkOrders && renderOrdersComponent()}
       </div>
     </div>
   );
