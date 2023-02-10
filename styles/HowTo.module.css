@@ -1,0 +1,182 @@
+.main_container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px 0 30px;
+  color: black;
+  position: relative;
+}
+
+/* .merchant_nft_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    max-width: 100vw;
+    max-height: fit-content;
+    margin: 15px;
+    padding: 20px;
+    border: 1px solid rgb(104, 104, 104);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    margin-bottom: 40px;
+    background: linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 1) 35%,
+      rgba(0, 0, 0, 0.42930675688244047) 100%
+    );
+  } */
+/*   
+  .info_container > h1 {
+    color: red;
+  } */
+
+/* .info_items_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    max-width: 100vw;
+  } */
+
+.info_items_container {
+  display: flex;
+  color: white;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  max-width: 100vw;
+  max-height: fit-content;
+  margin: 15px;
+  padding: 20px;
+  border: 1px solid rgb(104, 104, 104);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  margin-bottom: 40px;
+  background: linear-gradient(
+    -90deg,
+    rgba(0, 0, 0, 1) 35%,
+    rgba(0, 0, 0, 0.42930675688244047) 100%
+  );
+}
+
+.info_blob {
+  background: white;
+  max-height: 340px;
+
+  max-width: 40vw;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 15px;
+  min-height: 340px;
+}
+
+.info_blob h1 {
+  color: rgb(123, 0, 255);
+  text-align: center;
+  font-family: "Manrope";
+}
+
+.info_blob p {
+  color: black;
+  text-align: left;
+  padding: 1em;
+  font-family: "Manrope";
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.logo-img {
+  width: 100px;
+}
+
+/* .gif{
+    max-height: 200px;
+  } */
+
+.banner_hero {
+  width: 100%;
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  margin-bottom: 40px;
+  background-image: url("https://bafybeiekeeb3gushrz4evydundxohm7erxtiorqefb62zdfoo2ziicmofa.ipfs.dweb.link/bannerIkon.png");
+}
+
+.hero_text {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero_text h1 {
+  text-align: left;
+  color: #fff;
+  font-family: "Manrope";
+  font-size: 40px;
+  line-height: 52px;
+  max-width: 650px;
+  font-weight: lighter;
+}
+
+.hero_text h1 span {
+  color: #ffd9b5;
+}
+.hero_text h3 {
+  text-align: left;
+  color: #fff;
+  font-family: "Manrope";
+  font-size: 20px;
+  line-height: 52px;
+  max-width: 650px;
+  font-weight: lighter;
+}
+
+.hero_button {
+  border: none;
+  background: #fff;
+  color: #000;
+  width: 180px;
+  height: 60px;
+  font-size: 16px;
+  font-family: "Manrope";
+  margin-top: 30px;
+  border-radius: 10px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+.hero_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 35%,
+    rgba(0, 0, 0, 0.42930675688244047) 100%
+  );
+}

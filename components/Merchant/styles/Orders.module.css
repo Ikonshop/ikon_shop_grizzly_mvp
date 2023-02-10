@@ -1,0 +1,572 @@
+.order_container {
+  padding: 40px 20px;
+  width: 80vw;
+  min-height: 100vh;
+}
+
+.no_orders {
+  text-align: center;
+  padding-top: 150px;
+}
+
+.downloadButtonContainer button {
+  width: 200px;
+  height: 60px;
+  color: #130b46;
+  background-color: #8affcb;
+  border: none;
+  border-radius: 30px;
+  margin-top: 10px;
+  padding: 5px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* .order_card {
+  background: transparent;
+  opacity: 0.9;
+  margin: 2px;
+  padding: 10px;
+  min-height: 200px;
+  min-width: 200px;
+  border-radius: 16px;
+  box-shadow: 0px 0px 10px rgb(65, 65, 65);
+  color: black;
+}
+
+.order_info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+} */
+
+.download_button {
+  background: transparent;
+  border-radius: 30px;
+  border: none;
+  color: #000;
+  text-align: center;
+  text-decoration: none;
+  justify-content: space-evenly;
+  display: flex;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  font-family: "Manrope", sans-serif;
+  width: 100px;
+}
+
+.download_button:hover {
+  background-color: #58585888;
+  color: white;
+}
+
+.download_button:focus {
+  outline: none;
+  font-size: 18px;
+}
+
+.download_icon {
+  font-size: large;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.order_buyers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.6rem;
+  font-family: "Manrope", sans-serif;
+  color: white;
+}
+
+.order_emails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.6rem;
+  font-family: "Manrope", sans-serif;
+  color: white;
+}
+
+.order_shipping {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.6rem;
+  font-family: "Manrope", sans-serif;
+  color: white;
+}
+
+.order_text {
+  font-size: 0.9rem;
+  font-family: "Manrope", sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bolder;
+}
+
+/* .order_details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  background-color: #444444;
+  border: 1px solid #585858;
+  border-radius: 10px;
+  padding-right: 5px;
+} */
+
+.orders_maps {
+  display: flex;
+  flex-direction: row;
+}
+
+/* .order_details h2 {
+  font-size: 0.8rem;
+  font-family: "Manrope", sans-serif;
+  color: black;
+}
+
+.order_details h3 {
+  font-size: 0.7rem;
+  font-family: "Manrope", sans-serif;
+  color: black;
+}
+
+.order_details h5 {
+  font-size: 0.6rem;
+  font-family: "Manrope", sans-serif;
+  color: black;
+} */
+
+.searchBarSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search_filter {
+  width: 100% !important;
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+
+.inputSection {
+  position: relative;
+  background: #f3f3f3;
+  border-radius: 50px;
+  width: 400px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.inputSection > input {
+  border-radius: 50px;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  text-indent: 29px;
+  line-height: 10px;
+  font-family: "Manrope";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  background: #f3f3f3;
+  border: none;
+}
+
+.inputSection > input::placeholder {
+  color: #000;
+}
+
+.inputSection > input:nth-child(2)::placeholder {
+  font-family: "Manrope";
+  font-size: 16px;
+  line-height: 19px;
+  color: #000;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  bottom: 0;
+  margin: auto;
+}
+
+.sortContainer {
+  min-height: 45px;
+  max-height: fit-content;
+  min-width: 140px !important;
+  max-width: fit-content;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #b6b6b6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  gap: 15px;
+  margin-right: 50px;
+  cursor: pointer;
+  animation: appear 0.5s ease-in-out;
+}
+
+.filter_button_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* justify-content: space-between; */
+  gap: 15px;
+  margin-right: 50px;
+}
+
+.filter_button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  animation: appear 0.5s ease-in-out;
+  border: none;
+  border-radius: 30px;
+  background-color: transparent;
+}
+
+.active_filter {
+  /* green dot */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #14d19e;
+}
+
+.orders_container {
+  width: 80vw;
+  padding: 40px 20px;
+}
+
+.order_id {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.orders_table {
+  margin: 30px 0 50px 0;
+  width: 100%;
+}
+
+.sub_table tr:hover:not(:first-child) {
+  background-color: #e5e5e5;
+}
+.orders_table td:before {
+  display: none;
+}
+.orders_table th,
+.orders_table td {
+  display: table-cell;
+  padding: 0.25em 0.5em;
+  color: #494671;
+}
+.orders_table th:first-child,
+.orders_table td:first-child {
+  padding-left: 0;
+}
+.orders_table th {
+  color: #494671;
+  background: #f4f6f8 !important;
+  text-align: center;
+}
+.orders_table th:last-child,
+.orders_table td:last-child {
+  padding-right: 0;
+}
+.orders_table th,
+.orders_table td {
+  padding: 1em 1em !important;
+}
+.orders_table td {
+  position: relative;
+  text-align: center;
+}
+
+.orders_table tr:hover {
+  background-color: #e5e5e5;
+}
+
+.orders_table td .active_status,
+.orders_table td .overdue_status,
+.orders_table td .cxld_status {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.orders_table td .active_status {
+  background: #42ed72;
+}
+.orders_table td .overdue_status {
+  background: #f28d30;
+}
+.orders_table td .cxld_status {
+  background: #ff1111;
+}
+
+.backButton {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 18px;
+  color: #2b2b2b;
+  width: 40%;
+}
+
+.order_details_header {
+  margin: 0 0 50px 0;
+  display: flex;
+  align-items: center;
+}
+
+.order_details_header h4 {
+  width: 60%;
+  color: #130b46;
+  font-size: 32px;
+}
+
+.order_image {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product_image_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.price_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.token_image {
+  width: 20px;
+  margin-left: 10px;
+}
+
+.checkmark_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  padding-right: 5px;
+}
+
+.checkmark {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #73af55;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #73af55;
+  animation: fill 0.4s ease-in-out 0.4s forwards,
+    scale 0.3s ease-in-out 0.9s both;
+}
+
+.blank {
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.details_container {
+  cursor: pointer;
+}
+
+.details_link {
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.sortContainer > p {
+  font-family: "Manrope";
+  font-weight: 400;
+  font-size: 14px;
+  /* line-height: 20px; */
+  color: #000000;
+  margin: 0;
+}
+
+.order_card {
+  display: flex;
+  flex-direction: col;
+  align-items: center;
+  /* justify-content: center; */
+  background: #313131;
+  border-radius: 7px;
+  padding: 10px;
+  width: 350px;
+}
+.order_img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.order_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order_details {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.order_details p {
+  color: #fff;
+}
+
+.view_details {
+  background: #fff !important;
+  color: #000 !important;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+  width: 70px;
+}
+
+.product_name {
+  font-weight: bold;
+}
+
+.order_info {
+  display: inline-flex;
+  line-height: 10px;
+  text-align: left;
+}
+
+.order_list {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.buyer_address {
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 1150px) {
+  .inputSection > input::placeholder {
+    color: #f3f3f3;
+  }
+  .searchIcon {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    bottom: 0;
+    margin: auto;
+  }
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 400px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 1120px) {
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 300px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 992px) {
+  .searchBarSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 400px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 750px) {
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 300px !important;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 720px) {
+  .order_details_header {
+    margin-bottom: -50px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .order_details_header h4 {
+    width: 60%;
+    color: #130b46;
+    font-size: 24px;
+  }
+}

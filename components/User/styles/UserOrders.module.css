@@ -1,0 +1,434 @@
+.main_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  /* overflow: scroll; */
+}
+
+.user_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  /* overflow: scroll; */
+  width: 80vw;
+}
+
+.order_header {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "Manrope" !important;
+  margin: 2px 0 2px 0;
+  display: flex;
+  flex-direction: row;
+  margin-top: 2px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.order {
+  background-color: rgba(171, 171, 171, 0.201);
+  margin-bottom: 8px;
+  max-width: 300px;
+  height: auto;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.order_title_price {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order_price {
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+}
+
+.product_title {
+  font-size: 20px;
+  max-width: 180px;
+}
+
+.order_details_btn {
+  text-align: center;
+  margin: 20px auto 0 auto;
+  color: #fff;
+  background: #000;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.order_details_btn:hover {
+  background: #4a4a4a;
+}
+
+.txn_details {
+  margin: 0 auto;
+  text-align: center;
+  color: #4571ff;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: -10px;
+}
+
+/* .txn_details:hover {
+  font-weight: bold;
+} */
+
+.user_container h4 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "Manrope" !important;
+  margin: 2px 0 2px 0;
+  display: flex;
+  flex-direction: row;
+  margin-top: 2px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.order_container {
+  padding: 40px 30px 0 40px;
+  width: 80vw;
+  min-height: 100vh !important;
+}
+
+.orders_table {
+  margin: 30px 0 50px 0;
+  width: 100%;
+}
+
+.sub_table tr:hover:not(:first-child) {
+  background-color: #e5e5e5;
+}
+.orders_table td:before {
+  display: none;
+}
+.orders_table th,
+.orders_table td {
+  display: table-cell;
+  padding: 0.25em 0.5em;
+  color: #494671;
+}
+.orders_table th:first-child,
+.orders_table td:first-child {
+  padding-left: 0;
+}
+.orders_table th {
+  color: #494671;
+  background: #f4f6f8 !important;
+  text-align: center;
+}
+.orders_table th:last-child,
+.orders_table td:last-child {
+  padding-right: 0;
+}
+.orders_table th,
+.orders_table td {
+  padding: 1em 1em !important;
+}
+.orders_table td {
+  position: relative;
+  text-align: center;
+}
+
+.orders_table tr:hover {
+  background-color: #e5e5e5;
+}
+
+.orders_table td .active_status,
+.orders_table td .overdue_status,
+.orders_table td .cxld_status {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.sub_table td .active_status {
+  background: #42ed72;
+}
+.sub_table td .overdue_status {
+  background: #f28d30;
+}
+.sub_table td .cxld_status {
+  background: #ff1111;
+}
+
+.searchBarSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search_filter {
+  width: 100% !important;
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+
+.inputSection {
+  position: relative;
+  background: #f3f3f3;
+  border-radius: 50px;
+  width: 400px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.inputSection > input {
+  border-radius: 50px;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  text-indent: 29px;
+  line-height: 10px;
+  font-family: "Manrope";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  background: #f3f3f3;
+  border: none;
+}
+
+.inputSection > input::placeholder {
+  color: #000;
+}
+
+.inputSection > input:nth-child(2)::placeholder {
+  font-family: "Manrope";
+  font-size: 16px;
+  line-height: 19px;
+  color: #000;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 20px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  font-size: 22px;
+}
+
+.sortContainer {
+  min-height: 45px;
+  max-height: fit-content;
+  min-width: 140px !important;
+  max-width: fit-content;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #b6b6b6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  gap: 15px;
+  margin-right: 50px;
+  cursor: pointer;
+  animation: appear 0.5s ease-in-out;
+}
+
+.filter_button_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* justify-content: space-between; */
+  gap: 15px;
+  margin-right: 50px;
+}
+
+.filter_button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  animation: appear 0.5s ease-in-out;
+  border: none;
+  border-radius: 30px;
+  background-color: transparent;
+}
+
+.active_filter {
+  /* green dot */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #14d19e;
+}
+
+.primary_cta {
+  width: 200px;
+  height: 60px;
+  color: #130b46;
+  background-color: #8affcb;
+  border: none;
+  border-radius: 30px;
+  margin-top: 10px;
+  padding: 5px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.no_orders {
+  text-align: center;
+  margin: auto;
+}
+
+@media (max-width: 1150px) {
+  .inputSection > input::placeholder {
+    color: #f3f3f3;
+  }
+  .searchIcon {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    bottom: 0;
+    margin: auto;
+  }
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 400px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 1120px) {
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 300px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 992px) {
+  .searchBarSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 400px;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 750px) {
+  .inputSection {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 50px;
+    width: 300px !important;
+    height: 50px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .order {
+    background-color: rgba(171, 171, 171, 0.201);
+    margin-bottom: 8px;
+    max-width: 80vw;
+    height: auto;
+    padding: 2px;
+    border-radius: 20px;
+  }
+
+  .order_title_price {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .order_price {
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+  }
+
+  .product_title {
+    font-size: 20px;
+    max-width: 180px;
+  }
+  .sub_table {
+    margin: 3px 0 5px 0;
+    width: 80vw;
+  }
+
+  .sub_table tr:hover:not(:first-child) {
+    background-color: #e5e5e5;
+  }
+  .sub_table td:before {
+    display: none;
+  }
+  .sub_table th,
+  .sub_table td {
+    display: table-cell;
+    /* padding: 0.25em 0.5em; */
+  }
+  .sub_table th:first-child,
+  .sub_table td:first-child {
+    padding-left: 0;
+  }
+  .sub_table th {
+    color: #aaacac;
+    text-transform: uppercase;
+    background: #f4f6f8;
+  }
+  .sub_table th:last-child,
+  .sub_table td:last-child {
+    padding-right: 0;
+  }
+  .sub_table th,
+  .sub_table td {
+    padding: 0em 0.5em !important;
+    font-size: 0.6em;
+  }
+  .sub_table td {
+    position: relative;
+  }
+
+  .sub_table td .active_status,
+  .sub_table td .overdue_status,
+  .sub_table td .cxld_status {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .sub_table td .active_status {
+    background: #42ed72;
+  }
+  .sub_table td .overdue_status {
+    background: #f28d30;
+  }
+  .sub_table td .cxld_status {
+    background: #ff1111;
+  }
+}

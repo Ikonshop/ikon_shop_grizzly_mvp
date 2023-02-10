@@ -1,0 +1,821 @@
+.parent_form_container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  justify-content: space-evenly;
+}
+
+.linkContainer {
+  margin-top: 30px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background_blur {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /* gap: 40px; */
+  margin-bottom: 10vh;
+  flex-direction: column;
+}
+
+.payreq_container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px 0 0 20px;
+}
+
+.paylink_green {
+  width: 500px;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  background: url("/paylink_bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.tipjar_pink {
+  width: 500px;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  background: url("/tipjar_bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.paylink_green:hover,
+.tipjar_pink:hover {
+  transform: translateY(-10px);
+}
+
+.paylink_green h3 {
+  color: #494671;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.paylink_green p {
+  max-width: 300px;
+  color: #494671;
+  line-height: 30px;
+  margin-top: 20px;
+}
+
+.tipjar_pink h3 {
+  color: #5c3a6b;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.tipjar_pink p {
+  max-width: 300px;
+  color: #5c3a6b;
+  line-height: 30px;
+  margin-top: 20px;
+}
+
+.faqs {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  text-align: center;
+  color: #000;
+  font-family: "Manrope" !important;
+  font-size: 40px;
+  line-height: 52px;
+  max-width: 550px;
+  font-weight: lighter;
+  /* margin-top: 80px; */
+}
+
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.reqemail_reqshipping {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.flex_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.link_header {
+  display: flex;
+  align-items: center;
+}
+
+.faqs h1 span {
+  color: #f8c89b;
+}
+
+.link_container {
+  height: 80vh;
+  padding-top: 10px;
+}
+
+.create_product_container {
+  font-family: "Manrope" !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  z-index: 1;
+  /* padding-top: 10px; */
+}
+
+.button {
+  border: none;
+  background: #8affcb;
+  color: #130b46;
+  width: 200px;
+  height: 60px;
+  margin: 40px auto 20px auto;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Manrope" !important;
+  border-radius: 50px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.preview_button {
+  border: none;
+  background: #8affcb;
+  color: #130b46;
+  width: 100%;
+  height: 60px;
+  margin: 40px auto 20px auto;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Manrope" !important;
+  border-radius: 50px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/* .button:hover {
+  background-image: url(../../../public/blur-bg.png);
+  color: white;
+  -webkit-animation: bg-pan-left 2s linear infinite alternate both;
+  animation: bg-pan-left 2s ease-in-out infinite alternate both;
+} */
+
+.header {
+  text-align: center;
+  background-image: url(../../../public/blur-bg.png);
+  padding: 0 20px;
+  border-radius: 10px 10px 0 0;
+}
+
+.form_container {
+  background-color: transparent;
+  box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  background-color: #ebebebbb;
+  border: none;
+  font-size: 1rem;
+  height: 60px;
+  padding: 15px 30px;
+  border-radius: 7px;
+  color: #3b3b3b;
+  outline: none;
+  box-sizing: border-box;
+  margin: 10px 0;
+  width: 48%;
+  font-family: "Manrope" !important;
+}
+
+.input_name {
+  background-color: #ebebebbb;
+  border: none;
+  font-size: 1rem;
+  padding: 15px 30px;
+  border-radius: 7px;
+  color: #000;
+  outline: none;
+  box-sizing: border-box;
+  margin: 10px 0;
+  width: 100%;
+  height: 60px;
+  font-family: "Manrope" !important;
+}
+
+.input_name::-webkit-input-placeholder {
+  color: #3b3b3b;
+}
+
+/* .flex_row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+} */
+
+.input[type="url"] {
+  width: 100%;
+}
+
+.flex_full_row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.text_area {
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  background-color: #ebebebbb;
+  border: none;
+  font-size: 1.1rem;
+  padding: 15px 30px;
+  border-radius: 7px;
+  color: #3b3b3b;
+  outline: none;
+  box-sizing: border-box;
+  margin: 10px 0;
+  width: 100%;
+  font-family: "Manrope" !important;
+}
+
+.text_area::-webkit-input-placeholder {
+  color: #3b3b3b;
+}
+
+.form_header option {
+  display: flex;
+}
+
+.checkbox_text {
+  font-size: 16px;
+  font-family: "Manrope" !important;
+  color: #585858;
+  margin-left: 10px;
+  margin-top: -7px;
+}
+
+.product_link {
+  font-size: 1.2rem;
+  font-family: "Manrope" !important;
+  color: black;
+  /* center the items */
+  display: flex;
+  justify-content: center;
+}
+
+.link {
+  width: 500px;
+  height: auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.link h5 {
+  text-align: center;
+  font-weight: bold;
+  margin: 20px 0 15px 0;
+}
+
+.link p {
+  color: #727272;
+  text-align: center;
+  font-size: 16px;
+}
+
+.link_img {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 30px;
+  position: relative;
+}
+
+.link_img_overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.link_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share_link {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.link_text {
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #dbdbdb;
+  font-weight: bold;
+  color: #727272;
+}
+
+.share_button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #dbdbdb;
+  background: #fff;
+  margin-top: 50px;
+  font-weight: bold;
+}
+
+.link_button {
+  background: linear-gradient(
+    -90deg,
+    rgb(201, 9, 176) 100%,
+    rgba(152, 0, 186, 0.429) 35%
+  );
+  color: whitesmoke;
+  width: 180px;
+  height: 60px;
+  font-size: 16px;
+  font-family: "Manrope" !important;
+  margin-top: 30px;
+  border-radius: 10px;
+  padding: 8px 20px;
+  cursor: pointer;
+  /* center button */
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.copy_icon {
+  color: #585858;
+  font-size: 1.2rem;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.checkbox_text #tool_tip {
+  color: red;
+  display: none;
+  font-size: 0.6rem;
+}
+
+.checkbox_text:hover #tool_tip {
+  display: inline;
+}
+
+.back_button_container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.back_button {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #585858;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.form_header {
+  width: 100%;
+  height: 100px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.form_header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+}
+
+.form_header_text {
+  font-size: 20px;
+  text-align: center;
+  margin: 20px 0;
+  color: #130b46;
+  font-weight: bold;
+}
+
+.checkbox_container input {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox_container input:checked {
+  background: red !important;
+}
+
+/* .back_button:hover {
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: bold;
+} */
+
+/* For Tablet View */
+@media only screen and (max-width: 1410px) {
+  .paylink_green {
+    width: 450px;
+    padding-left: 40px;
+  }
+  .tipjar_pink {
+    width: 450px;
+    padding-left: 40px;
+  }
+}
+@media only screen and (max-width: 1310px) {
+  .paylink_green {
+    width: 400px;
+    padding-left: 40px;
+  }
+  .tipjar_pink {
+    width: 400px;
+    padding-left: 40px;
+  }
+}
+@media only screen and (max-width: 1204px) {
+  .paylink_green {
+    width: 350px;
+    padding-left: 40px;
+  }
+  .tipjar_pink {
+    width: 350px;
+    padding-left: 40px;
+  }
+
+  .paylink_green h3 {
+    font-size: 24px;
+  }
+
+  .paylink_green p {
+    max-width: 300px;
+  }
+
+  .tipjar_pink h3 {
+    font-size: 24px;
+  }
+
+  .tipjar_pink p {
+    max-width: 300px;
+  }
+}
+@media only screen and (max-width: 1093px) {
+  .paylink_green {
+    width: 500px;
+    padding-left: 50px;
+  }
+  .tipjar_pink {
+    width: 500px;
+    padding-left: 50px;
+  }
+
+  .paylink_green h3 {
+    font-size: 24px;
+  }
+
+  .paylink_green p {
+    max-width: 300px;
+  }
+
+  .tipjar_pink h3 {
+    font-size: 24px;
+  }
+
+  .tipjar_pink p {
+    max-width: 300px;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .flex_row {
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .col_half {
+    width: 100%;
+  }
+
+  .flex_row select,
+  .flex_row input {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 470px) {
+  .paylink_green {
+    width: 500px;
+    padding-left: 30px;
+  }
+  .tipjar_pink {
+    width: 500px;
+    padding-left: 30px;
+  }
+
+  .paylink_green h3 {
+    font-size: 24px;
+  }
+
+  .paylink_green p {
+    max-width: 200px;
+  }
+
+  .tipjar_pink h3 {
+    font-size: 24px;
+  }
+
+  .tipjar_pink p {
+    max-width: 220px;
+  }
+}
+@media only screen and (max-width: 380px) {
+  .paylink_green {
+    width: 500px;
+    padding: 0 20px;
+  }
+  .tipjar_pink {
+    width: 500px;
+    padding: 0 20px;
+  }
+
+  .paylink_green h3 {
+    font-size: 20px;
+  }
+
+  .paylink_green p {
+    max-width: 200px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .tipjar_pink h3 {
+    font-size: 20px;
+  }
+
+  .tipjar_pink p {
+    max-width: 220px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .gfg-div {
+    width: 400px;
+    height: 400px;
+    background-color: orange;
+    color: black;
+  }
+}
+
+/* For Mobile Portrait View */
+@media screen and (max-device-width: 480px) and (orientation: portrait) {
+  .faqs {
+    margin-top: 0px;
+  }
+
+  .background_blur {
+    background: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+    margin-bottom: 0;
+    flex-direction: column;
+  }
+
+  .faqs h1 {
+    text-align: left;
+    color: #000;
+    font-family: "Manrope" !important;
+    font-size: 20px;
+    /* line-height: 28px; */
+    max-width: 400px;
+    font-weight: lighter;
+    margin-top: 0;
+  }
+
+  .parent_form_container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    justify-content: space-evenly;
+  }
+
+  .background_blur {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    /* margin-bottom: 20vh; */
+  }
+
+  .input {
+    background-color: #212121bb;
+    border: none;
+    font-size: 12px;
+    height: 60px;
+    padding: 5px 3px;
+    border-radius: 7px;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+    text-align: left;
+    align-items: left;
+    justify-content: left;
+    margin: 2px 0;
+    width: 48%;
+    font-family: "Manrope" !important;
+  }
+
+  .input_name {
+    background-color: #212121bb;
+    border: none;
+    font-size: 12px;
+    padding: 15px 30px;
+    border-radius: 7px;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+    margin: 2px 0;
+    width: 100%;
+    height: 60px;
+    font-family: "Manrope" !important;
+  }
+
+  .text_area {
+    width: 100%;
+    min-height: 20px;
+    resize: none;
+    background-color: #212121bb;
+    border: none;
+    font-size: 12px;
+    padding: 15px 30px;
+    border-radius: 7px;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+    margin: 2px 0;
+    width: 100%;
+    font-family: "Manrope" !important;
+  }
+
+  .checkbox_text {
+    font-size: 0.6rem;
+    font-family: "Manrope" !important;
+    color: #585858;
+    margin-left: 6px;
+    padding-top: 2px;
+  }
+
+  .checkbox_text p {
+    color: red;
+    display: none;
+    font-size: 0.5rem;
+  }
+
+  .checkbox_text:hover p {
+    display: block;
+  }
+
+  .link_button {
+    background: linear-gradient(
+      -90deg,
+      rgb(201, 9, 176) 100%,
+      rgba(152, 0, 186, 0.429) 35%
+    );
+    color: whitesmoke;
+    width: 160px;
+    height: 30px;
+    font-size: 16px;
+    font-family: "Manrope" !important;
+    margin-top: 0px;
+    border-radius: 10px;
+    padding: 0;
+    cursor: pointer;
+    /* center button */
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* For Mobile Landscape View */
+@media screen and (max-device-width: 640px) and (orientation: landscape) {
+  .gfg-div {
+    width: 400px;
+    height: 200px;
+    background-color: cyan;
+    color: black;
+  }
+}
+
+/* For Mobile Phones Portrait or Landscape View */
+@media screen and (max-device-width: 640px) {
+  .gfg-div {
+    width: 400px;
+    height: 200px;
+    background-color: chartreuse;
+    color: black;
+  }
+}
+
+/* For iPhone 4 Portrait or Landscape View */
+@media screen and (min-device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+  .gfg-div {
+    width: 400px;
+    height: 400px;
+    background-color: brown;
+    color: black;
+  }
+}
+
+/* For iPhone 5 Portrait or Landscape View */
+@media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+  .gfg-div {
+    width: 400px;
+    height: 400px;
+    background-color: cornflowerblue;
+    color: black;
+  }
+}
+
+/* For iPhone 6 and 6 plus Portrait or Landscape View */
+@media (min-device-height: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 3) {
+  .gfg-div {
+    width: 400px;
+    height: 400px;
+    background-color: darkgoldenrod;
+    color: black;
+  }
+}

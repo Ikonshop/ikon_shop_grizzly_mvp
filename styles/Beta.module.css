@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css?family=Manrope");
+
+.beta_hero {
+  max-width: 1920px;
+  /* width: 100%; */
+  height: 40vh;
+  background: url(/betahero.png);
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;
+  overflow: hidden;
+  position: relative;
+}
+
+.beta_hero_overlay {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.7) 45%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* z-index: -1; */
+}
+
+.beta_hero_content {
+  position: absolute;
+  z-index: 2;
+  top: 80px;
+  left: 80px;
+  color: #fff;
+}
+
+.beta_hero_content p {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: "Manrope";
+}
+
+.beta_hero_content h1 {
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 54px;
+  font-family: "Manrope";
+}
+
+.main {
+  max-width: 700px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-left: 8px;
+}
+
+.aside {
+  width: 280px;
+  min-width: 220px;
+  padding: 16px;
+  margin: 8px;
+  align-self: flex-start;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 48px;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+  font-family: "Manrope";
+}
+
+.beta_container {
+  display: flex;
+  max-width: 1050px;
+  margin: 80px auto 20px auto;
+  height: 100%;
+  display: flex;
+}
+
+.beta_container .body {
+  line-height: 36px;
+  font-size: 18px;
+  color: #696969;
+  margin-top: 20px;
+  font-family: "Manrope";
+}
+
+/*  Gives a little bit of buffer when header is navigated to */
+.beta_container h2,
+.beta_container h3 {
+  padding-top: 16px;
+  margin-top: -16px;
+  font-family: "Manrope";
+}
+
+#initial_header {
+  font-size: 36px;
+  font-weight: bold;
+  color: #4c4c4c;
+  font-family: "Manrope";
+}
+
+#small_header1 {
+  font-size: 20px;
+  color: #4c4c4c;
+  margin-top: 40px;
+  font-weight: bold;
+  font-family: "Manrope";
+}
+#small_header2 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #4c4c4c;
+  margin: 30px 0;
+  font-family: "Manrope";
+}
+#small_header3 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #4c4c4c;
+  margin: 30px 0;
+  font-family: "Manrope";
+}
+
+.main li {
+  margin: 20px 0 0 0;
+  font-size: 18px;
+  color: #696969;
+  line-height: 32px;
+  font-family: "Manrope";
+}
+
+.main li span {
+  margin-left: 20px;
+  font-family: "Manrope";
+  line-height: 32px;
+}
+
+.main li p {
+  font-weight: bold;
+  font-family: "Manrope";
+}
+
+.beta_img {
+  width: 100%;
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 900px) {
+  .aside {
+    display: none;
+  }
+  .beta_App {
+    overflow-x: hidden;
+  }
+}
