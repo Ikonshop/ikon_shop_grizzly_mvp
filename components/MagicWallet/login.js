@@ -3,6 +3,7 @@ import { Magic } from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 import { CreateCollectionFromMagic, GetCollectionByEmail  } from "../../lib/api";
+import {  getAssociatedTokenAddress } from "@solana/spl-token";
 import Loading from "../Loading";
 
 
@@ -15,6 +16,7 @@ const LoginMagic = () => {
   const [loading, setLoading] = useState(false);
   const [userMetadata, setUserMetadata] = useState({});
   const [balance, setBalance] = useState(0);
+  const [magicUsdcBalance, setMagicUsdcBalance] = useState(0);
   const [destinationAddress, setDestinationAddress] = useState("");
   const [sendAmount, setSendAmount] = useState(0);
   const [txHash, setTxHash] = useState("");
@@ -23,29 +25,11 @@ const LoginMagic = () => {
 
   const connection = new web3.Connection(rpcUrl);
 
-  useEffect(() => {
+  
 
-    const magic = new Magic("pk_live_FCF04103A9172B45", {
-        extensions: {
-        solana: new SolanaExtension({
-            rpcUrl
-        })
-        }
-    });
-    magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-    setIsLoggedIn(magicIsLoggedIn);
-      if (magicIsLoggedIn) {
-        magic.user.getMetadata().then((user) => {
-          setUserMetadata(user);
-          const pubKey = new web3.PublicKey(user.publicAddress);
-          getBalance(pubKey);
-        });
-      }
-    });
-  }, [isLoggedIn]);
-
-  const login = async () => {
-
+  const login = async (e) => {
+    e.preventDefault();
+    console.log("starting login for email", email);
     const magic = new Magic("pk_live_FCF04103A9172B45", {
         extensions: {
         solana: new SolanaExtension({
@@ -56,12 +40,14 @@ const LoginMagic = () => {
     await magic.auth.loginWithMagicLink({ email });
     const userMetadata = await magic.user.getMetadata();
     localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));
-
+    const pubFromMetadata = new web3.PublicKey(userMetadata.publicAddress);
+    getBalance(pubFromMetadata);
+    getUsdcBalance(pubFromMetadata);
     setIsLoggedIn(true);
   };
 
-  const logout = async () => {
-
+  const logout = async (e) => {
+    e.preventDefault();
     const magic = new Magic("pk_live_FCF04103A9172B45", {
         extensions: {
         solana: new SolanaExtension({
@@ -74,13 +60,38 @@ const LoginMagic = () => {
     setIsLoggedIn(false);
   };
 
-  const getBalance = async (pubKey) => {
-    connection.getBalance(pubKey).then((bal) => setBalance(bal / 1000000000));
-  };
+
+    async function getBalance(pubKey) {
+      const solanaMagicAddress = new web3.PublicKey(pubKey);
+      const balance = await connection.getBalance(solanaMagicAddress);
+      console.log('balance: ', balance)
+      const convertedBalance = balance / 1000000000;
+      setBalance(convertedBalance);
+    }
+
+    async function getUsdcBalance(pubKey) {
+      const solanaMagicAddress = new web3.PublicKey(pubKey);
+      console.log('checking for usdc balance', solanaMagicAddress.toString())
+      const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+      // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
+      try{
+        const associatedTokenAddress = await getAssociatedTokenAddress(usdcAddress, solanaMagicAddress);
+        console.log('associatedTokenAddress: ', associatedTokenAddress.toString())
+        const usdcBalance = await connection.getTokenAccountBalance(associatedTokenAddress);
+        console.log('usdcBalance: ', usdcBalance.value.uiAmount)
+        const convertedUsdcBalance = usdcBalance.value.uiAmount;
+        setMagicUsdcBalance(convertedUsdcBalance);
+      } catch (error) {
+        console.log('error: ', error)
+      }
+
+    }
+
 
  
 
-  const handleSendTransaction = async () => {
+  const handleSendTransaction = async (e) => {
+    e.preventDefault();
     setSendingTransaction(true);
 
     const magic = new Magic("pk_live_FCF04103A9172B45", {
@@ -211,11 +222,13 @@ const LoginMagic = () => {
                               alt="blackPeace"
                               width="40px"
                             />
-                            {email}
-                            Balance: {balance}
+                            {email} 
+                            
                         </button>
+                        
                     </form>
                 )}
+                Balance: {balance} SOL || {magicUsdcBalance} USDC
             </>
         )
     }
@@ -235,18 +248,19 @@ const LoginMagic = () => {
                 console.log('loggedIn', loggedIn)
                 if(loggedIn) {
                   setIsLoggedIn(true)
-                
-
-                  const userMetadata = await magic.user.getMetadata();
-                  console.log('userMetadata', userMetadata)
-                  const wallet = new web3.PublicKey(userMetadata.publicAddress);
-                  console.log('wallet', wallet.toString()) 
-                  //set metadata to local storage
-                  localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));
-                  const magicEmail = userMetadata.email;
-                  const publicAddress = userMetadata.publicAddress;
-                  console.log('publicAddress', publicAddress)
-                  window.dispatchEvent(new CustomEvent("magic-logged-in"));
+                  magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+                    setIsLoggedIn(magicIsLoggedIn);
+                      if (magicIsLoggedIn) {
+                        magic.user.getMetadata().then((user) => {
+                          setUserMetadata(user);
+                          localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+                          const pubKey = new web3.PublicKey(user.publicAddress);
+                          getBalance(pubKey);
+                          getUsdcBalance(pubKey);
+                          window.dispatchEvent(new CustomEvent("magic-logged-in"));
+                        });
+                      }
+                    });
                 }
             }
             checkUser();
