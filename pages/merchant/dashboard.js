@@ -13,6 +13,7 @@ import InvoiceOpen from "../../components/Merchant/Invoices/InvoiceOpen";
 import PayRequests from "../../components/Merchant/PayRequests";
 import StoreSettings from "../../components/Merchant/StoreSettings";
 import Overview from "../../components/Merchant/Overview";
+import { CreateCollectionFromMagic, CheckForCollectionByOwner  } from "../../lib/api";
 // import StoreData from "../../components/Merchant/StoreData";
 import Subscriptions from "../../components/Merchant/Subscriptions/Subscriptions";
 import {
@@ -30,11 +31,14 @@ import {
   IoBarChartOutline,
   IoHourglass,
 } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
 
 function Dashboard() {
   const [loading, setLoading] = useState(false);
+  const [userPublicKey, setUserPublicKey] = useState();
+  const [userEmail, setUserEmail] = useState();
   const [currentWallet, setCurrentWallet] = useState([]);
   const [accessGranted, setAccessGranted] = useState(true);
   const [renderNfts, setRenderNfts] = useState(false);
@@ -419,6 +423,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (publicKey) {
+      setUserPublicKey(publicKey.toString());
       //add window event listener for view_all_orders that sets showOrders to true
       window.addEventListener("view_all_orders", () => {
         console.log("view all orders triggered");
@@ -428,15 +433,50 @@ function Dashboard() {
     }
   }, []);
 
+  const checkMagicLogin = async() => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      
+      const data = await CheckForCollectionByOwner(magicPubKey.toString());
+      console.log('data', data);
+      if (data) {
+        setMerchant(true);
+      }
+      console.log("userMagicMetadata", userMagicMetadata);
+    }
+  };
+
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
+  }, []);
+
   return (
     <div className={styles.parent_container}>
       {/* <DashboardHeader /> */}
       {showMerchantDash ? renderMerchantDashboard() : null}
       <div className={styles.main_container}>
         {/* {!publicKey ? renderNotConnected() : null} */}
-        {publicKey && loading ? renderLoading() : null}
+        {userPublicKey && loading ? renderLoading() : null}
 
-        {publicKey &&
+        {userPublicKey &&
         merchant &&
         !loading &&
         !showCreate &&
@@ -447,13 +487,13 @@ function Dashboard() {
         !showInvoices
           ? renderDisplay()
           : null}
-        {merchant && publicKey && showInvoices && renderInvoices()}
-        {merchant && publicKey && showPayRequests && renderAllPayRequests()}
-        {merchant && publicKey && showCreate && renderCreateComponent()}
-        {merchant && publicKey && showOrders && renderOrdersComponent()}
-        {merchant && publicKey && showSubHub && renderSubHubComponent()}
-        {merchant && publicKey && showInventory && renderInventoryComponent()}
-        {merchant && publicKey && showSettings && renderSettingsComponent()}
+        {merchant && userPublicKey && showInvoices && renderInvoices()}
+        {merchant && userPublicKey && showPayRequests && renderAllPayRequests()}
+        {merchant && userPublicKey && showCreate && renderCreateComponent()}
+        {merchant && userPublicKey && showOrders && renderOrdersComponent()}
+        {merchant && userPublicKey && showSubHub && renderSubHubComponent()}
+        {merchant && userPublicKey && showInventory && renderInventoryComponent()}
+        {merchant && userPublicKey && showSettings && renderSettingsComponent()}
       </div>
     </div>
   );

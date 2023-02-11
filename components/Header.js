@@ -402,19 +402,21 @@ export default function HeaderComponent() {
     <>
       <Navbar 
         expand="lg"
-        // style={{
-        //   backgroundColor: theme === "dark" ? "navy" : "#fff",
-        // }}
+       
       >
         <Container
-          style={{
+           
+        >
+            <div style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-            <>
+            justifyContent: "flex-end",
+            alignContent: "flex-end",
+            alignItems: "flex-end",
+            width: "100%",
+            gap: "10vw",
+            
+          }}>
               <Navbar.Brand
                 onClick={() => router.push("/")}
                 style={{ cursor: "pointer" }}
@@ -449,13 +451,66 @@ export default function HeaderComponent() {
                       style={{
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "space-evenly",
                       }}
                     >
+                      <div className="wave">
+                        <img src="/wave.png" />
+                        <p>
+                          Hello Wallet: <strong>{magicPublicKey && magicPublicKey.slice(0, 4)}...{magicPublicKey && magicPublicKey.slice(-4)}</strong>
+                        </p>
+                        <div className="wallet_amount">
+                          <div className="sol">
+                            <img src="/sol.png" />
+                            <p>{magicBalance} SOL</p>
+                          </div>
+                          <div className="usdc">
+                            <img src="/usdc.png" />
+                            <p>{magicUsdcBalance} USDC</p>
+                          </div>
+                        </div>
+                      </div>
                       {isMultiStoreOwner && (
                         <Navbar.Brand className="" style={{ border: "none" }}>
                           {renderMultiStoreSelection()}
                         </Navbar.Brand>
                       )}
+
+                      <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
+                        <div id="container">
+                          {theme === "light" && (
+                          <div 
+                            onClick={toggleTheme}
+                            id="target" 
+                            class="sun"
+                            
+                          > 
+                            <IoSunnyOutline className="sunny_tog" />
+                            <div></div>
+                          </div>
+                          )}
+                          {theme === "dark" && (
+                            <div 
+                              onClick={toggleTheme}
+                              id="target" 
+                              class="moon"
+                            > 
+                              {theme === "dark" && (
+                                <IoMoonOutline className="moon_tog" />
+                              )}
+                            
+                              <div></div>
+                            </div>
+                          )}
+                        </div>
+                      </Nav.Link>
+
+                    {!publicKey && (
+                      renderMagicLogin()
+                    )}
+                    {publicKey && (
+                      <WalletMultiButton />
+                    )}
                     </div>
                   </>
                 )}
@@ -606,7 +661,7 @@ export default function HeaderComponent() {
            
                 </Nav>
               </Navbar.Collapse>
-            </>
+            </div>
           
         </Container>
       </Navbar>

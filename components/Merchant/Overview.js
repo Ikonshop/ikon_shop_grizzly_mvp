@@ -9,7 +9,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IoCashOutline } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 import Loading from "../Loading";
+import { CreateCollectionFromMagic, CheckForCollectionByOwner  } from "../../lib/api";
+
 
 const Overview = (req) => {
   const publicKey = req.publicKey;
@@ -17,6 +20,10 @@ const Overview = (req) => {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [recentSales, setRecentSales] = useState([]);
+  const [userPublicKey, setUserPublicKey] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [currentWallet, setCurrentWallet] = useState("");
+
   const [totalSalesForYear, setTotalSalesForYear] = useState(0);
 
   const solana_logo = "/solana_logo.svg";
@@ -255,25 +262,81 @@ const Overview = (req) => {
   };
 
   useEffect(() => {
-    (async () => {
-      if (document.getElementById("salesChart")) {
-        document.getElementById("salesChart").remove();
-      }
-      const salesChartContainer = document.getElementById(
-        "salesChartContainer"
-      );
-      const salesChartElement = document.createElement("canvas");
+    if(publicKey){
+      (async () => {
+        if (document.getElementById("salesChart")) {
+          document.getElementById("salesChart").remove();
+        }
+        const salesChartContainer = document.getElementById(
+          "salesChartContainer"
+        );
+        const salesChartElement = document.createElement("canvas");
 
-      salesChartElement.id = "salesChart";
-      const owner = publicKey.toString();
-      const response = await GetMerchantOverview(owner);
-      //sort the response into orders and products
-      setOrders(response.orders);
-      setProducts(response.products);
-      //setRecentSales to the last 3 orders
-      setRecentSales(response.orders.slice(0, 3));
-      setLoading(false);
-    })();
+        salesChartElement.id = "salesChart";
+        const owner = publicKey.toString();
+        const response = await GetMerchantOverview(owner);
+        //sort the response into orders and products
+        setOrders(response.orders);
+        setProducts(response.products);
+        //setRecentSales to the last 3 orders
+        setRecentSales(response.orders.slice(0, 3));
+        setLoading(false);
+      })();
+    }
+    if(!publicKey && userPublicKey.toString()){
+      (async () => {
+        if (document.getElementById("salesChart")) {
+          document.getElementById("salesChart").remove();
+        }
+        const salesChartContainer = document.getElementById(
+          "salesChartContainer"
+        );
+        const salesChartElement = document.createElement("canvas");
+
+        salesChartElement.id = "salesChart";
+        const owner = userPublicKey.toString()
+        const response = await GetMerchantOverview(owner);
+        //sort the response into orders and products
+        setOrders(response.orders);
+        setProducts(response.products);
+        //setRecentSales to the last 3 orders
+        setRecentSales(response.orders.slice(0, 3));
+        setLoading(false);
+      })();
+    }
+  }, []);
+
+  const checkMagicLogin = async() => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      
+      const data = await CheckForCollectionByOwner(magicPubKey.toString());
+      console.log('data', data);
+      
+      console.log("userMagicMetadata", userMagicMetadata);
+    }
+  };
+
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
   }, []);
 
   return (
@@ -284,7 +347,7 @@ const Overview = (req) => {
         </div>
       )}
 
-      {!loading && publicKey && (
+      {!loading && userPublicKey && (
         <div className={styles.overview_container}>
           {/* Sales Container  */}
           <div className={styles.sales_container}>
