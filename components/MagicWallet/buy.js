@@ -4,7 +4,9 @@ import * as web3 from "@solana/web3.js";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAssociatedTokenAccount, getMint } from "@solana/spl-token";
 import BigNumber from "bignumber.js";
 import { gql, GraphQLClient } from 'graphql-request';
+import { addBuyAllOrder } from '../../lib/api';
 import base58 from 'bs58'
+import Loading from '../Loading';
 import { Magic } from 'magic-sdk';
 import { SolanaExtension } from '@magic-ext/solana';
 
@@ -32,9 +34,11 @@ const foxyAddress = new web3.PublicKey("FoXyMu5xwXre7zEoSvzViRk3nGawHUp9kUh97y2N
 
 const MagicButton = (req) => {
   const orderID = useMemo(() => web3.Keypair.generate().publicKey, []);
-
+  const [loading, setLoading] = useState(false);
+  // useMemo to write thank you message attached to order
   const createAndSendTransaction = async () => {
     try{
+      setLoading(true);
       const graphQLClient = new GraphQLClient((graphqlAPI), {
         headers: {
           authorization: `Bearer ${GRAPHCMS_TOKEN}`,
@@ -127,7 +131,7 @@ const MagicButton = (req) => {
   
       const bigAmount = BigNumber(itemPrice);
       const buyerPublicKey = new web3.PublicKey(buyerAddy);
-
+      console.log('buyerPublicKey', buyerPublicKey.toString());
 
       const magic = new Magic("pk_live_CD0FA396D4966FE0", {
         extensions: {
@@ -150,7 +154,7 @@ const MagicButton = (req) => {
       // const endpoint = web3.clusterApiUrl(network);
       // const block_connection = new web3.Connection(endpoint, "confirmed");
       // const { blockhash } = await block_connection.getLatestBlockhash("finalized");
-
+      console.log('payer', payer.toString())
       let transactionMagic = new web3.Transaction({
         feePayer: payer,
         recentBlockhash: hash.blockhash
@@ -196,7 +200,7 @@ const MagicButton = (req) => {
         // const secondUsdcAdress = await getAssociatedTokenAddress(usdcAddress, secondPublicKey);
         const secondUsdcAdress = await getAssociatedTokenAddress(usdcAddress, sellerPublicKey);
         
-
+        console.log('checkin accounts')
         const checkAccounts = async() => {
           const buyerUsdcAccount = await connection.getAccountInfo(buyerUsdcAcc);
           if (buyerUsdcAccount === null) {
@@ -240,7 +244,9 @@ const MagicButton = (req) => {
           ((bigAmount.toNumber() * 10 ** (await usdcMint).decimals)), 
           usdcMint.decimals // The token could have any number of decimals
         );
-  
+
+        var message = "Order for product: " + id;
+        console.log("message", message);
         transferInstruction.keys.push({
           pubkey: new web3.PublicKey(orderID),
           isSigner: false,
@@ -249,6 +255,17 @@ const MagicButton = (req) => {
         
         transactionMagic.add(...[transaction]);
         transactionMagic.add(...[transferInstruction]);
+
+        transactionMagic.add(
+                  new web3.TransactionInstruction({
+                    keys: [
+                      { pubkey: buyerPublicKey, isSigner: true, isWritable: false },
+                      
+                    ],
+                    data: Buffer.from(message, "utf-8"),
+                    programId: new web3.PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+                  })
+                )
 
         const serializeConfig = {
           requireAllSignatures: false,
@@ -264,10 +281,25 @@ const MagicButton = (req) => {
 
         const tx = web3.Transaction.from(signedTransaction.rawTransaction);
         const signature = await connection.sendRawTransaction(tx.serialize());
-        console.log(`https://explorer.solana.com/tx/${signature}`);
+        // wait for transaction to be confirmed
+        if(signature) {
+          addBuyAllOrder(req.order)
+        }
+        console.log(`https://solana.fm/tx/${signature}`);
+        setLoading(false);
       }
     } catch (error) {
       console.log("error", error);
+      console.log('error', error.message)
+      // if error message is 'Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1'
+      //alert('Transaction failed, due to insufficient funds.')
+      if(error.message === 'failed to send transaction: Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1') {
+        alert('Transaction failed, due to insufficient funds.')
+
+      }else{
+        alert('Transaction failed, please try again.')
+      }
+      setLoading(false);
     }
   };
 
@@ -276,7 +308,7 @@ const MagicButton = (req) => {
       onClick={() => createAndSendTransaction()}
       className="buy-button"
     >
-      Pay w/ Magic
+      {!loading ? 'Pay w/ Magic' : 'Loading...'}
     </button>
   );
 };
