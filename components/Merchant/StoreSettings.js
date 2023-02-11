@@ -14,6 +14,7 @@ import {
   IoLogoTwitter,
   IoLogoWebComponent,
 } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 
 const StoreSettings = () => {
   const connection = new Connection(
@@ -21,6 +22,9 @@ const StoreSettings = () => {
     "confirmed"
   );
   const { publicKey } = useWallet();
+  const [userPublicKey, setUserPublicKey] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [currentWallet, setCurrentWallet] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeStoreSymbol, setActiveStoreSymbol] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
@@ -255,6 +259,20 @@ const StoreSettings = () => {
     );
   };
 
+  const checkMagicLogin = async() => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      
+      setLoading(false);
+    }
+  };
+
   //add window event listener for if the user changes active_store in the local storage
   useEffect(() => {
     setLoading(true);
@@ -309,9 +327,25 @@ const StoreSettings = () => {
 
   //     }, []);
 
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
+  }, []);
+
   return (
     <div>
-      {publicKey &&
+      {userPublicKey &&
       isOwner &&
       !loading &&
       !confirmationModal &&

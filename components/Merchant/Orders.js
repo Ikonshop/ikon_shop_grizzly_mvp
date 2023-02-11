@@ -323,6 +323,7 @@ function Orders() {
       setOwnerOrders([]);
     }
   };
+  
   const checkMagicLogin = async() => {
     if (localStorage.getItem("userMagicMetadata")) {
       const userMagicMetadata = JSON.parse(
