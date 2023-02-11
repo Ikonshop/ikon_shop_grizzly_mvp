@@ -4,6 +4,7 @@ import {
   getCollectionOwner,
   deleteSingleProduct,
   getSingleProductOrders,
+  CheckForCollectionByOwner 
 } from "../../lib/api";
 import styles from "../../styles/Product.module.css";
 import Header from "../../components/Header";
@@ -23,11 +24,15 @@ import {
   IoEye,
   IoTrashBin,
 } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 
 import EditProduct from "../../components/Product/EditProduct";
 
 function myProducts() {
   const { publicKey } = useWallet();
+  const [userPublicKey, setUserPublicKey] = useState();
+  const [userEmail, setUserEmail] = useState();
+  const [currentWallet, setCurrentWallet] = useState();
   const router = useRouter();
   const [ownerProducts, setOwnerProducts] = useState([]);
   const [singleProductOrderView, setSingleProductOrderView] = useState(false);
@@ -290,38 +295,40 @@ function myProducts() {
     );
   };
 
-  useEffect(() => {
-    if (publicKey) {
-      const owner = publicKey.toString();
-      const getAllProducts = async () => {
-        const products = await getCollectionOwner(owner);
-        for (let i = 0; i < products.products.length; i++) {
-          if (products.products[i].type === "product") {
-            ownerProducts.push(products.products[i]);
-          }
-          if (i == products.products.length - 1) {
-            setLoading(false);
-            if (ownerProducts == 0) {
-              setNoProducts(true);
-            }
-          }
-        }
-      };
-      getAllProducts();
-      // console.log(ownerProducts);
+  const checkMagicLogin = async() => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      
+      const data = await CheckForCollectionByOwner(magicPubKey.toString());
+      console.log('data', data);
+      const products = await getCollectionOwner(magicPubKey.toString())
+      console.log('products', products.products);
+      setOwnerProducts(products.products);
+      console.log("userMagicMetadata", userMagicMetadata);
+      setLoading(false);
     }
-  }, [publicKey]);
+  };
 
   useEffect(() => {
-    const checkForKey = () => {
-      if (!publicKey) {
-        alert("Please connect to app to continue");
-      }
-    };
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
 
-    setTimeout(() => {
-      checkForKey();
-    }, 5000);
   }, []);
 
   return (

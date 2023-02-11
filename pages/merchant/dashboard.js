@@ -99,14 +99,14 @@ function Dashboard() {
 
   const renderDisplay = () => (
     <div className={styles.merchant_container}>
-      <Overview publicKey={publicKey} />
+      <Overview publicKey={userPublicKey} />
       {renderQuickActions()}
     </div>
   );
 
   const renderInvoices = () => (
     <div className={styles.merchant_container}>
-      <InvoiceOpen owner={publicKey} />
+      <InvoiceOpen owner={userPublicKey} />
     </div>
   );
 
@@ -134,7 +134,7 @@ function Dashboard() {
           />
           <button
             id="overview"
-            disabled={!publicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "overview"
                 ? "active_dash dash-button"
@@ -156,7 +156,7 @@ function Dashboard() {
 
           <button
             id="products"
-            disabled={!publicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "products"
                 ? "active_dash dash-button"
@@ -178,7 +178,7 @@ function Dashboard() {
 
           <button
             id="orders"
-            disabled={!publicKey}
+            disabled={!userPublicKey}
             className={
               activeMenu == "orders" ? "active_dash dash-button" : "dash-button"
             }
@@ -231,7 +231,7 @@ function Dashboard() {
           </button> */}
           <button
             id="settings"
-            disabled={!publicKey}
+            disabled={!userPublicKey}
             className={"dash-button"}
             onClick={() => (
               setShowOrders(false),
@@ -271,7 +271,7 @@ function Dashboard() {
     return (
       <>
         <div className={styles.create_component}>
-          <PayRequests publicKey={publicKey} />
+          <PayRequests publicKey={userPublicKey} />
         </div>
       </>
     );
@@ -365,55 +365,9 @@ function Dashboard() {
             "welcome to ikonshop, if you have any issues please reach out to us on discord"
           );
         }
-        if (
-          process.env.NEXT_PUBLIC_IKONS_WALLETS.includes(publicKey.toString())
-        ) {
-          setMerchant(true);
-        }
-        if (
-          process.env.NEXT_PUBLIC_MRSC_WALLETS.includes(publicKey.toString())
-        ) {
-          setMerchant(true);
-        }
-        // if (
-        //   process.env.NEXT_PUBLIC_UKR_FUND_WALLETS.includes(publicKey.toString())
-        // ) {
-        //   setMerchant(true);
-        // }
-        // if (
-        //   process.env.NEXT_PUBLIC_FUEGO_WALLETS.includes(publicKey.toString())
-        // ) {
-        //   setMerchant(true);
-        // }
-        if (
-          process.env.NEXT_PUBLIC_LOGVFX_WALLETS.includes(publicKey.toString())
-        ) {
-          setMerchant(true);
-        }
-        if (
-          process.env.NEXT_PUBLIC_SLABZIO_WALLETS.includes(publicKey.toString())
-        ) {
-          setMerchant(true);
-        }
-        if (
-          process.env.NEXT_PUBLIC_LASERED_DESIGN_WALLETS.includes(
-            publicKey.toString()
-          )
-        ) {
-          setMerchant(true);
-        }
-        if (
-          process.env.NEXT_PUBLIC_MEGABOAST_WALLETS.includes(
-            publicKey.toString()
-          )
-        ) {
-          setMerchant(true);
-        }
-        if (
-          process.env.NEXT_PUBLIC_ATADIA_WALLETS.includes(
-            publicKey.toString()
-          )
-        ) {
+        const data = await CheckForCollectionByOwner(publicKey.toString());
+        console.log('data', data)
+        if(data){
           setMerchant(true);
         }
       };

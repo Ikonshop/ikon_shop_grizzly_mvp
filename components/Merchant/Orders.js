@@ -7,6 +7,10 @@ import styles from "../../components/Merchant/styles/Orders.module.css";
 import Loading from "../../components/Loading";
 import OrderDetails from "./OrderDetails";
 import {
+  getCollectionOwner,
+  CheckForCollectionByOwner 
+} from "../../lib/api";
+import {
   ArrowForward,
   SearchOutline,
   OptionsOutline,
@@ -22,6 +26,7 @@ import {
   TodayOutline,
 } from "react-ionicons";
 import { IoArrowUp, IoCheckmark, IoDownloadOutline } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 // import Lottie from 'react-lottie';
 // import animationData from './lotties/empty-order-state';
 
@@ -38,7 +43,10 @@ function Orders() {
   const [ownerProducts, setOwnerProducts] = useState([]);
   const [productIdArray, setProductIdArray] = useState([]);
   const { publicKey, connected } = useWallet();
-
+  const [userPublicKey, setUserPublicKey] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [currentWallet, setCurrentWallet] = useState(null);
+  
   const [searchTerm, setSearchTerm] = useState("");
 
   // icon constants
@@ -315,6 +323,32 @@ function Orders() {
       setOwnerOrders([]);
     }
   };
+  const checkMagicLogin = async() => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      setUserEmail(userMagicMetadata.email);
+      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+      setCurrentWallet(magicPubKey.toString());
+      setUserPublicKey(magicPubKey.toString());
+      
+      const data = await CheckForCollectionByOwner(magicPubKey.toString());
+      console.log('data', data);
+      const products = await getCollectionOwner(magicPubKey.toString())
+      console.log('products', products.products);
+      setOwnerProducts(products.products);
+      console.log("userMagicMetadata", userMagicMetadata);
+      const getOrders = async () => {
+        const orders = await getCollectionOrders(magicPubKey.toString());
+        setNonFilteredOrders(orders);
+        setOwnerOrders(orders);
+        setLoading(false);
+      };
+      getOrders();
+      setLoading(false);
+    }
+  };
 
   const renderDisplay = () => (
     <div className={styles.order_container}>
@@ -409,6 +443,24 @@ function Orders() {
       getOrders();
     }
   }, [publicKey, connected, !orderDetailView]);
+
+  
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
+  }, []);
+
 
   return (
     <>
