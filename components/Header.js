@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Magic } from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
+import { CheckForWallet, CreateWallet, getCollectionOwner, CheckForCollectionByOwner  } from "../lib/api";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -15,7 +16,6 @@ import ApplyToSell from "./ApplyToSell";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LogoDiscord, LogoTwitter } from "react-ionicons";
 import dynamic from "next/dynamic";
-import { getCollectionOwner } from "../lib/api";
 import * as web3 from "@solana/web3.js";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAssociatedTokenAccount, getMint } from "@solana/spl-token";
@@ -315,6 +315,7 @@ export default function HeaderComponent() {
 
     }
 
+    
     getBalance(publicKey);
     getUsdcBalance(publicKey);
     (async () => {
@@ -342,6 +343,28 @@ export default function HeaderComponent() {
         setIsMultiStoreOwner(true);
       }
     })();
+
+    const getData = async () => {
+      const walletData = await CheckForWallet(publicKey.toString());
+      if (walletData.wallet === null) {
+        const newWallet = CreateWallet(publicKey.toString());
+        if (newWallet) {
+          console.log(
+            "welcome to ikonshop, if you have any issues please reach out to us on discord"
+          );
+        }
+      } else {
+        console.log(
+          "welcome to ikonshop, if you have any issues please reach out to us on discord"
+        );
+      }
+      const data = await CheckForCollectionByOwner(publicKey.toString());
+      console.log('data', data)
+      if(data){
+        setMerchant(true);
+      }
+    };
+    getData();
     }
   }, [publicKey, merchant]);
 
@@ -384,6 +407,27 @@ export default function HeaderComponent() {
           setMagicMetadata(parsedData);
           setMagicPublicKey(publicKey.toString());
           setMagicUser(true);
+          const getData = async () => {
+            const walletData = await CheckForWallet(publicKey.toString());
+            if (walletData.wallet === null) {
+              const newWallet = CreateWallet(publicKey.toString());
+              if (newWallet) {
+                console.log(
+                  "welcome to ikonshop, if you have any issues please reach out to us on discord"
+                );
+              }
+            } else {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }
+            const data = await CheckForCollectionByOwner(publicKey.toString());
+            console.log('data', data)
+            if(data){
+              setMerchant(true);
+            }
+          };
+          getData();
         }
         else {
           setMagicUser(false);

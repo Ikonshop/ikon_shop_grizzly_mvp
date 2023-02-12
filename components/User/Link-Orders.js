@@ -7,6 +7,7 @@ import styles from "./styles/UserOrders.module.css";
 import Loading from "../../components/Loading";
 import { ArrowForward, SearchOutline, OptionsOutline } from "react-ionicons";
 import { IoSearchOutline } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 // import Lottie from 'react-lottie';
 // import animationData from './lotties/empty-order-state';
 
@@ -20,7 +21,10 @@ function Orders() {
   const [sortedOrders, setSortedOrders] = useState([]);
 
   const { publicKey } = useWallet();
-  const owner = publicKey.toString();
+  const [userPublicKey, setUserPublicKey] = useState("");
+  const [currentWallet, setCurrentWallet] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
+  const [owner, setOwner] = useState("");
 
   const renderLoading = () => <Loading />;
 
@@ -115,6 +119,7 @@ function Orders() {
 
   useEffect(() => {
     if (publicKey) {
+      setOwner(publicKey.toString());
       async function sortedOrders() {
         const payReqOrders = await GetLinkOrdersForOwner(owner);
         // console.log("pay req", payReqOrders);
@@ -144,16 +149,58 @@ function Orders() {
   }, [publicKey]);
 
   useEffect(() => {
-    const checkForKey = () => {
-      if (!publicKey) {
-        alert("Please connect to app to continue");
-      }
-    };
+    if(!publicKey){
+      const checkMagicLogin = async() => {
+        if (localStorage.getItem("userMagicMetadata")) {
+          const userMagicMetadata = JSON.parse(
+            localStorage.getItem("userMagicMetadata")
+          );
+          const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+          setUserPublicKey(magicPubKey.toString());
+          const owner = magicPubKey.toString();
+          setCurrentWallet(owner);
+          setUserEmail(userMagicMetadata.email);
+          setOwner(magicPubKey.toString());
+          async function sortedOrders() {
+            const payReqOrders = await GetLinkOrdersForOwner(owner);
+            // console.log("pay req", payReqOrders);
+            for (let i = 0; i < payReqOrders.orders.length; i++) {
+              ownerOrders.push(payReqOrders.orders[i]);
+            }
+            const tipOrders = await GetTipOrdersForOwner(owner);
+            // console.log("link orders", tipOrders);
+            for (let i = 0; i < tipOrders.orders.length; i++) {
+              ownerOrders.push(tipOrders.orders[i]);
+              if (i === tipOrders.orders.length - 1) {
+                setLoading(false);
+              }
+            }
+            if (ownerOrders.length > 0) {
+              setNoOrders(false);
+            }
+            // sort ownersOrders by date
+            const sortedOrders = ownerOrders.sort((a, b) => {
+              return b.purchaseDate - a.purchaseDate;
+            });
+            setSortedOrders(sortedOrders);
+          }
+          sortedOrders();
+        }
+      };
+      checkMagicLogin();
+      setLoading(false);
+    }
 
-    setTimeout(() => {
-      checkForKey();
-    }, 5000);
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserPublicKey(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
   }, []);
+
+ 
 
   return (
     <>

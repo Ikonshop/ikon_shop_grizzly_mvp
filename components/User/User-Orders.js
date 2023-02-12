@@ -6,6 +6,7 @@ import Header from "../Header";
 import styles from "./styles/UserOrders.module.css";
 import Loading from "../Loading";
 import { IoOptionsOutline, IoSearchOutline } from "react-icons/io5";
+import * as web3 from "@solana/web3.js";
 
 function UserOrders() {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,8 @@ function UserOrders() {
   const [productIdArray, setProductIdArray] = useState([]);
   const [currentWallet, setCurrentWallet] = useState([]);
   const { publicKey } = useWallet();
+  const [userPublicKey, setUserPublicKey] = useState("");
+
 
   const renderLoading = () => <Loading />;
 
@@ -149,22 +152,48 @@ function UserOrders() {
   }, [publicKey]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-  }, [orders]);
+    const checkMagicLogin = async() => {
+      if (localStorage.getItem("userMagicMetadata")) {
+        const userMagicMetadata = JSON.parse(
+          localStorage.getItem("userMagicMetadata")
+        );
+        const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+        setUserPublicKey(magicPubKey.toString());
+        const owner = magicPubKey.toString();
+        setCurrentWallet(owner);
+        const getOrders = async () => {
+          const orders = await getBuyerOrders(owner);
+          if (orders.length > 0) {
+            setOrders(orders);
 
-  useEffect(() => {
-    const checkForKey = () => {
-      if (!publicKey) {
-        alert("Please connect to app to continue");
+            const productIds = orders.map((order) => order.productid);
+            setProductIdArray(productIds);
+
+            setNoOrders(false);
+
+          } else {
+            setNoOrders(true);
+            
+          }
+        };
+        getOrders();
       }
     };
+    if(!publicKey){
+      
+      checkMagicLogin();
+      setLoading(false);
+    }
 
-    setTimeout(() => {
-      checkForKey();
-    }, 5000);
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserPublicKey(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
   }, []);
+
 
   return (
     <>

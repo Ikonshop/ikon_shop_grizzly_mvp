@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import Container from "react-bootstrap/Container";
 import useClipboard from "../../../hooks/useClipboard";
-// import Green from "../../../components/Alert/Green";
 
 
 
@@ -458,22 +457,10 @@ const CreateSub = () => {
     }
   }, [publicKey]);
 
-  useEffect(() => {
-    const checkForKey = () => {
-      if (!publicKey) {
-        alert("Please connect to app to continue");
-      }
-    };
-
-    setTimeout(() => {
-      checkForKey();
-    }, 5000);
-  }, []);
 
   return (
     <>
       {loading ? renderLoading() : null}
-      {showGreen && renderGreen()}
       {!loading && !showLink ? renderForm() : null}
       {showLink ? renderLink() : null}
     </>
