@@ -4,9 +4,10 @@ import * as web3 from "@solana/web3.js";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAssociatedTokenAccount, getMint } from "@solana/spl-token";
 import BigNumber from "bignumber.js";
 import { gql, GraphQLClient } from 'graphql-request';
-import { addBuyAllOrder } from '../../lib/api';
+import { addBuyAllOrder,   getSingleProductBySku } from '../../lib/api';
 import base58 from 'bs58'
 import Loading from '../Loading';
+import styles from "../../styles/Product.module.css";
 import { Magic } from 'magic-sdk';
 import { SolanaExtension } from '@magic-ext/solana';
 
@@ -31,11 +32,377 @@ const foxyAddress = new web3.PublicKey("FoXyMu5xwXre7zEoSvzViRk3nGawHUp9kUh97y2N
 
 // ******************MAGIC
 
+const STATUS = {
+  Initial: "Initial",
+  Submitted: "Submitted",
+  Paid: "Paid",
+};
+
+
 
 const MagicButton = (req) => {
   const orderID = useMemo(() => web3.Keypair.generate().publicKey, []);
   const [loading, setLoading] = useState(false);
-  // useMemo to write thank you message attached to order
+  const [userPublicKey, setUserPublicKey] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  console.log('reqs are: ', req)
+  const id = req.id
+  // DETAILS NEEDED FOR ORDER
+  const [tipJar, setTipJar] = useState(false);
+  const [tipTokenType, setTipTokenType] = useState();
+  const [tipAmount, setTipAmount] = useState();
+  const [item, setItem] = useState(null); // IPFS hash & filename of the purchased item
+  const [infoCaptured, setInfoCaptured] = useState(true); // Whether the info has been grabbed from the user
+  const [shippingCaptured, setShippingCaptured] = useState(true); // Whether the shipping info has been grabbed from the user
+  const [status, setStatus] = useState(STATUS.Initial); // Tracking transaction status
+
+  const [showEmail, setShowEmail] = useState(false); // Whether to show the email input form
+  const [email, setEmail] = useState(""); // Email address of the user
+
+  const [showNote, setShowNote] = useState(false); // Whether to show the note input form
+  const [note, setNote] = useState(""); // Note to the seller
+  const [noteCaptured, setNoteCaptured] = useState(true); // Whether the note has been grabbed from the user
+
+  const [showTwitter, setShowTwitter] = useState(false); // Whether to show the twitter input form
+  const [twitter, setTwitter] = useState(""); // Twitter handle of the user
+  const [twitterCaptured, setTwitterCaptured] = useState(true); // Whether the twitter handle has been grabbed from the user
+
+  const [showDiscord, setShowDiscord] = useState(false); // Whether to show the discord input form
+  const [discord, setDiscord] = useState(""); // Discord handle of the user
+  const [discordCaptured, setDiscordCaptured] = useState(true); // Whether the discord handle has been grabbed from the user
+
+  const [showColorOptions, setShowColorOptions] = useState(false); // Whether to show the color options input form
+  const [colorOption, setColorOption] = useState(""); // Color option of the user
+
+  const [showShipping, setShowShipping] = useState(false); // Whether to show the shipping input form
+  const [shipping, setShipping] = useState({
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    zip: "",
+    international: false,
+  }); // Shipping address of the user
+  const [shippingInfo, setShippingInfo] = useState(""); // Shipping info of the user in string form
+
+  const order = useMemo(
+    () => ({
+      id: req.order.product.id,
+      buyer: userPublicKey,
+      orderID: orderID.toString(),
+      // if product is a tip jar set the price to tip amount and set the token type to the tip jar token type
+      product: req.order.product,
+      price: tipJar ? tipAmount : req.order.product.price,
+      token: tipJar ? tipTokenType : req.order.product.token,
+      email: email,
+      twitter: twitter,
+      discord: discord,
+      shippingInfo: shippingInfo,
+      note: note,
+      colorOption: colorOption,
+    }),
+    [
+      userPublicKey,
+      orderID,
+      req.order.product.token,
+      id,
+      req.order.product,
+      email,
+      shippingInfo,
+      twitter,
+      discord,
+      note,
+      tipJar,
+      tipTokenType,
+      tipAmount,
+      req.order.productprice,
+      colorOption,
+    ]
+  );
+  
+
+  // render dropdown selection of color options and set selected color to colorOption
+  const renderColorOptions = () => {
+    const colorOptions = [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "orange",
+      "purple",
+      "pink",
+      "black",
+      "white",
+    ];
+    return (
+      <div>
+        <label for="colorOptions">Select Color:</label>
+        <select
+          id="colorOptions"
+          name="colorOptions"
+          onChange={(e) => setColorOption(e.target.value)}
+        >
+          {colorOptions.map((color) => (
+            <option value={color}>{color}</option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+
+  // render form to capture user email
+  const renderEmailForm = () => {
+    var validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const handleChange = (e) => {
+      setEmail(e.target.value);
+      // console.log("email", email);
+    };
+    return (
+      <div className={styles.emailForm}>
+        <label>Email</label>
+        <div className={styles.input_field}>
+          <input
+            type="email"
+            placeholder="jim@gmail.com"
+            value={email}
+            onChange={handleChange}
+          />
+        </div>
+        <button
+          className={styles.saveBtn}
+          onClick={() => {
+            if (email !== "" && validRegex.test(email)) {
+              setEmail(email);
+              // console.log("Email captured", email);
+              setShowEmail(false);
+              setInfoCaptured(true);
+            } else {
+              alert("Please enter a valid email");
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  };
+
+  // render form to capture user shipping info
+  const renderShippingForm = () => {
+    return (
+      <div className={styles.shippingForm}>
+        <label style={{ marginBottom: "20px" }}>Shipping Address</label>
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={shipping.name}
+            onChange={(e) => setShipping({ ...shipping, name: e.target.value })}
+          />
+        </div>
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="Address"
+            value={shipping.address}
+            onChange={(e) =>
+              setShipping({ ...shipping, address: e.target.value })
+            }
+          />
+        </div>
+
+        {/* <div className={styles.form_row}>
+          <div className={styles.col_half}> */}
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="City"
+            value={shipping.city}
+            onChange={(e) => setShipping({ ...shipping, city: e.target.value })}
+          />
+        </div>
+        {/* </div> */}
+        {/* <div className={styles.col_half}> */}
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="Zip"
+            value={shipping.zip}
+            onChange={(e) => setShipping({ ...shipping, zip: e.target.value })}
+          />
+        </div>
+        {/* </div>
+        </div> */}
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="State"
+            value={shipping.state}
+            onChange={(e) =>
+              setShipping({ ...shipping, state: e.target.value })
+            }
+          />
+        </div>
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="Country"
+            value={shipping.country}
+            onChange={(e) =>
+              setShipping({ ...shipping, country: e.target.value })
+            }
+          />
+        </div>
+        {/* checkbox for if shipping internationally */}
+        <div className={styles.checkbox}>
+          <input
+            type="checkbox"
+            id="international"
+            name="international"
+            value="international"
+            onChange={(e) =>
+              setShipping({ ...shipping, international: e.target.checked })
+            }
+          />
+          <label htmlFor="international">International? (+.25 SOL)</label>
+        </div>
+
+        <button
+          className={styles.saveBtn}
+          onClick={() => {
+            if (
+              shipping.name !== "" &&
+              shipping.address !== "" &&
+              shipping.city !== "" &&
+              shipping.state !== "" &&
+              shipping.zip !== "" &&
+              shipping.country !== ""
+            ) {
+              setShipping(shipping);
+              // console.log("Shipping info captured", shipping);
+              setShowShipping(false);
+              setShippingCaptured(true);
+              // setShippingInfo as a string of only the values from the shipping not the key's
+              setShippingInfo(
+                `${shipping.name}, ${shipping.address}, ${shipping.city}, ${shipping.state}, ${shipping.country}, ${shipping.zip}, ${shipping.international}`
+              );
+
+              // console.log("Shipping info,", shippingInfo);
+            } else {
+              alert("Please fill out all shipping fields");
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  };
+
+  const renderNoteForm = () => {
+    return (
+      <div className={styles.noteForm}>
+        <label style={{ marginBottom: "20px" }}>Note to Seller</label>
+        <div className={styles.input_field}>
+          <input
+            type="text"
+            placeholder="Note to Seller"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+        </div>
+        <button
+          className={styles.saveBtn}
+          onClick={() => {
+            if (note !== "") {
+              setNote(note);
+              // console.log("Note captured", note);
+              setShowNote(false);
+              setNoteCaptured(true);
+            } else {
+              alert("Please enter a note to seller");
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  };
+
+  // render form to capture user twitter handle
+  const renderTwitterForm = () => {
+    return (
+      <div className={styles.twitterForm}>
+        <label>Twitter Handle</label>
+        <div className={styles.input_field}>
+          <input
+            tabIndex={showEmail || showShipping || showTwitter ? "0" : "-1"}
+            type="text"
+            placeholder="@TopShotTurtles"
+            value={twitter}
+            onChange={(e) => setTwitter(e.target.value)}
+          />
+        </div>
+        <button
+          className={styles.saveBtn}
+          onClick={() => {
+            if (twitter !== "") {
+              setTwitter(twitter);
+              // console.log("Twitter handle captured", twitter);
+              setShowTwitter(false);
+              setTwitterCaptured(true);
+            } else {
+              alert("Please enter a valid twitter handle");
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  };
+
+  // render form to capture user discord id
+  const renderDiscordForm = () => {
+    return (
+      <div className={styles.discordForm}>
+        <label>Discord ID</label>
+        <div className={styles.input_field}>
+          <input
+            tabIndex={
+              showEmail || showShipping || showTwitter || showDiscord
+                ? "0"
+                : "-1"
+            }
+            type="text"
+            placeholder="User#1234"
+            value={discord}
+            onChange={(e) => setDiscord(e.target.value)}
+          />
+        </div>
+        <button
+          className={styles.saveBtn}
+          onClick={() => {
+            if (discord !== "") {
+              setDiscord(discord);
+              // console.log("Discord ID captured", discord);
+              setShowDiscord(false);
+              setDiscordCaptured(true);
+            } else {
+              alert("Please enter a valid discord ID");
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  };
+
+
   const createAndSendTransaction = async () => {
     try{
       setLoading(true);
@@ -60,7 +427,7 @@ const MagicButton = (req) => {
       const buyerAddy = req.order.buyer;
       const owner = req.order.owner;
       var itemPrice = req.order.price;
-      const elusiv= req.order.elusiv;
+
       console.log("TOKEN TYPE IS THIS!!!", tokenType);
       // const { publicKey, signTransaction }= useWallet();
   
@@ -283,7 +650,7 @@ const MagicButton = (req) => {
         const signature = await connection.sendRawTransaction(tx.serialize());
         // wait for transaction to be confirmed
         if(signature) {
-          addBuyAllOrder(req.order)
+          addBuyAllOrder(order)
         }
         console.log(`https://solana.fm/tx/${signature}`);
         setLoading(false);
@@ -303,13 +670,101 @@ const MagicButton = (req) => {
     }
   };
 
+  useEffect(() => {
+
+      console.log("reqs", req);
+
+      if (req.order.product) {
+        console.log("reqs are", req);
+        console.log("require email?", req.order.product.reqUserEmail);
+        console.log("require shipping info?", req.order.product.reqUserShipping);
+        if (req.order.product.reqTwitter === true) {
+          setShowTwitter(true);
+          setTwitterCaptured(false);
+        }
+        if (req.order.product.reqDiscord === true) {
+          setShowDiscord(true);
+          setDiscordCaptured(false);
+        }
+        if (req.order.product.reqUserEmail === false) {
+          setInfoCaptured(true);
+          if (reqs.product.reqUserShipping === false) {
+            setShippingCaptured(true);
+          }
+          // console.log("", infoCaptured);
+        }
+        if (req.order.product.reqUserEmail === true) {
+          setShowEmail(true);
+        }
+        if (req.order.product.reqUserShipping === true) {
+          setShippingCaptured(false);
+          setShowShipping(true);
+        }
+        if (req.order.product.reqColor === true) {
+          setShowColorOptions(true);
+        }
+        if (req.order.product.reqNote === true) {
+          setNoteCaptured(false);
+          setShowNote(true);
+        }
+        if (req.order.product.type === "tipjar") {
+          setTipJar(true);
+        }
+      }
+
+  }, []);
+
+  useEffect(() => {
+      //check local storage for userMagicMetadata get the public address and convert it to publicKey and set it
+      const userMagicMetadata = localStorage.getItem("userMagicMetadata");
+      console.log("userMagicMetadata", userMagicMetadata)
+      if (userMagicMetadata) {
+        const userMagicMetadataObj = JSON.parse(userMagicMetadata);
+        const userPublicAddress = userMagicMetadataObj.publicAddress;
+        const userPublicKeyObj = new web3.PublicKey(userPublicAddress);
+        setUserPublicKey(userPublicKeyObj.toString());
+        setUserEmail(userMagicMetadataObj.email);
+        setEmail(userMagicMetadataObj.email);
+        console.log("userPublicKeyObj", userPublicKeyObj.toString());
+      }
+
+  }, [])
+
   return (
-    <button
-      onClick={() => createAndSendTransaction()}
-      className="buy-button"
-    >
-      {!loading ? 'Pay w/ Magic' : 'Loading...'}
-    </button>
+    <>
+      {showEmail ? renderEmailForm() : null}
+      {showTwitter ? renderTwitterForm() : null}
+      {showDiscord ? renderDiscordForm() : null}
+      {showShipping ? renderShippingForm() : null}
+      {showColorOptions ? renderColorOptions() : null}
+      {showNote ? renderNoteForm() : null}
+      {showNote && noteCaptured ? (
+        <div className={styles.note}>
+          <p>Note to Seller: {note}</p>
+        </div>
+      ) : null}
+      {showTwitter && twitterCaptured ? (
+        <p>Twitter Captured: {twitter}</p>
+      ) : null}
+      {showDiscord && discordCaptured ? (
+        <p>Discord Captured: {discord}</p>
+      ) : null}
+      {infoCaptured && email ? <p>Email Captured: {email}</p> : null}
+      {infoCaptured && shipping ? (
+        <p>
+          {shipping.name} {shipping.address} {shipping.city} {shipping.state}{" "}
+          {shipping.country} {shipping.zip}{" "}
+          {shipping.international ? shipping.international : null}
+        </p>
+      ) : null}
+      <button
+        onClick={() => createAndSendTransaction()}
+        className="buy-button"
+      >
+        {!loading ? 'Pay w/ Magic' : 'Loading...'}
+      </button>
+    </>
+    
   );
 };
 

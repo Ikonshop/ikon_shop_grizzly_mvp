@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/CreateProduct.module.css";
-import { addProduct } from "../../lib/api";
+import { addProduct, fetchCollectionIdByOwner } from "../../lib/api";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
 import Loading from "../../components/Loading";
@@ -9,21 +9,23 @@ import Header from "../../components/Header";
 import Container from "react-bootstrap/Container";
 import Product from "../../components/Product/Product"
 import { CloudUploadOutline } from "react-ionicons";
+import {Magic} from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
+import * as web3 from "@solana/web3.js";
 
 const CreateProduct = () => {
   const router = useRouter();
   const { publicKey } = useWallet();
+  const [userPublicKey, setUserPublicKey] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   // const productOwner = publicKey.toString();
 
-  function getAccessToken() {
-    const NEXT_PUBLIC_WEB3STORAGE_TOKEN =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI4NDQyNzlkMDRmRDc2NDJDMUQyNzZhQkRmNDI3ZDBkOWJmMGU0NzkiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTM0MzIxMDY3MjAsIm5hbWUiOiJkZXYifQ.gFBojcATcuBQeXse4O1OAVEIrrmdKPxyHlK83AaqZrQ";
-    return NEXT_PUBLIC_WEB3STORAGE_TOKEN;
-  }
+  const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+  const connection = new web3.Connection(rpcUrl);
 
-  
+
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -44,55 +46,7 @@ const CreateProduct = () => {
   const [file, setFile] = useState({ filename: "null", hash: "null" });
   const [uploading, setUploading] = useState(false);
 
-  // STORE OWNER COLLECTION SETUP
-  useEffect(() => {
-    // if public key is in ikon store owners, set collection to ikon
-    if (process.env.NEXT_PUBLIC_IKONS_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "IKONS" });
-    }
-    if(process.env.NEXT_PUBLIC_MRSC_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "MR_SC" });
-    }
-    if(process.env.NEXT_PUBLIC_COMM_LABS_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "COMM_LABS" });
-    }
-    if (process.env.NEXT_PUBLIC_JUNGLECATS_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "JUNGLECATS" });
-    }
-    if(process.env.NEXT_PUBLIC_CREAM_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "CREAM" });
-    }
-    if(process.env.NEXT_PUBLIC_SOL_PERMA_BULL_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "SOL_PERMA_BULL" });
-    }
-    if(process.env.NEXT_PUBLIC_THUGBIRDZ_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "THUGBIRDZ" });
-    }
-    if(process.env.NEXT_PUBLIC_DESHOEYS_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "DESHOEYS" });
-    }
-    if(process.env.NEXT_PUBLIC_UKR_FUND_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "UKR_FUND" });
-    }
-    if(process.env.NEXT_PUBLIC_FUEGO_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "FUEGO" });
-    }
-    if (process.env.NEXT_PUBLIC_LOGVFX_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "LOGVFX" });
-    }
-    if(process.env.NEXT_PUBLIC_SLABZIO_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "SLABZIO" });
-    }
-    if(process.env.NEXT_PUBLIC_LASERED_DESIGN_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "LDESIGNS" });
-    }
-    if(process.env.NEXT_PUBLIC_MEGABOAST_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "MEGAB" });
-    }
-    if(process.env.NEXT_PUBLIC_ATADIA_WALLETS.includes(publicKey.toString())) {
-      setNewProduct({ ...newProduct, collection: "ATADIA" });
-    }
-  }, []);
+ 
 
  
 
@@ -106,7 +60,7 @@ const CreateProduct = () => {
       if (response.publishProduct.id) {
         if (window.confirm("Product Created! Would you like to see it?")) {
           {
-            router.push(`/product/${product.id}`);
+            router.push(`/product/${response.publishProduct.id}`);
           }
         }
       }
@@ -181,7 +135,7 @@ const CreateProduct = () => {
                       setNewProduct({
                         ...newProduct,
                         token: e.target.value,
-                        owner: publicKey.toString(),
+                        owner: userPublicKey.toString(),
                       });
                     }}
                   >
@@ -320,13 +274,49 @@ const CreateProduct = () => {
 
   useEffect(() => {
     if (publicKey) {
+      setUserPublicKey(publicKey);
       setLoading(false);
     }
   }, [publicKey]);
 
+  useEffect(() => {
+    
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+        extensions: {
+            solana: new SolanaExtension({
+            rpcUrl
+            })
+        }
+    });
+    async function checkUser() {
+        const loggedIn = await magic.user.isLoggedIn();
+        console.log('loggedIn', loggedIn)
+        if(loggedIn) {
+          setIsLoggedIn(true)
+          magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+            setIsLoggedIn(magicIsLoggedIn);
+              if (magicIsLoggedIn) {
+                magic.user.getMetadata().then((user) => {
+                  const pubKey = new web3.PublicKey(user.publicAddress);
+                  setUserPublicKey(pubKey);
+                  fetchCollectionIdByOwner(pubKey.toString()).then((collectionId) => {
+                    setNewProduct({
+                      ...newProduct,
+                      collection: collectionId,
+                    });
+                  });
+                });
+              }
+            });
+        }
+    }
+    checkUser();
+    setLoading(false);
+}, []);
+
   return (
     <>
-      {loading ? renderLoading() : renderForm()}
+      {loading && isLoggedIn ? renderLoading() : renderForm()}
       <div className={styles.faqs}>
         Live Preview
       </div>

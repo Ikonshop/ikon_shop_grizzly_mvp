@@ -9,9 +9,17 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Loading from "../../components/Loading";
 import PaylinkComponent from "../../components/Paylink";
 import { useRouter } from "next/router";
+import { Magic } from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
+import * as web3 from "@solana/web3.js";
+
 
 export default function SingleProductViewer({}) {
   const { publicKey, connected } = useWallet();
+  const [userPublicKey, setUserPublicKey] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [userMetadata, setUserMetadata] = useState(null);
+  const [userMagic, setUserMagic] = useState(false);
   const router = useRouter();
   const [product, setProduct] = useState({
     type: "",
@@ -25,23 +33,8 @@ export default function SingleProductViewer({}) {
   const [productImages, setProductImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    // create async function called showProductDetails
-    async function showProductDetails() {
-      const url = window.location.href;
-      //url : http://localhost:3000/product/cldy0nu7rtpju0ak2v50nhm88?email=maweiche%40gmail.com
-      //productId : cldy0nu7rtpju0ak2v50nhm88
-      const productId = url.split("/")[4].split("?")[0];
-      const data = await getSingleProductBySku(productId);
-      console.log(data.product)
-      setProduct(data.product);
-      // data.product.productImages returns an array of objects with a url property, so we need to map over it to get the url
-      setProductImages(data.product.productImages.map((image) => image.url));
-      setLoading(false);
-    }
-    showProductDetails();
-  }, []);
+  const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+  const connection = new web3.Connection(rpcUrl);
 
   // create a small image carousel for the product.productImages array
   const handleImageChange = (e) => {
@@ -159,13 +152,14 @@ export default function SingleProductViewer({}) {
           <div className={styles.product_details_desc}>
             {product.description}
           </div>
-          {publicKey ? (
+          {userPublicKey ? (
             <Buy
               id={product.id}
               price={product.price}
               token={product.token}
               owner={product.owner}
               product={product}
+              collection={product.collections ? product.collections[0].symbol : null}
             />
           ) : null}
         </div>
@@ -179,16 +173,65 @@ export default function SingleProductViewer({}) {
     </div>
   );
 
-  const renderLoading = () => <Loading />;
 
   useEffect(() => {
     // console.log(product)
     renderSingleProduct(product);
   }, [!loading]);
 
+  useEffect(() => {
+    setLoading(true);
+    // create async function called showProductDetails
+    async function showProductDetails() {
+      const url = window.location.href;
+      //url : http://localhost:3000/product/cldy0nu7rtpju0ak2v50nhm88?email=maweiche%40gmail.com
+      //productId : cldy0nu7rtpju0ak2v50nhm88
+      const productId = url.split("/")[4].split("?")[0];
+      const data = await getSingleProductBySku(productId);
+      console.log(data.product)
+      setProduct(data.product);
+      // data.product.productImages returns an array of objects with a url property, so we need to map over it to get the url
+      setProductImages(data.product.productImages.map((image) => image.url));
+      setLoading(false);
+    }
+    showProductDetails();
+  }, []);
+
+  useEffect(() => {
+    if (publicKey) {
+      setUserPublicKey(publicKey);
+      setLoading(false);
+    }
+  }, [publicKey]);
+
+  useEffect(() => {
+    
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+        extensions: {
+            solana: new SolanaExtension({
+            rpcUrl
+            })
+        }
+    });
+    async function checkUser() {
+        const loggedIn = await magic.user.isLoggedIn();
+        console.log('loggedIn', loggedIn)
+        if(loggedIn) {
+
+                magic.user.getMetadata().then((user) => {
+                  const pubKey = new web3.PublicKey(user.publicAddress);
+                  setUserPublicKey(pubKey);
+                  setUserEmail(user.email);
+                });
+        }
+    }
+    checkUser();
+    setLoading(false);
+}, []);
+
   return (
     <>
-      {loading ? renderLoading() : null}
+      {loading ? <Loading /> : null}
       {!loading && product.type === "product" ? renderSingleProduct() : null}
       {(!loading && product && product.type === "link") || product.type === "tipjar"
         ? renderSingleLink()
