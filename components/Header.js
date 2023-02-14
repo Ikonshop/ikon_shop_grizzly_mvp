@@ -30,6 +30,9 @@ import {
   IoSunnyOutline,
   IoMoonOutline,
   IoSwapHorizontalOutline,
+  IoAccessibilityOutline,
+  IoStorefrontOutline
+  
 } from "react-icons/io5";
 import LoginMagic from "./MagicWallet/login";
 import LogoutMagic from "./MagicWallet/logout";
@@ -156,131 +159,15 @@ export default function HeaderComponent() {
   const renderMultiStoreSelection = () => {
     // console.log('multiStoreArray: ', multiStoreArray)
     return (
-      <div
-        style={{
-          marginRight: "50px",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "20px",
-          width: "20vw",
-          fontSize: "12px",
-        }}
-      >
-        <div>
-          <img
-            // src="/ikons.gif"
-            src={currentStore.banner}
-            alt={currentStore.projectName}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-            }}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            lineHeight: "12px",
-            paddingTop: "20px",
-          }}
-        >
-          {/* <p
-            style={{
-              color: "#130B46",
-              fontWeight: "700",
-              fontSize: "20px",
-            }}
-          >
-            Ikons Store
-          </p> */}
-          <p
-            style={{
-              color: "#130B46",
-              fontWeight: "700",
-              fontSize: "20px",
-            }}
-          >
-            {currentStore.projectName}
-          </p>
-          <p
-            style={{
-              color: "#8E8E8E",
-              fontWeight: "400",
-              fontSize: "16px",
-            }}
-          >
-            Welcome Fren!
-          </p>
-        </div>
-
-         
-
-        <NavDropdown
-          // title={currentStore.projectName}
-          title=""
-          id="basic-nav-dropdown"
-          style={{
-            fontSize: "18px",
-          }}
-        >
-          {multiStoreArray.map((store, index) => {
-            console.log("store: ", store);
-            return (
-              <NavDropdown.Item
-                key={index}
-                onClick={() => {
-                  //trigger window event to update header for listenting components
-                  const event = new CustomEvent("active_store_changed", {
-                    detail: multiStoreArray[index],
-                  });
-                  localStorage.setItem(
-                    "active_store",
-                    JSON.stringify(multiStoreArray[index].symbol)
-                  );
-                  window.dispatchEvent(event);
-                  setCurrentStore(multiStoreArray[index]);
-                }}
-              >
-                <img
-                  // src="/ikons.gif"
-                  src={store.banner}
-                  alt={store.projectName}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "50%",
-                    marginRight: "10px",
-                  }}
-                />
-                {store.projectName}
-              </NavDropdown.Item>
-            );
-          })}
-
-          <Nav.Link
-            onClick={() => {
-              router.push("/user/dashboard");
-            }}
-            className="menu_link"
-            style={{
-              border: "none",
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <IoSwapHorizontalOutline
-              style={{ marginRight: "5px", fontSize: "14px" }}
-            />
-            <p style={{ border: "none", fontSize: "16px", marginTop: "10px" }}>
-              Switch to User
-            </p>
-          </Nav.Link>
-        </NavDropdown>
+      <div 
+        onClick={toggleTheme}
+        id="target" 
+        class="moon"
+      > 
+      
+        <IoMoonOutline className="moon_tog" />
+    
+        <div></div>
       </div>
     );
   };
@@ -513,11 +400,26 @@ export default function HeaderComponent() {
                           </div>
                         </div>
                       </div>
-                      {isMultiStoreOwner && (
-                        <Navbar.Brand className="" style={{ border: "none" }}>
-                          {renderMultiStoreSelection()}
-                        </Navbar.Brand>
-                      )}
+
+                      {/* ******TOGGLE DASHBOARD********** */}
+                      <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
+                        
+                        <div id="container">
+                          
+                          <div 
+                            onClick={()=> router.push("/user/dashboard")}
+                            
+                            id="target" 
+                            class="sun"
+                            
+                          > 
+                            <IoStorefrontOutline className="sunny_tog" />
+                      
+                          </div>
+             
+               
+                        </div>
+                      </Nav.Link>
 
                       <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
                         <div id="container">
@@ -534,7 +436,7 @@ export default function HeaderComponent() {
                           )}
                           {theme === "dark" && (
                             <div 
-                              onClick={toggleTheme}
+                              onClick={()=> router.push("/merchant/dashboard")}
                               id="target" 
                               class="moon"
                             > 
@@ -547,6 +449,9 @@ export default function HeaderComponent() {
                           )}
                         </div>
                       </Nav.Link>
+        
+
+                      
 
                     {!publicKey && (
                       renderMagicLogin()
@@ -583,6 +488,25 @@ export default function HeaderComponent() {
                         </div>
                       </div>
                     </div>
+
+                    {/* ******TOGGLE DASHBOARD********** */}
+                    <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
+                        <div id="container">
+                          
+                            <div 
+                              onClick={()=> router.push("/merchant/dashboard")}
+                              id="target" 
+                              class="moon"
+                            > 
+                    
+                                <IoAccessibilityOutline className="moon_tog" />
+                              
+                            
+                   
+                            </div>
+                     
+                        </div>
+                      </Nav.Link>
                     
                     {/* TOGGLE FOR LIGHT MODE AND DARK MODE */}
                     <Nav.Link className="menu_link" style={{ border: "none" }}>
