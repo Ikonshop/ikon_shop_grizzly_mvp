@@ -332,10 +332,8 @@ export default function HeaderComponent() {
     <>
       <Navbar 
         expand="lg"
-       
       >
         <Container
-           
         >
             <div style={{
             display: "flex",
