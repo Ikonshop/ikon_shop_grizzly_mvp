@@ -5,7 +5,6 @@ import { CheckForWallet, CreateWallet, getCollectionOwner, CheckForCollectionByO
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
-import styles from "../styles/Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import Container from "react-bootstrap/Container";
@@ -36,6 +35,7 @@ import {
 } from "react-icons/io5";
 import LoginMagic from "./MagicWallet/login";
 import LogoutMagic from "./MagicWallet/logout";
+import styles from "../styles/Header.module.css";
 
 
 // import Head from "next/head";
@@ -329,48 +329,21 @@ export default function HeaderComponent() {
   }, []);
 
   return (
-    <>
-      <Navbar 
-        expand="lg"
-      >
-        <Container
-        >
-            <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignContent: "flex-end",
-            alignItems: "flex-end",
-            width: "100%",
-            gap: "10vw",
-            
-          }}>
-              <Navbar.Brand
-                onClick={() => router.push("/")}
-                style={{ cursor: "pointer" }}
-              >
+    <Navbar collapseOnSelect expand="lg" style={{display:"flex", flexDirection:"row"}} className={styles.navbar}>
+        <Container className={styles.navbar_container}>
+              <Navbar.Brand onClick={() => router.push("/")} className={styles.navbar_brand}>
                 <img
                   src="/newlogo.png"
-                  style={{ cursor: "pointer", maxWidth: "160px", position: "absolute", top: "15px", left: "60px"}}
+                  style={{ cursor: "pointer", maxWidth: "160px"}}
                   className="logo_header"
                 />
               </Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav">
-                <FontAwesomeIcon icon={faBars} style={{ color: "#000" }} />
+              <Navbar.Toggle style={{ color: "#000", position:"absolute", top:"10px", right:"10px"}} aria-controls="basic-navbar-nav">
+                <FontAwesomeIcon icon={faBars}  />
               </Navbar.Toggle>
               <Navbar.Collapse
                 id="basic-navbar-nav"
-                style={{
-                  // space evenly from middle
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-
-         
-                  
-                  
-                }}
+                className={styles.navbar_collapse}
               >
                 {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
                 {currentPath === "/merchant/dashboard" && (
@@ -551,15 +524,6 @@ export default function HeaderComponent() {
                 >
                   {currentPath != "/user/dashboard" && currentPath != "/merchant/dashboard" && (
                   <>
-                    {merchant && (
-                      <Nav.Link
-                        href="/merchant/dashboard"
-                        className="menu_link nav-link nav-link-fade-up"
-                        style={{ border: "none" }}
-                      >
-                        Merchant
-                      </Nav.Link>
-                    )}
                     <Nav.Link
                       href="/user/dashboard"
                       className="menu_link nav-link nav-link-fade-up"
@@ -581,22 +545,23 @@ export default function HeaderComponent() {
                     >
                       NFT
                     </Nav.Link>
+                    <div className={styles.social_links}>
+                      <Nav.Link
+                        href="https://twitter.com/IkonShopApp"
+                        className="menu_link"
+                        style={{ border: "none" }}
+                      >
+                        <LogoTwitter />
+                      </Nav.Link>
 
-                    <Nav.Link
-                      href="https://twitter.com/IkonShopApp"
-                      className="menu_link"
-                      style={{ border: "none" }}
-                    >
-                      <LogoTwitter />
-                    </Nav.Link>
-
-                    <Nav.Link
-                      href="https://discord.gg/ikons"
-                      className="menu_link"
-                      style={{ border: "none" }}
-                    >
-                      <LogoDiscord />
-                    </Nav.Link>
+                      <Nav.Link
+                        href="https://discord.gg/ikons"
+                        className="menu_link"
+                        style={{ border: "none" }}
+                      >
+                        <LogoDiscord />
+                      </Nav.Link>
+                    </div>
                     {/* if page is not /register then display  */}
                     {/* IF LOGGED IN WITH MAGIC THEN HIDE WALLET MULTI BUTTON */}
                     {currentPath !== "/register" && (
@@ -626,10 +591,9 @@ export default function HeaderComponent() {
            
                 </Nav>
               </Navbar.Collapse>
-            </div>
+         
           
         </Container>
       </Navbar>
-    </>
   );
 }
