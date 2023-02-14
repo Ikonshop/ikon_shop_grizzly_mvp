@@ -347,7 +347,12 @@ export default function HeaderComponent() {
               >
                 {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
                 {currentPath === "/merchant/dashboard" && (
-                  <>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <div
                       style={{
                         display: "flex",
@@ -431,15 +436,14 @@ export default function HeaderComponent() {
                       <WalletMultiButton />
                     )}
                     </div>
-                  </>
+                  </div>
                 )}
                 {currentPath === "/user/dashboard" && (
-                  <>
+                  <div
+                    className={styles.multi_display}
+                  >
                     <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                      className={styles.wallet_display}
                     >
                       <div className="wave">
                         <img src="/wave.png" />
@@ -514,16 +518,19 @@ export default function HeaderComponent() {
                     {publicKey && (
                       <WalletMultiButton />
                     )}
-                  </>
+                  </div>
                 )}
                 <Nav
                   style={{
+                    
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
                 >
                   {currentPath != "/user/dashboard" && currentPath != "/merchant/dashboard" && (
-                  <>
+                  <div
+                    className={styles.wallet_display}
+                  >
                     <Nav.Link
                       href="/user/dashboard"
                       className="menu_link nav-link nav-link-fade-up"
@@ -586,7 +593,7 @@ export default function HeaderComponent() {
                         
                       </>
                     )}
-                  </>
+                  </div>
                   )}
            
                 </Nav>
