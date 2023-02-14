@@ -92,7 +92,14 @@ const App = () => {
               <div className="signup_row1">
                 <h1>Sign Up to start selling your products/services.</h1>
 
-                <div className="signup_input_container">
+                <div 
+                  className="signup_input_container"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
                   {!showRegister && renderForm()}
                   {showRegister && renderRegisterPage()}
                 </div>

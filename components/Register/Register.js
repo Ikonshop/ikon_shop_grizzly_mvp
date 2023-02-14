@@ -55,19 +55,19 @@ const Register = (req) => {
             <div className={styles.register_container}>
                 <div className={styles.register_container_left}>
                     <div className={styles.register_container_left_title}>
-                        <h1>Current Info</h1>
+                        Current Info
                     </div>
        
                     <div className={styles.register_container_left_data}>
-                        <p>Name: {userName}</p>
-                        <p>Email: {email}</p>
-                        <p>Store Name: {storeName != null ? storeName : null}</p>
+                        <p><span>Name:</span> {userName}</p>
+                        <p><span>Email:</span> {email}</p>
+                        <p><span>Store Name:</span> {storeName != null ? storeName : null}</p>
                     </div>
                       
                 </div>
                 <div className={styles.register_container_right}>
                     <div className={styles.register_container_right_title}>
-                        <h1>Select Merchant Wallet</h1>
+                        Select Merchant Wallet
                     </div>
                         <p className= {styles.sub_text}>*this is will be used to connect to the Merchant Dash and receive payments</p>
                     
@@ -85,7 +85,6 @@ const Register = (req) => {
                                     style={{
                                         display: "flex",
                                         justifyContent: "center",
-                                        marginTop: "20px",
                                     }}
                                 />
 
