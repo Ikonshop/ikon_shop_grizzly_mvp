@@ -280,21 +280,23 @@ const StoreSettings = () => {
     setActiveStoreSymbol(new_active_store);
     console.log("new active store", new_active_store);
     //get the store info
-    (async () => {
-      const store_info = await GetStoreInfo();
-      console.log(store_info);
-      setStoreInfo(store_info);
-      setNewCollectionInfo(store_info);
-      setIsOwner(true);
-      setLoading(false);
-    })();
+    if(userPublicKey){
+      (async () => {
+        const store_info = await getCollectionOwner(userPublicKey);
+        console.log(store_info);
+        setStoreInfo(store_info.collections[0]);
+        setNewCollectionInfo(store_info.collections[0]);
+        setIsOwner(true);
+        setLoading(false);
+      })();
+    }
     window.addEventListener("active_store_changed", () => {
       setLoading(true);
       const new_active_store = localStorage.getItem("active_store");
 
       setActiveStoreSymbol(new_active_store);
       (async () => {
-        const store_info = await GetStoreInfo();
+        const store_info = await getCollectionOwner(userPublicKey);
         console.log(store_info);
         setStoreInfo(store_info);
         setNewCollectionInfo(store_info);
@@ -302,7 +304,7 @@ const StoreSettings = () => {
         setLoading(false);
       })();
     }); 
-  }, []);
+  }, [userPublicKey]);
 
   //add window event listener for if the user changes active_store in the local storage
   //   useEffect(() => {
@@ -328,6 +330,13 @@ const StoreSettings = () => {
   //     }, []);
 
   useEffect(() => {
+    if(publicKey) {
+      setUserPublicKey(publicKey);
+      setCurrentWallet(publicKey);
+    }
+  }, [publicKey]);
+
+  useEffect(() => {
     if(!publicKey) {
       checkMagicLogin();
     }
@@ -348,8 +357,7 @@ const StoreSettings = () => {
       {userPublicKey &&
       isOwner &&
       !loading &&
-      !confirmationModal &&
-      activeStoreSymbol
+      !confirmationModal 
         ? renderStoreSettings()
         : null}
       {confirmationModal ? renderConfirmationModal() : null}

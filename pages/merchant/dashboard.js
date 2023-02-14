@@ -422,6 +422,17 @@ function Dashboard() {
 
   }, []);
 
+  useEffect(() => {
+    // if url has query string, set settings = to true
+    // setShowSettings(false);
+    //url: /merchant/dashboard?settings=true
+    const urlParams = new URLSearchParams(window.location.search);
+    const settings = urlParams.get("settings");
+    if (settings === "true") {
+      setShowSettings(true);
+    }
+  }, []);
+
   return (
     <div className={styles.parent_container}>
       {/* <DashboardHeader /> */}

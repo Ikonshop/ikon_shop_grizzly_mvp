@@ -33,7 +33,6 @@ import {
 } from "react-icons/io5";
 import LoginMagic from "./MagicWallet/login";
 import LogoutMagic from "./MagicWallet/logout";
-import { MagicConnectPayloadMethod } from "@magic-ext/connect";
 
 
 // import Head from "next/head";
