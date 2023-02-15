@@ -12,7 +12,7 @@ const QuickActions = (req) => {
 
     const [trasferToAddress, setTransferToAddress] = useState('');
     const [transferAmount, setTransferAmount] = useState(0);
-    const [transferToken, setTransferToken] = useState('SOL');
+    const [tokenType, setTokenType] = useState('SOL');
     const [displayTransfer, setDisplayTransfer] = useState(false);
 
     console.log('incoming quickActions props: ', req.magicMetadata, req.magicBalance, req.magicUsdcBalance)
@@ -36,6 +36,48 @@ const QuickActions = (req) => {
         const url = encodeURL({
             amount: 0,
             recipient: pubKey,
+            message: "Magic Deposit on IkonShop"
+        });
+        // create a qr code with the url that is 200x200
+        const qr = createQR(url, 200);
+        console.log(qr);
+
+        const element = document.getElementById("qr-code");
+        qr.append(element);
+        //will need to create a modal that displays the qr code
+        return (
+            <div className={styles.depositContainer}>
+                {displayQR && (<div id="qr-code"></div>)}
+                <div className={styles.transferInputTokenRow}>
+                    <span>Token: </span>
+                    <div className={styles.tokenSelect}>
+                        <select onChange={(e) => (
+                            setDisplayQR(false),
+                            setTokenType(e.target.value),
+                            setDisplayQR(true)
+                        )}>
+                            <option value="SOL">SOL</option>
+                            <option value="USDC">USDC</option>
+                        </select>
+                    </div>
+                </div>
+                <div className={styles.transferInputRow}>
+                    <span>Address: </span> {publicKey.slice(0,4)}...{publicKey.slice(-4)}
+                    {copied ? <IoCheckmark className={styles.copyIconCheck}/> : null}
+                    {!copied && (
+                        <IoCopyOutline className={styles.copyIcon} onClick={() => handleCopy(publicKey)}/>
+                    )}
+                </div>
+            </div>
+        )
+    }
+
+    const renderDepositQRUsdc = () => {
+        //create qr code that uses the publicKey as the recipient that when scanned will create a deposit transaction where the user is the sender and inputs amount
+        
+        const url = encodeURL({
+            amount: 0,
+            recipient: pubKey,
             splToken: usdcAddress,
             message: "Magic Deposit on IkonShop"
         });
@@ -49,6 +91,19 @@ const QuickActions = (req) => {
         return (
             <div className={styles.depositContainer}>
                 {displayQR && (<div id="qr-code"></div>)}
+                <div className={styles.transferInputTokenRow}>
+                    <span>Token: </span>
+                    <div className={styles.tokenSelect}>
+                        <select onChange={(e) => (
+                            setDisplayQR(false),
+                            setTokenType(e.target.value),
+                            setDisplayQR(true)
+                        )}>
+                            <option value="USDC">USDC</option>
+                            <option value="SOL">SOL</option> 
+                        </select>
+                    </div>
+                </div>
                 <div className={styles.transferInputRow}>
                     <span>Address: </span> {publicKey.slice(0,4)}...{publicKey.slice(-4)}
                     {copied ? <IoCheckmark className={styles.copyIconCheck}/> : null}
@@ -116,14 +171,14 @@ const QuickActions = (req) => {
                            {!displayQR ? '| Deposit' : '| Hide'}
                         </p>
                     </div>
-                    {displayQR && (
+                    {displayQR && tokenType === 'SOL' &&(
                         renderDepositQR()
+                    )}
+                    {displayQR && tokenType === 'USDC' &&(
+                        renderDepositQRUsdc()
                     )}
                     {!displayQR && (
                         <div className={styles.transferContainer}>
-                         
-                                
-                          
                             {displayTransfer && (
                                 <>
                                     <p

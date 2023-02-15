@@ -143,6 +143,7 @@
     width: 100%;
     /* margin-top: 50px; */
     margin-bottom: 0px;
+    height: 16px;
 }
 
 .displayOptions > p {
@@ -203,10 +204,20 @@
 }
 
 .transferInputRow > span{
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #000;
-    margin-right: 10px;
+    margin-right: 2px;
+}
+
+.transferInputTokenRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 12px;
+    height:14px;
 }
 
 .transferInput{
@@ -216,9 +227,10 @@
     border-radius: 10px;
     text-align: center;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 300;
     color: #000;
     margin-bottom: 5px;
+    margin-right: 2px;
 }
 
 .transferInputSplit{
