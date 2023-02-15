@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { CheckForWallet, CreateWallet } from "../../lib/api";
+import { CheckForWallet, CreateWallet, GetTotalUsers } from "../../lib/api";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../../components/Loading";
 // MERCHANT COMPONENTS
@@ -36,7 +36,7 @@ import * as web3 from "@solana/web3.js";
 config.autoAddCss = false;
 
 function Dashboard() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userPublicKey, setUserPublicKey] = useState();
   const [userEmail, setUserEmail] = useState();
   const [currentWallet, setCurrentWallet] = useState([]);
@@ -49,6 +49,7 @@ function Dashboard() {
     "https://wvhvakczb3yg4gnsybgdbss4cczqt2fks7zmjus4ftqcxc7kkrqa.arweave.net/tU9QKFkO8G4ZssBMMMpcELMJ6KqX8sTSXCzgK4vqVGA?ext=png",
     "https://www.arweave.net/QAt7CY9wwVOf50cuuqrqNdcTqVAKzgg5Xl8tddOoxb8?ext=png",
   ];
+  const [totalUsers, setTotalUsers] = useState(0);
   const router = useRouter();
   const { publicKey } = useWallet();
 
@@ -259,7 +260,7 @@ function Dashboard() {
               <li></li>
             </ul>
             <p>
-              <strong>1,043</strong> merchants/users on IkonShop.
+              <strong>{totalUsers}</strong> merchants/users on IkonShop.
             </p>
           </div>
         </div>
@@ -351,7 +352,15 @@ function Dashboard() {
 
   useEffect(() => {
     if (publicKey) {
+      setUserPublicKey(publicKey.toString());
       const getData = async () => {
+        const data = await CheckForCollectionByOwner(publicKey.toString())
+
+        console.log('data', data)
+        if(data === true){
+          console.log('setting merchant to true')
+          setMerchant(true);
+        }
         const walletData = await CheckForWallet(publicKey.toString());
         if (walletData.wallet === null) {
           const newWallet = CreateWallet(publicKey.toString());
@@ -365,13 +374,11 @@ function Dashboard() {
             "welcome to ikonshop, if you have any issues please reach out to us on discord"
           );
         }
-        const data = await CheckForCollectionByOwner(publicKey.toString());
-        console.log('data', data)
-        if(data){
-          setMerchant(true);
-        }
+         
+        
       };
       getData();
+      setLoading(false);
     }
   }, [publicKey]);
 
@@ -383,8 +390,13 @@ function Dashboard() {
         console.log("view all orders triggered");
         setShowOrders(true);
       });
-      setLoading(false);
     }
+    async function getUsers () {
+      const data = await GetTotalUsers();
+      console.log('users', data);
+      setTotalUsers(data);
+    }
+    getUsers();
   }, []);
 
   const checkMagicLogin = async() => {
@@ -399,7 +411,7 @@ function Dashboard() {
       
       const data = await CheckForCollectionByOwner(magicPubKey.toString());
       console.log('data', data);
-      if (data) {
+      if (data === true) {
         setMerchant(true);
       }
       console.log("userMagicMetadata", userMagicMetadata);
@@ -446,13 +458,11 @@ function Dashboard() {
         !loading &&
         !showCreate &&
         !showOrders &&
-        !showInventory &&
-        !showSettings &&
         !showSubHub &&
-        !showInvoices
+        !showInventory &&
+        !showSettings
           ? renderDisplay()
           : null}
-        {merchant && userPublicKey && showInvoices && renderInvoices()}
         {merchant && userPublicKey && showPayRequests && renderAllPayRequests()}
         {merchant && userPublicKey && showCreate && renderCreateComponent()}
         {merchant && userPublicKey && showOrders && renderOrdersComponent()}

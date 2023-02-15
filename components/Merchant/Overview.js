@@ -304,7 +304,7 @@ const Overview = (req) => {
         setLoading(false);
       })();
     }
-  }, []);
+  }, [publicKey, userPublicKey]);
 
   const checkMagicLogin = async() => {
     if (localStorage.getItem("userMagicMetadata")) {
@@ -338,6 +338,13 @@ const Overview = (req) => {
     });
 
   }, []);
+
+  useEffect(() => {
+    if(publicKey){
+      setUserPublicKey(publicKey.toString());
+      setCurrentWallet(publicKey.toString());
+    }
+  }, [publicKey]);
 
   return (
     <>
