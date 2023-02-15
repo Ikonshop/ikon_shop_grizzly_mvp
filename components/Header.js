@@ -368,11 +368,12 @@ export default function HeaderComponent() {
                         <div className="wallet_amount">
                           <div className="sol">
                             <img src="/sol.png" />
-                            <p>{magicBalance} SOL</p>
+                            {/* truncate magicBalance to the 2nd decimal */}
+                            <p>{magicBalance && magicBalance.toFixed(2)} SOL</p>
                           </div>
                           <div className="usdc">
                             <img src="/usdc.png" />
-                            <p>{magicUsdcBalance} USDC</p>
+                            <p>{magicUsdcBalance && magicUsdcBalance.toFixed(2)} USDC</p>
                           </div>
                         </div>
                       </div>
@@ -455,11 +456,11 @@ export default function HeaderComponent() {
                       <div className="wallet_amount">
                         <div className="sol">
                           <img src="/sol.png" />
-                          <p>{magicBalance} SOL</p>
+                          <p>{magicBalance && magicBalance.toFixed(2)} SOL</p>
                         </div>
                         <div className="usdc">
                           <img src="/usdc.png" />
-                          <p>{magicUsdcBalance} USDC</p>
+                          <p>{magicUsdcBalance && magicUsdcBalance.toFixed(2)} USDC</p>
                         </div>
                       </div>
                     </div>
