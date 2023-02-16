@@ -275,6 +275,12 @@ const CreateProduct = () => {
   useEffect(() => {
     if (publicKey) {
       setUserPublicKey(publicKey);
+      fetchCollectionIdByOwner(publicKey.toString()).then((collectionId) => {
+        setNewProduct({
+          ...newProduct,
+          collection: collectionId,
+        });
+      });
       setLoading(false);
     }
   }, [publicKey]);
