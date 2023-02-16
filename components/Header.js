@@ -183,38 +183,42 @@ export default function HeaderComponent() {
     );
   };
 
+  async function getBalance(pubKey) {
+
+    const balance = await connection.getBalance(pubKey);
+    console.log('balance: ', balance)
+    const convertedBalance = balance / 1000000000;
+    setMagicBalance(convertedBalance);
+  }
+
+  async function getUsdcBalance(pubKey) {
+    const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+    // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
+    try{
+      const associatedTokenAddress = await getAssociatedTokenAddress(usdcAddress, pubKey);
+      console.log('associatedTokenAddress: ', associatedTokenAddress.toString())
+      const usdcBalance = await connection.getTokenAccountBalance(associatedTokenAddress);
+      console.log('usdcBalance: ', usdcBalance.value.uiAmount)
+      const convertedUsdcBalance = usdcBalance.value.uiAmount;
+      setMagicUsdcBalance(convertedUsdcBalance);
+    } catch (error) {
+      console.log('error: ', error)
+    }
+
+  }
+
+
   useEffect(() => {
     if (publicKey) {
     setIsMultiStoreOwner(false);
     setMultiStoreArray(null);
     setMagicPublicKey(publicKey.toString());
-    async function getBalance(pubKey) {
-
-      const balance = await connection.getBalance(pubKey);
-      console.log('balance: ', balance)
-      const convertedBalance = balance / 1000000000;
-      setMagicBalance(convertedBalance);
-    }
-
-    async function getUsdcBalance(pubKey) {
-      const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
-      // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
-      try{
-        const associatedTokenAddress = await getAssociatedTokenAddress(usdcAddress, pubKey);
-        console.log('associatedTokenAddress: ', associatedTokenAddress.toString())
-        const usdcBalance = await connection.getTokenAccountBalance(associatedTokenAddress);
-        console.log('usdcBalance: ', usdcBalance.value.uiAmount)
-        const convertedUsdcBalance = usdcBalance.value.uiAmount;
-        setMagicUsdcBalance(convertedUsdcBalance);
-      } catch (error) {
-        console.log('error: ', error)
-      }
-
-    }
-
     
-    getBalance(publicKey);
-    getUsdcBalance(publicKey);
+
+    if(!magicBalance) {
+      getBalance(publicKey);
+      getUsdcBalance(publicKey);
+    }
     (async () => {
       // check local storage for store_owner_array, if it does not exist then create it
       if (localStorage.getItem("store_owner_array") === null) {
@@ -266,31 +270,7 @@ export default function HeaderComponent() {
   }, [publicKey, merchant]);
 
   useEffect(() => {
-    async function getBalance(pubKey) {
-
-      const balance = await connection.getBalance(pubKey);
-      console.log('balance: ', balance)
-      const convertedBalance = balance / 1000000000;
-      setMagicBalance(convertedBalance);
-    }
-
-    async function getUsdcBalance(pubKey) {
-      const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
-      // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
-      try{
-        const associatedTokenAddress = await getAssociatedTokenAddress(usdcAddress, pubKey);
-        console.log('associatedTokenAddress: ', associatedTokenAddress.toString())
-        const usdcBalance = await connection.getTokenAccountBalance(associatedTokenAddress);
-        console.log('usdcBalance: ', usdcBalance.value.uiAmount)
-        const convertedUsdcBalance = usdcBalance.value.uiAmount;
-        setMagicUsdcBalance(convertedUsdcBalance);
-      } catch (error) {
-        console.log('error: ', error)
-      }
-
-    }
-
-    if (window) {
+      
       window.addEventListener("magic-logged-in", () => {
         console.log('event listener fired')
         const data = localStorage.getItem("userMagicMetadata");
@@ -340,7 +320,7 @@ export default function HeaderComponent() {
         setShowQuickActions(false);
       });
       
-    }
+    
   }, []);
 
   return (

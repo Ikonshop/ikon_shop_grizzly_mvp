@@ -385,7 +385,37 @@ function Dashboard() {
       getData();
       setLoading(false);
     }
-  }, [publicKey]);
+    if(!publicKey, userPublicKey){
+      const getData = async () => {
+        const data = await CheckForCollectionByOwner(userPublicKey)
+
+        console.log('data', data)
+        if(data === true){
+          console.log('setting merchant to true')
+          setMerchant(true);
+        }
+        const walletData = await CheckForWallet(userPublicKey);
+        if (walletData.wallet === null) {
+          const newWallet = CreateWallet(userPublicKey);
+          if (newWallet) {
+            console.log(
+              "welcome to ikonshop, if you have any issues please reach out to us on discord"
+            );
+          }
+        } else {
+          console.log(
+            "welcome to ikonshop, if you have any issues please reach out to us on discord"
+          );
+        }
+         
+        if(data === false){
+          router.push('/register')
+        }
+      };
+      getData();
+      setLoading(false);
+    }
+  }, [publicKey, userPublicKey]);
 
   useEffect(() => {
     if (publicKey) {
@@ -415,23 +445,18 @@ function Dashboard() {
     async function checkUser() {
       const loggedIn = await magic.user.isLoggedIn();
       console.log('loggedIn', loggedIn)
-      if(loggedIn) {
-        setIsLoggedIn(true)
-        magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-          setIsLoggedIn(magicIsLoggedIn);
-            if (magicIsLoggedIn) {
-              magic.user.getMetadata().then((user) => {
-                setUserMetadata(user);
-                localStorage.setItem('userMagicMetadata', JSON.stringify(user));
-                const pubKey = new web3.PublicKey(user.publicAddress);
-                window.dispatchEvent(new CustomEvent("magic-logged-in"));
-              });
-            } else {
-              window.dispatchEvent(new CustomEvent("magic-logged-out"));
-              setLoading(false);
-            }
+      magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+        if (magicIsLoggedIn) {
+          magic.user.getMetadata().then((user) => {
+            localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+            const pubKey = new web3.PublicKey(user.publicAddress);
+            setUserPublicKey(pubKey.toString());
           });
-      }
+        } else {
+          window.dispatchEvent(new CustomEvent("magic-logged-out"));
+          setLoading(false);
+        }
+      });
     }
   checkUser();
   };

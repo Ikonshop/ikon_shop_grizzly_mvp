@@ -236,36 +236,38 @@ const LoginMagic = () => {
 
     // useEffect to see if user is logged in
     useEffect(() => {
-    
-            const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-                extensions: {
-                    solana: new SolanaExtension({
-                    rpcUrl
-                    })
-                }
-            });
-            async function checkUser() {
-                const loggedIn = await magic.user.isLoggedIn();
-                console.log('loggedIn', loggedIn)
-                if(loggedIn) {
-                  setIsLoggedIn(true)
-                  magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-                    setIsLoggedIn(magicIsLoggedIn);
-                      if (magicIsLoggedIn) {
-                        magic.user.getMetadata().then((user) => {
-                          setUserMetadata(user);
-                          localStorage.setItem('userMagicMetadata', JSON.stringify(user));
-                          const pubKey = new web3.PublicKey(user.publicAddress);
-                          getBalance(pubKey);
-                          getUsdcBalance(pubKey);
-                          setEmail(user.email);
-                          window.dispatchEvent(new CustomEvent("magic-logged-in"));
-                        });
-                      }
-                    });
-                }
+      if(!isLoggedIn){
+        const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+            extensions: {
+                solana: new SolanaExtension({
+                rpcUrl
+                })
             }
-            checkUser();
+        });
+        async function checkUser() {
+            const loggedIn = await magic.user.isLoggedIn();
+            console.log('loggedIn', loggedIn)
+            if(loggedIn) {
+              setIsLoggedIn(true)
+              magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+                setIsLoggedIn(magicIsLoggedIn);
+                  if (magicIsLoggedIn) {
+                    magic.user.getMetadata().then((user) => {
+                      setUserMetadata(user);
+                      localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+                      const pubKey = new web3.PublicKey(user.publicAddress);
+                      getBalance(pubKey);
+                      getUsdcBalance(pubKey);
+                      setEmail(user.email);
+                      window.dispatchEvent(new CustomEvent("magic-logged-in"));
+                    });
+                  }
+                });
+            }
+        }
+        
+        checkUser();
+      }
 
     }, []);
 

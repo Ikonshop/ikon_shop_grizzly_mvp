@@ -672,31 +672,26 @@ function Dashboard() {
       }
     });
     async function checkUser() {
-      const loggedIn = await magic.user.isLoggedIn();
-      console.log('loggedIn', loggedIn)
-      if(loggedIn) {
-        setIsLoggedIn(true)
+    
         magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-          setIsLoggedIn(magicIsLoggedIn);
             if (magicIsLoggedIn) {
               magic.user.getMetadata().then((user) => {
-                setUserMetadata(user);
                 localStorage.setItem('userMagicMetadata', JSON.stringify(user));
                 const pubKey = new web3.PublicKey(user.publicAddress);
-                window.dispatchEvent(new CustomEvent("magic-logged-in"));
+                setUserPublicKey(pubKey.toString());
               });
             } else {
               window.dispatchEvent(new CustomEvent("magic-logged-out"));
               setLoading(false);
             }
           });
-      }
+    
     }
   checkUser();
   };
 
   useEffect(() => {
-    if(!publicKey) {
+    if(!publicKey && !userPublicKey) {
       checkMagicLogin();
     }
     window.addEventListener("magic-logged-in", () => {
