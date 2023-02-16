@@ -364,7 +364,7 @@ export default function HeaderComponent() {
                 className={styles.navbar_collapse}
               >
                 {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
-                {currentPath === "/merchant/dashboard" && (
+                {currentPath === "/merchant/dashboard" && magicPublicKey && (
                   <div
                     className={styles.multi_display}
                   >
@@ -393,19 +393,14 @@ export default function HeaderComponent() {
                       <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
                         
                         <div id="container">
-                          
                           <div 
                             onClick={()=> router.push("/user/dashboard")}
-                            
                             id="target" 
                             class="sun"
                             
                           > 
                             <IoStorefrontOutline className="sunny_tog" />
-                      
                           </div>
-             
-               
                         </div>
                       </Nav.Link>
 
@@ -416,7 +411,6 @@ export default function HeaderComponent() {
                             onClick={toggleTheme}
                             id="target" 
                             class="sun"
-                            
                           > 
                             <IoSunnyOutline className="sunny_tog" />
                             <div></div>
@@ -431,7 +425,6 @@ export default function HeaderComponent() {
                               {theme === "dark" && (
                                 <IoMoonOutline className="moon_tog" />
                               )}
-                            
                               <div></div>
                             </div>
                           )}
@@ -455,7 +448,23 @@ export default function HeaderComponent() {
                     </div>
                   </div>
                 )}
-                {currentPath === "/user/dashboard" && (
+                {currentPath === "/merchant/dashboard" && !magicPublicKey && (
+                  <div
+                    style={{
+                      display:"flex", 
+                      flexDirection:"row",
+                      justifyContent:"flex-end",
+                      alignItems:"center",
+                      width:"100%"
+                    }}
+                  >
+                    <WalletMultiButton />
+                    {renderMagicLogin()}
+                    
+                  </div>
+                  
+                )}
+                {currentPath === "/user/dashboard" && magicPublicKey && (
                   <div
                     className={styles.multi_display}
                   >
@@ -543,6 +552,20 @@ export default function HeaderComponent() {
                     {publicKey && (
                       <WalletMultiButton />
                     )}
+                  </div>
+                )}
+                {currentPath === "/user/dashboard" && !magicPublicKey && (
+                  <div
+                    style={{
+                      display:"flex", 
+                      flexDirection:"row",
+                      justifyContent:"flex-end",
+                      alignItems:"center",
+                      width:"100%"
+                    }}
+                  >
+                    <WalletMultiButton />
+                    {renderMagicLogin()}
                   </div>
                 )}
                 <Nav

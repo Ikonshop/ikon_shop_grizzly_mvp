@@ -31,9 +31,12 @@ import {
   IoBarChartOutline,
   IoHourglass,
 } from "react-icons/io5";
+import {Magic} from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
+const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -402,25 +405,35 @@ function Dashboard() {
   }, []);
 
   const checkMagicLogin = async() => {
-    if (localStorage.getItem("userMagicMetadata")) {
-      const userMagicMetadata = JSON.parse(
-        localStorage.getItem("userMagicMetadata")
-      );
-      setUserEmail(userMagicMetadata.email);
-      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
-      setCurrentWallet(magicPubKey.toString());
-      setUserPublicKey(magicPubKey.toString());
-      
-      const data = await CheckForCollectionByOwner(magicPubKey.toString());
-      console.log('data', data);
-      if (data === true) {
-        setMerchant(true);
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: {
+          solana: new SolanaExtension({
+          rpcUrl
+          })
       }
-      if( data === false) {
-        router.push('/register');
+    });
+    async function checkUser() {
+      const loggedIn = await magic.user.isLoggedIn();
+      console.log('loggedIn', loggedIn)
+      if(loggedIn) {
+        setIsLoggedIn(true)
+        magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+          setIsLoggedIn(magicIsLoggedIn);
+            if (magicIsLoggedIn) {
+              magic.user.getMetadata().then((user) => {
+                setUserMetadata(user);
+                localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+                const pubKey = new web3.PublicKey(user.publicAddress);
+                window.dispatchEvent(new CustomEvent("magic-logged-in"));
+              });
+            } else {
+              window.dispatchEvent(new CustomEvent("magic-logged-out"));
+              setLoading(false);
+            }
+          });
       }
-      console.log("userMagicMetadata", userMagicMetadata);
     }
+  checkUser();
   };
 
   useEffect(() => {
@@ -440,6 +453,12 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
+    if (!publicKey && !userPublicKey) {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
     // if url has query string, set settings = to true
     // setShowSettings(false);
     //url: /merchant/dashboard?settings=true
@@ -455,7 +474,7 @@ function Dashboard() {
       {/* <DashboardHeader /> */}
       {showMerchantDash ? renderMerchantDashboard() : null}
       <div className={styles.main_container}>
-        {/* {!publicKey ? renderNotConnected() : null} */}
+        {!publicKey && !userPublicKey ? renderNotConnected() : null}
         {userPublicKey && loading ? renderLoading() : null}
 
         {userPublicKey &&

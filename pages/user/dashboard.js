@@ -42,9 +42,12 @@ import {
   IoCheckmark,
   IoClose,
 } from "react-icons/io5";
+import { Magic } from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
+const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 function Dashboard() {
   const router = useRouter();
@@ -660,17 +663,36 @@ function Dashboard() {
     }
   }, [publicKey]);
 
-  const checkMagicLogin = () => {
-    if (localStorage.getItem("userMagicMetadata")) {
-      const userMagicMetadata = JSON.parse(
-        localStorage.getItem("userMagicMetadata")
-      );
-      setUserEmail(userMagicMetadata.email);
-      const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
-      setCurrentWallet(magicPubKey.toString());
-      setUserPublicKey(magicPubKey.toString());
-      console.log("userMagicMetadata", userMagicMetadata);
+  const checkMagicLogin = async() => {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: {
+          solana: new SolanaExtension({
+          rpcUrl
+          })
+      }
+    });
+    async function checkUser() {
+      const loggedIn = await magic.user.isLoggedIn();
+      console.log('loggedIn', loggedIn)
+      if(loggedIn) {
+        setIsLoggedIn(true)
+        magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+          setIsLoggedIn(magicIsLoggedIn);
+            if (magicIsLoggedIn) {
+              magic.user.getMetadata().then((user) => {
+                setUserMetadata(user);
+                localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+                const pubKey = new web3.PublicKey(user.publicAddress);
+                window.dispatchEvent(new CustomEvent("magic-logged-in"));
+              });
+            } else {
+              window.dispatchEvent(new CustomEvent("magic-logged-out"));
+              setLoading(false);
+            }
+          });
+      }
     }
+  checkUser();
   };
 
   useEffect(() => {
