@@ -375,7 +375,9 @@ function Dashboard() {
           );
         }
          
-        
+        if(data === false){
+          router.push('/register')
+        }
       };
       getData();
       setLoading(false);
@@ -413,6 +415,9 @@ function Dashboard() {
       console.log('data', data);
       if (data === true) {
         setMerchant(true);
+      }
+      if( data === false) {
+        router.push('/register');
       }
       console.log("userMagicMetadata", userMagicMetadata);
     }

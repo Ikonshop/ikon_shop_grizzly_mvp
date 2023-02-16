@@ -5,14 +5,14 @@ import Loading from "../components/Loading";
 import styles from "../styles/Store.module.css";
 import LoginForm from "../components/MagicWallet/loginForm";
 import Register from "../components/Register/Register";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 const App = () => {
-  useEffect(() => {
-    AOS.init({ duration: 800 });
-  }, []);
+  
+  const {publicKey, connected, disconnect} = useWallet();
 
 
   // CONNECTED DISPLAY
@@ -22,6 +22,7 @@ const App = () => {
     const [email, setEmail] = useState(null);
     const [showRegister, setShowRegister] = useState(false);
     const [loading, setLoading] = useState(false);
+    
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -153,6 +154,17 @@ const App = () => {
     );
   };
 
+  useEffect(() => {
+    if(publicKey) {
+      // disconnect the wallet upon mount
+      disconnect();
+    }
+  }, []);
+
+  useEffect(() => {
+    AOS.init({ duration: 800 });
+  }, []);
+  
   return (
     <div className="App">
       {renderRegisterContainer()}

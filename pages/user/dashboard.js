@@ -656,7 +656,7 @@ function Dashboard() {
         setCreditScore(creditScoreData.credit_score);
         setCreditProb(creditScoreData.credit_prob);
       }
-      getAtadiaData();
+      // getAtadiaData();
     }
   }, [publicKey]);
 
