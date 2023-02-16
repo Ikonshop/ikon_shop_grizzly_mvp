@@ -17,7 +17,7 @@ import { LogoDiscord, LogoTwitter } from "react-ionicons";
 import dynamic from "next/dynamic";
 import * as web3 from "@solana/web3.js";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
-import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAssociatedTokenAccount, getMint } from "@solana/spl-token";
+import { getAssociatedTokenAddress } from "@solana/spl-token";
 import {
   Connection,
   GetTokenAccountsByOwnerConfig,
@@ -30,11 +30,13 @@ import {
   IoMoonOutline,
   IoSwapHorizontalOutline,
   IoAccessibilityOutline,
-  IoStorefrontOutline
+  IoStorefrontOutline,
+  IoWalletOutline,
   
 } from "react-icons/io5";
 import LoginMagic from "./MagicWallet/login";
 import LogoutMagic from "./MagicWallet/logout";
+import QuickActions from "./MagicWallet/quickActions";
 import styles from "../styles/Header.module.css";
 
 
@@ -62,6 +64,7 @@ export default function HeaderComponent() {
   const [magicPublicKey, setMagicPublicKey] = useState(null);
   const [magicBalance, setMagicBalance] = useState(0);
   const [magicUsdcBalance, setMagicUsdcBalance] = useState(0);
+  const [showQuickActions, setShowQuickActions] = useState(false);
 
   // MERCHANT HEADER CONSTANTS
   const [isMultiStoreOwner, setIsMultiStoreOwner] = useState(false);
@@ -152,7 +155,15 @@ export default function HeaderComponent() {
     );
   };
 
-
+  const renderMagicQuickActions = () => {
+    return (
+      <QuickActions 
+        magicMetadata={magicMetadata} 
+        magicBalance={magicBalance} 
+        magicUsdcBalance={magicUsdcBalance}
+      />
+    );
+  };
   
 
 
@@ -314,6 +325,7 @@ export default function HeaderComponent() {
             }
           };
           getData();
+
         }
         else {
           setMagicUser(false);
@@ -324,6 +336,9 @@ export default function HeaderComponent() {
         setMagicPublicKey("");
         setMagicUser(false);
       });
+      window.addEventListener("closeQuickActions", () => {
+        setShowQuickActions(false);
+      });
       
     }
   }, []);
@@ -332,6 +347,9 @@ export default function HeaderComponent() {
     <Navbar collapseOnSelect expand="lg" style={{display:"flex", flexDirection:"row"}} className={styles.navbar}>
         <Container className={styles.navbar_container}>
               <Navbar.Brand onClick={() => router.push("/")} className={styles.navbar_brand}>
+                {showQuickActions && (
+                  renderMagicQuickActions()
+                )}
                 <img
                   src="/newlogo.png"
                   style={{ cursor: "pointer", maxWidth: "160px"}}
@@ -361,11 +379,12 @@ export default function HeaderComponent() {
                         <div className="wallet_amount">
                           <div className="sol">
                             <img src="/sol.png" />
-                            <p>{magicBalance} SOL</p>
+                            {/* truncate magicBalance to the 2nd decimal */}
+                            <p>{magicBalance && magicBalance.toFixed(2)} SOL</p>
                           </div>
                           <div className="usdc">
                             <img src="/usdc.png" />
-                            <p>{magicUsdcBalance} USDC</p>
+                            <p>{magicUsdcBalance && magicUsdcBalance.toFixed(2)} USDC</p>
                           </div>
                         </div>
                       </div>
@@ -418,10 +437,15 @@ export default function HeaderComponent() {
                           )}
                         </div>
                       </Nav.Link>
-        
-
-                      
-
+                    {!publicKey && magicUser &&(
+                      <Nav.Link
+                        // setShowQuickActions(true);
+                        onClick={()=> setShowQuickActions(true)}
+                        className={styles.navbar_link}
+                      >
+                        <IoWalletOutline />
+                      </Nav.Link>
+                    )}
                     {!publicKey && (
                       renderMagicLogin()
                     )}
@@ -448,11 +472,11 @@ export default function HeaderComponent() {
                       <div className="wallet_amount">
                         <div className="sol">
                           <img src="/sol.png" />
-                          <p>{magicBalance} SOL</p>
+                          <p>{magicBalance && magicBalance.toFixed(2)} SOL</p>
                         </div>
                         <div className="usdc">
                           <img src="/usdc.png" />
-                          <p>{magicUsdcBalance} USDC</p>
+                          <p>{magicUsdcBalance && magicUsdcBalance.toFixed(2)} USDC</p>
                         </div>
                       </div>
                     </div>
@@ -504,7 +528,15 @@ export default function HeaderComponent() {
                         )}
                       </div>
                     </Nav.Link>
-
+                    {!publicKey && magicUser &&(
+                      <Nav.Link
+                        // setShowQuickActions(true);
+                        onClick={()=> setShowQuickActions(true)}
+                        className={styles.navbar_link}
+                      >
+                        <IoWalletOutline />
+                      </Nav.Link>
+                    )}
                     {!publicKey && (
                       renderMagicLogin()
                     )}
@@ -562,6 +594,15 @@ export default function HeaderComponent() {
                         <LogoDiscord />
                       </Nav.Link>
                     </div>
+                    {!publicKey && magicUser &&(
+                      <Nav.Link
+                        // setShowQuickActions(true);
+                        onClick={()=> setShowQuickActions(true)}
+                        className={styles.navbar_link}
+                      >
+                        <IoWalletOutline />
+                      </Nav.Link>
+                    )}
                     {/* if page is not /register then display  */}
                     {/* IF LOGGED IN WITH MAGIC THEN HIDE WALLET MULTI BUTTON */}
                     {currentPath !== "/register" && (
@@ -574,7 +615,6 @@ export default function HeaderComponent() {
                         {!publicKey && (
                           renderMagicLogin()
                         )}
-                        
                       </>
                     )}
                     {currentPath === "/register" && (
@@ -591,8 +631,6 @@ export default function HeaderComponent() {
            
                 </Nav>
               </Navbar.Collapse>
-         
-          
         </Container>
       </Navbar>
   );

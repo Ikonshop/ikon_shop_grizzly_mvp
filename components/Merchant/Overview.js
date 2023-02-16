@@ -342,7 +342,6 @@ const Overview = (req) => {
   useEffect(() => {
     if(publicKey){
       setUserPublicKey(publicKey.toString());
-      setCurrentWallet(publicKey.toString());
     }
   }, [publicKey]);
 

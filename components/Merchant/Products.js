@@ -43,6 +43,7 @@ function myProducts() {
 
   const [showEdit, setShowEdit] = useState(false);
   const [productToEdit, setProductToEdit] = useState();
+  const [productToDelete, setProductToDelete] = useState();
 
   async function getOrders(product) {
     const orders = await getSingleProductOrders(product.id);
@@ -54,37 +55,47 @@ function myProducts() {
 
   const [show, setShow] = useState(false);
 
+  const renderDeleteModal = () => (
+    <div className={styles.modal_bg}>
+      <div className={styles.modal_}>
+        <IoCloseCircleOutline
+          style={{ fontSize: "100px", color: "#FF5E4A" }}
+        />
+        <h4>Are you sure?</h4>
+        <p>
+          Do you really want to delete this product? This process cannot
+          be undone.
+        </p>
+        <div className={styles.modal_buttons}>
+          <button
+            onClick={() => setShow(!show)}
+            className={styles.modal_sec_button}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              setShow(!show)
+              deleteSingleProduct(productToDelete.id);
+              const index = ownerProducts.indexOf(productToDelete);
+              if (index > -1) {
+                ownerProducts.splice(index, 1);
+              }
+              setOwnerProducts([...ownerProducts]);
+            }}
+            className={styles.modal_pry_button}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
   const renderProducts = () => (
     <>
       <div className={styles.owner_product_containter}>
-        {show && (
-          <div className={styles.modal_bg}>
-            <div className={styles.modal_}>
-              <IoCloseCircleOutline
-                style={{ fontSize: "100px", color: "#FF5E4A" }}
-              />
-              <h4>Are you sure?</h4>
-              <p>
-                Do you really want to delete this product? This process cannot
-                be undone.
-              </p>
-              <div className={styles.modal_buttons}>
-                <button
-                  onClick={() => setShow(!show)}
-                  className={styles.modal_sec_button}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setShow(!show)}
-                  className={styles.modal_pry_button}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {show && renderDeleteModal()}
         <div className={styles.searchBarSection}>
           {/* <div className={styles.search_filter}>
             <div className={styles.inputSection}>
@@ -188,16 +199,10 @@ function myProducts() {
                           fontSize: "20px",
                           color: "#595959",
                         }}
-                        onClick={() => setShow(true)}
-                        // onClick={() => {
-                        //   // delete and remove index from array
-                        //   deleteSingleProduct(product.id);
-                        //   const index = ownerProducts.indexOf(product);
-                        //   if (index > -1) {
-                        //     ownerProducts.splice(index, 1);
-                        //   }
-                        //   setOwnerProducts([...ownerProducts]);
-                        // }}
+                        onClick={() =>{ 
+                          setShow(true)
+                          setProductToDelete(product)
+                        }}
                       />
                     </div>
                   </div>
@@ -315,9 +320,25 @@ function myProducts() {
     }
   };
 
+  const checkStandardLogin = async() => {
+    if (publicKey) {
+      setCurrentWallet(publicKey.toString());
+      setUserPublicKey(publicKey.toString());
+      
+      const data = await CheckForCollectionByOwner(publicKey.toString());
+      console.log('data', data);
+      const products = await getCollectionOwner(publicKey.toString())
+      console.log('products', products.products);
+      setOwnerProducts(products.products);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if(!publicKey) {
       checkMagicLogin();
+    }else if(publicKey) {
+      checkStandardLogin();
     }
     window.addEventListener("magic-logged-in", () => {
       checkMagicLogin();

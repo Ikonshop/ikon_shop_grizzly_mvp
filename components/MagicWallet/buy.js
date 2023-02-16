@@ -532,7 +532,7 @@ const MagicButton = (req) => {
         const transaction = web3.SystemProgram.transfer({
           fromPubkey: buyerPublicKey,
           // Lamports are the smallest unit of SOL, like Gwei with Ethereum
-          lamports: (bigAmount.multipliedBy(LAMPORTS_PER_SOL).toNumber()), 
+          lamports: bigAmount.multipliedBy(1000000000).toNumber(), 
           toPubkey: sellerPublicKey,
         });
 
