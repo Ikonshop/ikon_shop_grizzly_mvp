@@ -339,6 +339,12 @@ const Overview = (req) => {
 
   }, []);
 
+  useEffect(() => {
+    if(publicKey){
+      setUserPublicKey(publicKey.toString());
+    }
+  }, [publicKey]);
+
   return (
     <>
       {loading && (
