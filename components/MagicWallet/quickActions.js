@@ -4,18 +4,19 @@ import styles from "./styles/QuickActions.module.css";
 import * as web3 from "@solana/web3.js";
 import { IoCopyOutline, IoTimeOutline, IoCheckmark } from "react-icons/io5";
 import { encodeURL, createQR } from '@solana/pay';
+import Send from "./send";
 
 
 const QuickActions = (req) => {
     const [copied, setCopied] = useState(false);
     const [displayQR, setDisplayQR] = useState(false);
+    const [depositQR, setDepositQR] = useState(null);
 
-    const [trasferToAddress, setTransferToAddress] = useState('');
+    const [transferToAddress, setTransferToAddress] = useState('');
     const [transferAmount, setTransferAmount] = useState(0);
     const [tokenType, setTokenType] = useState('SOL');
     const [displayTransfer, setDisplayTransfer] = useState(false);
 
-    console.log('incoming quickActions props: ', req.magicMetadata, req.magicBalance, req.magicUsdcBalance)
     const pubKey = new web3.PublicKey(req.magicMetadata.publicAddress);
     const publicKey = pubKey.toString();
     const usdcAddress = new web3.PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
@@ -31,30 +32,16 @@ const QuickActions = (req) => {
     };
 
     const renderDepositQR = () => {
-        //create qr code that uses the publicKey as the recipient that when scanned will create a deposit transaction where the user is the sender and inputs amount
-        
-        const url = encodeURL({
-            amount: 0,
-            recipient: pubKey,
-            message: "Magic Deposit on IkonShop"
-        });
-        // create a qr code with the url that is 200x200
-        const qr = createQR(url, 200);
-        console.log(qr);
-
         const element = document.getElementById("qr-code");
-        qr.append(element);
-        //will need to create a modal that displays the qr code
+        depositQR.append(element);
         return (
             <div className={styles.depositContainer}>
-                {displayQR && (<div id="qr-code"></div>)}
+                <div id="qr-code"></div>
                 <div className={styles.transferInputTokenRow}>
                     <span>Token: </span>
                     <div className={styles.tokenSelect}>
                         <select onChange={(e) => (
-                            setDisplayQR(false),
-                            setTokenType(e.target.value),
-                            setDisplayQR(true)
+                            setTokenType(e.target.value)
                         )}>
                             <option value="SOL">SOL</option>
                             <option value="USDC">USDC</option>
@@ -62,6 +49,7 @@ const QuickActions = (req) => {
                     </div>
                 </div>
                 <div className={styles.transferInputRow}>
+                    <h4>Address: </h4>
                     <span>Address: </span> {publicKey.slice(0,4)}...{publicKey.slice(-4)}
                     {copied ? <IoCheckmark className={styles.copyIconCheck}/> : null}
                     {!copied && (
@@ -73,31 +61,17 @@ const QuickActions = (req) => {
     }
 
     const renderDepositQRUsdc = () => {
-        //create qr code that uses the publicKey as the recipient that when scanned will create a deposit transaction where the user is the sender and inputs amount
-        
-        const url = encodeURL({
-            amount: 0,
-            recipient: pubKey,
-            splToken: usdcAddress,
-            message: "Magic Deposit on IkonShop"
-        });
-        // create a qr code with the url that is 200x200
-        const qr = createQR(url, 200);
-        console.log(qr);
-
         const element = document.getElementById("qr-code");
-        qr.append(element);
+        depositQR.append(element);
         //will need to create a modal that displays the qr code
         return (
             <div className={styles.depositContainer}>
-                {displayQR && (<div id="qr-code"></div>)}
+                <div id="qr-code"></div>
                 <div className={styles.transferInputTokenRow}>
                     <span>Token: </span>
                     <div className={styles.tokenSelect}>
                         <select onChange={(e) => (
-                            setDisplayQR(false),
-                            setTokenType(e.target.value),
-                            setDisplayQR(true)
+                            setTokenType(e.target.value)
                         )}>
                             <option value="USDC">USDC</option>
                             <option value="SOL">SOL</option> 
@@ -105,7 +79,9 @@ const QuickActions = (req) => {
                     </div>
                 </div>
                 <div className={styles.transferInputRow}>
-                    <span>Address: </span> {publicKey.slice(0,4)}...{publicKey.slice(-4)}
+                    <h4>Address: </h4>
+                    <span>Address: </span> 
+                    {publicKey.slice(0,4)}...{publicKey.slice(-4)}
                     {copied ? <IoCheckmark className={styles.copyIconCheck}/> : null}
                     {!copied && (
                         <IoCopyOutline className={styles.copyIcon} onClick={() => handleCopy(publicKey)}/>
@@ -121,6 +97,32 @@ const QuickActions = (req) => {
         }, 2000);
         return () => clearTimeout(timer);
     }, [copied]);
+
+    useEffect(() => {
+        if (tokenType === 'SOL') {
+            const url = encodeURL({
+                amount: 0,
+                recipient: pubKey,
+                message: "Magic Deposit on IkonShop"
+            });
+            // create a qr code with the url that is 200x200
+            const newQr = createQR(url, 200)
+    
+            setDepositQR(newQr);
+
+        } else if (tokenType === 'USDC') {
+            const url = encodeURL({
+                amount: 0,
+                recipient: pubKey,
+                splToken: usdcAddress,
+                message: "Magic Deposit on IkonShop"
+            });
+            // create a qr code with the url that is 200x200
+            const newQr = createQR(url, 200)
+            
+            setDepositQR(newQr);
+        }
+    }, [tokenType])
     
     return(
         <div className={styles.quickActionsOverlay}>
@@ -133,43 +135,50 @@ const QuickActions = (req) => {
                 </div>
                 <div className={styles.leftContainer}>
                     <div className={styles.addressContainer}>
-                        <p className={styles.address}>
+                        <div className={styles.address}>
+                            {/* for mobile, hide span and display h4 */}
+                            <h4>Address</h4>
                             <span>Address:</span>{publicKey.slice(0,4)}...{publicKey.slice(-4)}
-                        </p>
+                        </div>
                         {copied ? <IoCheckmark className={styles.copyIconCheck}/> : null}
                         {!copied && (
                             <IoCopyOutline className={styles.copyIcon} onClick={() => handleCopy(publicKey)}/>
                         )}
                     </div>
                     <div className={styles.emailContainer}>
-                        <p className={styles.email}>
+                        <div className={styles.email}>
+                            <h4>Email</h4>
+                            {/* for mobile hide span and display h4 */}
                             <span>Email:</span>{req.magicMetadata.email}
-                        </p>
+                        </div>
                     </div>
                     <div className={styles.balanceContainer}>
+                        <h4>Balance</h4>
                         <p className={styles.balance}>{req.magicBalance.toFixed(4)} SOL</p>
                         <p className={styles.balance}>{req.magicUsdcBalance} USDC</p>
                     </div>
                 </div>
                 <div className={styles.rightContainer}>
                     <div className={styles.displayOptions}>
-                        <p
+                        <div
+                            className={styles.displayOptionsText}
                             onClick={() => {
                                 setDisplayTransfer(!displayTransfer)
                                 setDisplayQR(false)
                             }}
                         >
                             {!displayTransfer ? 'Transfer |' : 'Hide |'}
-                        </p>
+                        </div>
                             
-                        <p
+                        <div                            
+                            className={styles.displayOptionsText}
                             onClick={() => {
                                 setDisplayQR(!displayQR)
                                 setDisplayTransfer(false)
                             }}
                         >
                            {!displayQR ? '| Deposit' : '| Hide'}
-                        </p>
+                        </div>
                     </div>
                     {displayQR && tokenType === 'SOL' &&(
                         renderDepositQR()
@@ -181,12 +190,6 @@ const QuickActions = (req) => {
                         <div className={styles.transferContainer}>
                             {displayTransfer && (
                                 <>
-                                    <p
-                                        className={styles.transferMax}
-                                        onClick={() => setTransferAmount(req.magicBalance - 0.0001)}
-                                    >
-                                        Set Max
-                                    </p>
                                     <div className={styles.transferInputRow}>
                                         <input 
                                             className={styles.transferInput} 
@@ -200,25 +203,37 @@ const QuickActions = (req) => {
                                             placeholder="Amount"
                                             onChange={(e) => setTransferAmount(e.target.value)}
                                         ></input>
+                                        {/* <div
+                                            className={styles.transferMax}
+                                            onClick={() => setTransferAmount(req.magicBalance - 0.001)}
+                                        >
+                                            Set Max
+                                        </div> */}
+                                    </div>
+                                    <div className={styles.transferInputRow}>
+
                                         <select
                                             className={styles.transferInputSplit}
-                                            onChange={(e) => setTransferToken(e.target.value)}
+                                            onChange={(e) => setTokenType(e.target.value)}
                                         >
                                             <option value="SOL">SOL</option>
                                             <option value="USDC">USDC</option>
                                         </select>
                                     </div>
-                                    <button 
-                                        className={styles.transferButton}
-                                    >
-                                        Transfer
-                                    </button>
+                                    <Send 
+                                      buyer={publicKey}
+                                      recipient={transferToAddress}
+                                      price={transferAmount}
+                                      token={tokenType}
+                                    
+                                    />
                                     <div
                                         className={styles.transferDetails}
                                     >
-                                        <p className={styles.detailRow}><span>Recipient:</span> {trasferToAddress}</p>
-                                        <p className={styles.detailRow}><span>Gas:</span> 0.0001 SOL</p>
-                                        <p className={styles.detailRow}><span>Total:</span> {transferAmount + 0.0001}</p>
+                                        <h4>Recipient:</h4>
+                                        <div className={styles.detailRowAddress}><span>Recipient:</span> {transferToAddress}</div>
+                                        <div className={styles.detailRow}><span>Gas:</span> 0.0001 SOL</div>
+                                        <div className={styles.detailRow}><span>Total:</span> {transferAmount + 0.0001}</div>
                                     </div>
                                 </>
                             )}

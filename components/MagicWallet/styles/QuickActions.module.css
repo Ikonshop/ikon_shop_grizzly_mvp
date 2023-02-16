@@ -60,6 +60,10 @@
     color: #000;
 }
 
+.address > h4 {
+    display: none;
+}
+
 .address > span {
     font-size: 16px;
     font-weight: 600;
@@ -112,6 +116,10 @@
     margin-right: 10px;
 }
 
+.email > h4{
+    display: none;
+}
+
 .balanceContainer{
     display: flex;
     flex-direction: column;
@@ -124,6 +132,10 @@
     font-size: 16px;
     font-weight: 600;
     color: #000;
+}
+
+.balanceContainer > h4 {
+    display: none;
 }
 
 .rightContainer{
@@ -146,7 +158,7 @@
     height: 16px;
 }
 
-.displayOptions > p {
+.displayOptionsText {
     font-size: 20px;
     font-weight: 600;
     color: #000;
@@ -198,9 +210,13 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 246px;
     margin-top: 5px;
     font-size: 16px;
+}
+
+.transferInputRow > h4{
+    display: none;
 }
 
 .transferInputRow > span{
@@ -234,7 +250,7 @@
 }
 
 .transferInputSplit{
-    width: 50%;
+    width: 123px;
     height: 30px;
     border: 1px solid #000;
     border-radius: 10px;
@@ -245,12 +261,27 @@
     margin-bottom: 5px;
 }
 
+.transferMax{
+    width: fit-content;
+    height: fit-content;
+    background-color: #000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-right: 2px;
+    padding: 5px;
+}
+
 .transferButton{
     width: 100px;
     height: 40px;
     background-color: #000;
     color: #fff;
-    font-size: 20px;
+    font-size: 12px;
     font-weight: 600;
     border: none;
     border-radius: 10px;
@@ -276,3 +307,393 @@
     height: 18px;
 }
 
+.detailRow > span{
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    margin-right: 2px;
+}
+
+.detailRowAddress{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 12px;
+    height: 18px;
+}
+
+.detailRowAddress > span{
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    margin-right: 2px;
+}
+
+
+.transferDetails > h4{
+    display: none;
+}
+
+/* media screen for mobile */
+@media screen and (max-device-width: 480px) {
+    .quickActionsOverlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 100;
+    }
+    
+    .closeButton{
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 20px;
+        height: 20px;
+        color: black;
+        font-size: 20px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+    }
+    .quickActions{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 300px;
+        background-color: #fff;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 10px 0 rgba(0,0,0,0.5);
+    }
+    
+    .leftContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        align-items: center;
+        height: 100%;
+        width: 50%;
+        border-right: 1px solid #000;
+    }
+    
+    .addressContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    } 
+    
+    .address{
+        font-size: 14px;
+
+        /* wrap the text if it overflows */
+        text-overflow: ellipsis;
+    }
+    
+    .address > span {
+        display: none;
+    }
+
+    .address > h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .copyIcon{
+        width: 16px;
+        height: 16px;
+        color: black;
+        font-size: 20px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+    
+    .copyIconCheck{
+        width: 16px;
+        height: 16px;
+        color: green;
+        font-size: 20px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+    
+    .emailContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+    }
+    
+    .email{
+        font-size: 12px;
+        font-weight: 200;
+        color: #000;
+        margin-bottom: 5px;
+    }
+    
+    .email > h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .email > span {
+        display: none;
+    }
+    
+    .balanceContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .balanceContainer > h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        border-bottom: 1px solid #000;
+    }
+    
+    .balance{
+        font-size: 14px;
+        font-weight: 800;
+        color: #000;
+    }
+    
+    .rightContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 50%;
+    }
+    
+    .displayOptions{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        /* margin-top: 50px; */
+        margin-bottom: 0px;
+    }
+    
+    .displayOptionsText {
+        font-size: 10px;
+        margin-top: 5px;
+        font-weight: 600;
+        color: #000;
+    }
+    
+    .depositContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    
+    .depositContainer > p {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+    }
+    
+    .depositButton{
+        width: 100px;
+        height: 40px;
+        background-color: #000;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    .transferContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .transferContainer > p {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+    }
+    
+    .transferInputRow{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .transferInputRow > h4 {
+        font-size: 12px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .transferInputRow > span{
+        display: none;
+    }
+    
+    .transferInputTokenRow{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        font-size: 12px;
+        height:14px;
+    }
+    
+    .transferInput{
+        width: 150px;
+        height: 30px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 300;
+        color: #000;
+        margin-bottom: 5px;
+        margin-right: 2px;
+        overflow: scroll;
+    }
+    
+    .transferInputSplit{
+        width: 75px;
+        height: 30px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 5px;
+    }
+
+    .transferMax{
+        width: fit-content;
+        height: fit-content;
+        background-color: #000;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 5px;
+        margin-right: 2px;
+        padding: 5px;
+    }
+    
+    .transferButton{
+        width: 100px;
+        height: 30px;
+        background-color: #000;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    .transferDetails{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .detailRow{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        font-size: 12px;
+        height: 18px;
+    }  
+    
+    .detailRow > span{
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        margin-right: 2px;
+    }
+
+    .detailRowAddress{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+        overflow: scroll;
+        font-size: 12px;
+        height: 18px;
+    }
+
+    .detailRowAddress > span{
+        display: none;
+    }
+
+    .transferDetails > h4{
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        margin-right: 2px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+}
