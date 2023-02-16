@@ -13,6 +13,19 @@ import UserOrders from "../../components/User/User-Orders";
 import PayRequests from "../../components/Merchant/PayRequests";
 import CreateLink from "../../components/User/Create-Link";
 import { getCollectionOwner } from "../../lib/api";
+import { 
+  GetPublickeyCreditScore,
+  GetPublickeyTwitterPfpScore,
+  GetPublickeyDiamondHandScore,
+  GetPublickeyMintLoverScore,
+  GetTokenAddressRoyaltyContribution,
+  GetPublickeyWealth,
+  GetPublickeyDemographics,
+  GetPublickeyTransactionFrequency,
+  GetPublickeyTransactionVolume,
+  GetPublickeySecondaryMarketActivity,
+  GetPublickeyProfitLoss
+} from "../../lib/Atadia/api";
 import {
   IoArrowBackOutline,
   IoBarChartOutline,
@@ -49,6 +62,11 @@ function Dashboard() {
   const [showLinkOrders, setShowLinkOrders] = useState(false);
   const [userLinks, setUserLinks] = useState([]);
   const [userTipJar, setUserTipJar] = useState([]);
+
+  // ATADIA CONSTANTS
+  const [atadiaLoading, setAtadiaLoading] = useState(false);
+  const [creditScore, setCreditScore] = useState();
+  const [creditProb, setCreditProb] = useState();
 
   const renderLoading = () => <Loading />;
 
@@ -607,6 +625,38 @@ function Dashboard() {
       console.log("these are the owners products", ownerProducts);
       console.log("these are the user links", userLinks);
       console.log("these are the user tip jar", userTipJar);
+
+      async function getAtadiaData() {
+        setAtadiaLoading(true);
+        const creditScoreData = await GetPublickeyCreditScore(publicKey.toString());
+        // const twitterPfpScoreDataData = await GetPublickeyTwitterPfpScore(publicKey.toString());
+        // const diamondHandScoreData = await GetPublickeyDiamondHandScore(publicKey.toString());
+        // const mintLoverScoreData = await GetPublickeyMintLoverScore(publicKey.toString());
+        // const tokenRoyaltyContributionData = await GetTokenAddressRoyaltyContribution(publicKey.toString());
+        const wealthData = await GetPublickeyWealth(publicKey.toString());
+        const demographicData = await GetPublickeyDemographics(publicKey.toString());
+        const txnFreqData = await GetPublickeyTransactionFrequency(publicKey.toString());
+        const txnVolumeData = await GetPublickeyTransactionVolume(publicKey.toString());
+        const secondaryMktActData = await GetPublickeySecondaryMarketActivity(publicKey.toString());
+        const profitLossData = await GetPublickeyProfitLoss(publicKey.toString());
+      
+
+        console.log("creditScoreData", creditScoreData);
+        // console.log("twitterPfpScoreDataData", twitterPfpScoreDataData);
+        // console.log("diamondHandScoreData", diamondHandScoreData);
+        // console.log("mintLoverScoreData", mintLoverScoreData);
+        // console.log("tokenRoyaltyContributionData", tokenRoyaltyContributionData);
+        console.log("wealthData", wealthData);
+        console.log("demographicData", demographicData);
+        console.log("txnFreqData", txnFreqData);
+        console.log("txnVolumeData", txnVolumeData);
+        console.log("secondaryMktActData", secondaryMktActData);
+        console.log("profitLossData", profitLossData);
+        
+        setCreditScore(creditScoreData.credit_score);
+        setCreditProb(creditScoreData.credit_prob);
+      }
+      getAtadiaData();
     }
   }, [publicKey]);
 

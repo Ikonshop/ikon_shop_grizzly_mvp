@@ -304,7 +304,7 @@ const Overview = (req) => {
         setLoading(false);
       })();
     }
-  }, []);
+  }, [publicKey, userPublicKey]);
 
   const checkMagicLogin = async() => {
     if (localStorage.getItem("userMagicMetadata")) {

@@ -366,17 +366,10 @@ export default function HeaderComponent() {
                 {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
                 {currentPath === "/merchant/dashboard" && (
                   <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                    className={styles.multi_display}
                   >
                     <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-evenly",
-                      }}
+                      className={styles.wallet_display}
                     >
                       <div className="wave">
                         <img src="/wave.png" />
