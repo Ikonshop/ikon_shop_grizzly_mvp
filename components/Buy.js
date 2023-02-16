@@ -40,7 +40,7 @@ export default function Buy({
   imageUrl,
   name,
 }) {
-  // console.log("this is the buy price", price);
+  console.log("this is the buy price", product);
   const connection = new Connection(
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
     "confirmed"

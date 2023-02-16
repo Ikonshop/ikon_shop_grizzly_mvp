@@ -193,6 +193,7 @@ export default function PaylinkComponent(product) {
                       token={tokenType}
                       owner={owner}
                       elusiv={false}
+                      product={product.product}
                     />
                   )}
                   {userPublicKey && type != "tipjar" ? (
@@ -203,6 +204,7 @@ export default function PaylinkComponent(product) {
                       token={token}
                       owner={owner}
                       elusiv={false}
+                      product={product.product}
                     />
                   ) : null}
                   {/* {publicKey && showElusiv && tipAmount && elusivBalance < tipAmount && (

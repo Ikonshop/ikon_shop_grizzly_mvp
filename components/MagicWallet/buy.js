@@ -46,11 +46,11 @@ const MagicButton = (req) => {
   const [userPublicKey, setUserPublicKey] = useState("");
   const [userEmail, setUserEmail] = useState("");
   console.log('reqs are: ', req)
-  const id = req.id
+  const id = req.order.id
   // DETAILS NEEDED FOR ORDER
   const [tipJar, setTipJar] = useState(false);
-  const [tipTokenType, setTipTokenType] = useState();
-  const [tipAmount, setTipAmount] = useState();
+  const tipTokenType = req.order.token;
+  const tipAmount = req.order.price;
   const [item, setItem] = useState(null); // IPFS hash & filename of the purchased item
   const [infoCaptured, setInfoCaptured] = useState(true); // Whether the info has been grabbed from the user
   const [shippingCaptured, setShippingCaptured] = useState(true); // Whether the shipping info has been grabbed from the user
@@ -105,7 +105,7 @@ const MagicButton = (req) => {
     [
       userPublicKey,
       orderID,
-      req.order.product.token,
+      req.order.token,
       id,
       req.order.product,
       email,
@@ -688,7 +688,7 @@ const MagicButton = (req) => {
         }
         if (req.order.product.reqUserEmail === false) {
           setInfoCaptured(true);
-          if (reqs.product.reqUserShipping === false) {
+          if (req.order.product.reqUserShipping === false) {
             setShippingCaptured(true);
           }
           // console.log("", infoCaptured);
