@@ -11,6 +11,7 @@ import Loading from "../../components/Loading";
 // USER COMPONENTS
 import UserOrders from "../../components/User/User-Orders";
 import PayRequests from "../../components/Merchant/PayRequests";
+import Profile from "../../components/User/Profile";
 import CreateLink from "../../components/User/Create-Link";
 import { getCollectionOwner } from "../../lib/api";
 import { 
@@ -35,6 +36,7 @@ import {
   IoLinkOutline,
   IoChevronDown,
   IoTrashBin,
+  IoFingerPrintSharp,
   IoCopy,
   IoEye,
   IoLink,
@@ -63,6 +65,7 @@ function Dashboard() {
   const [showUserOrders, setShowUserOrders] = useState(false);
   const [showCreateLink, setShowCreateLink] = useState(false);
   const [showLinkOrders, setShowLinkOrders] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
   const [userLinks, setUserLinks] = useState([]);
   const [userTipJar, setUserTipJar] = useState([]);
 
@@ -146,6 +149,23 @@ function Dashboard() {
             <IoDocumentOutline />
             <span id={styles.full_screen}>My Orders</span>
           </button>
+          <button
+            id="profile"
+            disabled={!userPublicKey}
+            className={
+              activeMenu == "profile" ? "active_dash dash-button" : "dash-button"
+            }
+            onClick={() => (
+              setShowUserOrders(false),
+              setShowCreateLink(false),
+              setShowLinkOrders(false),
+              setShowUserProfile(true),
+              setActiveMenu("profile")
+            )}
+          >
+            <IoFingerPrintSharp />
+            <span id={styles.full_screen}>Profile</span>
+          </button>
           <button className="dash-button" onClick={() => router.push("/")}>
             <IoArrowBackOutline />
             <span id={styles.full_screen}>Back to Stores</span>
@@ -184,6 +204,17 @@ function Dashboard() {
       </>
     );
   };
+
+  const renderUserProfileComponent = () => {
+    return (
+      <>
+        <div className={styles.create_component}>
+          <Profile userPubKey={userPublicKey}/>
+        </div>
+      </>
+    );
+  };
+
 
 
   const renderDisplay = () => (
@@ -732,12 +763,14 @@ function Dashboard() {
         userPublicKey &&
         !showUserOrders &&
         !showCreateLink &&
-        !showLinkOrders 
+        !showLinkOrders &&
+        !showUserProfile
           ? renderDisplay()
           : null}
         {userPublicKey && showUserOrders && renderUserOrdersComponent()}
         {userPublicKey && showCreateLink && renderCreateLinkComponent()}
         {userPublicKey && showLinkOrders && renderOrdersComponent()}
+        {userPublicKey && showUserProfile && renderUserProfileComponent()}
       </div>
     </div>
   );
