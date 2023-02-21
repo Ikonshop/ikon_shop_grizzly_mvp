@@ -93,6 +93,7 @@ function Dashboard() {
               setShowCreateLink(false),
               setShowUserOrders(false),
               setShowLinkOrders(false),
+              setShowUserProfile(false),
               setActiveMenu("overview")
             )}
           >
@@ -110,6 +111,7 @@ function Dashboard() {
               setShowCreateLink(false),
               setShowLinkOrders(false),
               setShowUserOrders(true),
+              setShowUserProfile(false),
               setActiveMenu("order")
             )}
           >
@@ -126,6 +128,7 @@ function Dashboard() {
               setShowUserOrders(false),
               setShowLinkOrders(false),
               setShowCreateLink(true),
+              setShowUserProfile(false),
               setActiveMenu("payreq")
             )}
           >
@@ -143,6 +146,7 @@ function Dashboard() {
               setShowUserOrders(false),
               setShowCreateLink(false),
               setShowLinkOrders(true),
+              setShowUserProfile(false),
               setActiveMenu("link")
             )}
           >
@@ -749,7 +753,10 @@ function Dashboard() {
     if (window.location.href.includes("?payhub=true")) {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
-  }, []);
+    if(window.location.href.includes("?settings=true")) {
+      setShowUserProfile(true), setActiveMenu("profile");
+    }
+  }, []); 
 
   return (
     <div className={styles.parent_container}>

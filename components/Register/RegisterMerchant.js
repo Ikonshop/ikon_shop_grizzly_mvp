@@ -83,7 +83,7 @@ const Register = (req) => {
 
         const createUser = await UpsertWallet(data);
         console.log('createUser', createUser)
-        router.push('/user/dashboard/?settings=true');
+        router.push('/user/dashboard');
     };
         
 
@@ -113,15 +113,32 @@ const Register = (req) => {
                         <div className={styles.register_container_left_data}>
                             <p><span>Name:</span> {userName}</p>
                             <p><span>Email:</span> {email}</p>
+                            <p><span>Store Name:</span> {storeName != null ? storeName : null}</p>
                         </div>
 
                     </div>
                     <div className={styles.register_container_right}>
                         <div className={styles.register_container_right_data}>
-                            <div className={styles.register_container_right_data_user}>
-                                <p>User</p>
-                                <p>As a user, you can browse the marketplace, purchase products from merchants, and create your own Tip Jar and Pay Request links.</p>
-                                <button className={styles.register_button} onClick={()=> handleUserRegister()}>Register as User</button>
+                            <div className={styles.register_container_right_data_merchant}>
+                                <p>Merchant</p>
+                                <p>As a merchant, you can create your own digital storefront and sell your products on the IkonShop marketplace.</p>
+                                {ikonNfts.length > 0 ? (
+                                    <div className={styles.nftContainer}>
+                                        <p>Total Ikons: {ikonNfts.length}</p>
+                                        <button className={styles.register_button} onClick={() => handleMerchantRegister()}>Register as Merchant</button>
+                                    </div>
+                                ) : (
+                                    <div className={styles.nftContainer}>
+                                        <p>You must own at least one Ikon NFT to register as a merchant.</p>
+                                        <a
+                                            href="https://hyperspace.xyz/collection/ikons"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            <button className={styles.register_button}>Buy Ikon NFT</button>
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

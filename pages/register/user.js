@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Audio } from "react";
 import Link from "next/link";
-import HeadComponent from "../components/Head";
-import Loading from "../components/Loading";
-import styles from "../styles/Store.module.css";
-import LoginForm from "../components/MagicWallet/loginForm";
-import Register from "../components/Register/Register";
+import HeadComponent from "../../components/Head";
+import Loading from "../../components/Loading";
+import styles from "../../styles/Store.module.css";
+import LoginForm from "../../components/MagicWallet/loginForm";
+import Register from "../../components/Register/Register";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useRouter } from "next/router";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -14,11 +13,10 @@ import "aos/dist/aos.css";
 const App = () => {
   
   const {publicKey, connected, disconnect} = useWallet();
-  const router = useRouter();
+
 
   // CONNECTED DISPLAY
   const renderRegisterContainer = () => {
-    
     const [userName, setUserName] = useState(null);
     const [storeName, setStoreName] = useState(null);
     const [email, setEmail] = useState(null);
@@ -42,25 +40,23 @@ const App = () => {
       return (
           <>
             <form onSubmit={()=>setShowRegister(true)}>
-                
+                {/* EMAIL */}
+                <input type="email" onChange={handleChange} name="email" required="required" placeholder="Enter your email" />
+                {/* NAME */}
+                <input type="text" name="name" onChange={handleChange} required="required" placeholder="Enter your name" />
+                {/* STORE NAME */}
+                <br/>
                 <div className="signup_row1">
                     <p>
-                    Choose your destiny{" "}
-                    <strong>Merchant</strong> or{" "}
-                    <strong>User</strong>
+                    By signing up, you agree to IkonShop's{" "}
+                    <strong>Terms of Use</strong> and{" "}
+                    <strong>Privacy Policy</strong>
                     </p>
                     <button 
+                        type="submit"
                         className="signup_button"
-                        onClick={()=> router.push('/register/merchant')}
                     >
-                        Merchant
-                    </button>
-
-                    <button 
-                        className="signup_button"
-                        onClick={()=> router.push('/register/user')}
-                    >
-                        User
+                        Proceed
                     </button>
                 </div>
             </form>
@@ -93,7 +89,7 @@ const App = () => {
           <div className="signup">
             <div className="signup_container">
               <div className="signup_row1">
-                <h1>Hello, anon.</h1>
+                <h1>Sign Up to start selling your products/services.</h1>
 
                 <div 
                   className="signup_input_container"
