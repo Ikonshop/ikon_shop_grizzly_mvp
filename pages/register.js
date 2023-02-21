@@ -68,7 +68,6 @@ const App = () => {
     const renderRegisterPage = () => {
       return (
         <>
-          
           <Register userName={userName} storeName={storeName} email={email} />
 
           <button

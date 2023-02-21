@@ -21,8 +21,7 @@ const LoginForm = (req) => {
     const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 
-    const handleLogin = async (e) => {    
-        e.preventDefault();
+    const handleLogin = async () => {    
         
         if (email) {
             setLoading(true);
@@ -37,25 +36,10 @@ const LoginForm = (req) => {
             });
             await magic.auth.loginWithMagicLink({ email });
             const userMetadata = await magic.user.getMetadata();
-            localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));
-            const pubFromMetadata = new web3.PublicKey(userMetadata.publicAddress);
-            setUserPubKey(pubFromMetadata);
-            setPublicAddress(pubFromMetadata.toString());
-            const data = JSON.stringify({
-                email: email,
-                owner: pubFromMetadata.toString(),
-                storeName: storeName,
-                name: userName
-            });
-            const isCollectionOwner = await CheckForCollectionByOwner(pubFromMetadata.toString());
-            console.log('isCollectionOwner', isCollectionOwner)
-            if (!isCollectionOwner) {
-                CreateCollectionFromMagic(data);
-            }
+            localStorage.setItem('userMagicMetadata', JSON.stringify(userMetadata));            
             window.dispatchEvent(new CustomEvent("magic-logged-in"));
             setLoggedIn(true);
             setLoading(false);
-            router.push('/merchant/dashboard?settings=true');
         }
     };
 
