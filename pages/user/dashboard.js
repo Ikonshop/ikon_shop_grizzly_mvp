@@ -716,7 +716,6 @@ function Dashboard() {
                 setUserPublicKey(pubKey.toString());
               });
             } else {
-              window.dispatchEvent(new CustomEvent("magic-logged-out"));
               setLoading(false);
             }
           });
@@ -762,7 +761,7 @@ function Dashboard() {
     <div className={styles.parent_container}>
       {renderUserDashboard()}
       <div className={styles.main_container}>
-        {!userPublicKey ? renderConnectWallet() : null}
+        {!userPublicKey && !publicKey && !loading ? renderConnectWallet() : null}
 
         {userPublicKey && loading ? renderLoading() : null}
 

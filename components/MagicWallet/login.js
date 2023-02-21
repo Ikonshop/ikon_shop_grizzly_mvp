@@ -212,11 +212,11 @@ const LoginMagic = () => {
         return (
             <>
                 {isLoggedIn && (
-                    <form onSubmit={logout}>
+                    <form>
                         <button 
                             className="signup_button"
                             type="submit"
-                            onClick={logout}
+                            onClick={()=> logout()}
                         >
                             {/* use whitePeace.svg from public, size is small enough to fit inline with text on button */}
                             <img 

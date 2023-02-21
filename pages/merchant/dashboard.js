@@ -453,7 +453,6 @@ function Dashboard() {
             setUserPublicKey(pubKey.toString());
           });
         } else {
-          window.dispatchEvent(new CustomEvent("magic-logged-out"));
           setLoading(false);
         }
       });
