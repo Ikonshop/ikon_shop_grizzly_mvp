@@ -7,27 +7,54 @@ import { WalletConnectWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { CreateCollectionFromMagic, CheckForCollectionByOwner, UpsertWallet  } from "../../lib/api";
 import { useRouter } from "next/router";
+import { Metaplex } from "@metaplex-foundation/js";
 import * as web3 from "@solana/web3.js";
+import { check } from "prettier";
 
 
 const Register = (req) => {
     const router = useRouter();
-    const { publicKey } = useWallet();
+    const { publicKey, disconnect } = useWallet();
     const [userPubKey, setUserPubKey] = useState(null);
     const [confirmRegister, setConfirmRegister] = useState(false);
+    const [ikonNfts, setIkonNfts] = useState([]);
     const userName = req.userName;
     const storeName = req.storeName;
     const email = req.email;
     console.log('userName', req.userName)
     console.log('storeName', req.storeName)
     console.log('email', req.email)
+    const connection = new web3.Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
+        "confirmed"
+      );    
+    const metaplex = new Metaplex(connection);
     const WalletMultiButton = dynamic(
         async () =>
           (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
         { ssr: false }
-      );
+    );
 
-    
+    // METAPLEX FUNCTIONS
+    const checkForNfts = async () => {
+        console.log('checking for nfts for ', userPubKey);
+        const ikonCollectionAddress = 'EgVDqrPZAiNCQdf7zC2Lj8CVTv25YSwQRF2k8aTmGEnM';
+        const key = publicKey ? publicKey : new web3.PublicKey(userPubKey);
+        var nfts =[];
+        const myNfts = await metaplex.nfts().findAllByOwner({
+            owner: key,
+        });
+
+        for(let i = 0; i < myNfts.length; i++) {
+            if(myNfts[i].collection != null && myNfts[i].collection.address.toString() === ikonCollectionAddress) {
+                nfts.push(myNfts[i]);
+            }
+        }
+
+        console.log("myNfts", myNfts);
+        console.log("ikon nfts", nfts);
+        setIkonNfts(nfts);
+    };
 
     const handleMerchantRegister = async () => {
         const data = JSON.stringify({
@@ -69,7 +96,7 @@ const Register = (req) => {
         });
         const isCollectionOwner = await CheckForCollectionByOwner(publicKey.toString());
         console.log('isCollectionOwner', isCollectionOwner)
-
+        await checkForNfts();
         setConfirmRegister(true);
        
     };
@@ -99,7 +126,23 @@ const Register = (req) => {
                             <div className={styles.register_container_right_data_merchant}>
                                 <p>Merchant</p>
                                 <p>As a merchant, you can create your own digital storefront and sell your products on the IkonShop marketplace.</p>
-                                <button className={styles.register_button} onClick={() => handleMerchantRegister()}>Register as Merchant</button>
+                                {ikonNfts.length > 0 ? (
+                                    <div className={styles.nftContainer}>
+                                        <p>Total Ikons: {ikonNfts.length}</p>
+                                        <button className={styles.register_button} onClick={() => handleMerchantRegister()}>Register as Merchant</button>
+                                    </div>
+                                ) : (
+                                    <div className={styles.nftContainer}>
+                                        <p>You must own at least one Ikon NFT to register as a merchant.</p>
+                                        <a
+                                            href="https://hyperspace.xyz/collection/ikons"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            <button className={styles.register_button}>Buy Ikon NFT</button>
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                             <div className={styles.register_container_right_data_user}>
                                 <p>User</p>
@@ -114,10 +157,11 @@ const Register = (req) => {
     }
 
 
+
     useEffect(() => {
         if(publicKey) {
-            handleLogin();
             setUserPubKey(publicKey.toString());
+            handleLogin();
         }
     }, [publicKey])
 
