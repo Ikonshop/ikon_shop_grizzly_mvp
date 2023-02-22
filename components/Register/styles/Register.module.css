@@ -12,6 +12,28 @@
   font-size: 16px;
 }
 
+.nftContainer {
+  margin-top: 100px;
+}
+
+.nftContainer p {
+  width: 100%;
+  font-size: 16px;
+}
+
+.register_container_right_data_merchant {
+  position: relative;
+  z-index: 2;
+}
+
+.confetti {
+  position: absolute;
+  top: -120px;
+  left: 200px;
+  z-index: -1;
+  max-width: 200px;
+}
+
 .register_container {
   display: flex;
   flex-direction: column;

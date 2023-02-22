@@ -1199,6 +1199,21 @@ p {
   cursor: pointer;
 }
 
+.dep_button_sec {
+  border: none;
+  background: transparent;
+  color: #818181;
+  width: 250px;
+  height: 50px;
+  border: 1px solid #959595;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: "Manrope" !important;
+  border-radius: 50px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
 .guide_p_register {
   font-size: 16px;
 }
