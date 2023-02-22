@@ -176,12 +176,12 @@ const Profile = (userPubKey) => {
             setLoading(true);
             const response = await GetWalletSettings(userPubKey);
             console.log('get wallet settings resp', response);
-            setEmail(response.email);
-            setUserName(response.name);
-            setProfilePicture(response.profileImage.url);
-            setDescription(response.description);
-            setSocialLinks(response.socialLinks);
-            setCryptoLinks(response.cryptoLinks);
+            setEmail(response.email != null ? response.email : '');
+            setUserName(response.name != null ? response.name : '');
+            setProfilePicture(response.profileImage != null ? response.profileImage.url : '');
+            setDescription(response.description != null ? response.description : '');
+            setSocialLinks(response.socialLinks != null ? response.socialLinks : []);
+            setCryptoLinks(response.cryptoLinks != null ? response.cryptoLinks : []);
             setLoading(false);
         }
         getWalletSettings();
