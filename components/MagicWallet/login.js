@@ -5,6 +5,7 @@ import * as web3 from "@solana/web3.js";
 import { CreateCollectionFromMagic, GetCollectionByEmail } from "../../lib/api";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import Loading from "../Loading";
+import { IoPersonCircle } from "react-icons/io5";
 
 const rpcUrl =
   "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
@@ -209,10 +210,15 @@ const LoginMagic = () => {
       <>
         {isLoggedIn && (
           <form onSubmit={logout}>
-            <button className="signup_button" type="submit" onClick={logout}>
-              {/* use whitePeace.svg from public, size is small enough to fit inline with text on button */}
-              <img src="/blackPeace.svg" alt="blackPeace" width="40px" />
-              {email}
+            <button className="logout_button" type="submit" onClick={logout}>
+              <IoPersonCircle
+                style={{
+                  fontSize: "30px",
+                  color: "#130b46",
+                }}
+              />
+              <span>{email}</span>
+              <div class="tooltip">Logout</div>
             </button>
           </form>
         )}
