@@ -83,8 +83,12 @@ function Orders() {
                     ))}
                   </td>
                   <td data-th="Txn">
-                    <a href={`https://solscan.io/account/${order.orderID}`}>
-                      SolScan
+                    <a href={
+                        new Date(order.createdAt)> new Date('2023-02-22T00:00:00.000Z')
+                          ? `https://solana.fm/tx/${order.orderID}`
+                          : `https://solana.fm/address/${order.orderID}`
+                      }>
+                      Solana FM
                     </a>
                   </td>
                 </tr>
