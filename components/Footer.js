@@ -48,8 +48,9 @@ export default function HeaderComponent() {
           </div>
 
           <div className="footer_links2">
-            <p>Privacy Policy</p>
-            <p>Terms and Conditions</p>
+            <a href="/terms">
+              <p>Terms and Conditions</p>
+            </a>
           </div>
         </div>
       </Container>

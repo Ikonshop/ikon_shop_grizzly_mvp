@@ -10,11 +10,10 @@
   overflow-x: hidden;
 }
 
-body{
+body {
   width: 100vw;
   height: 100vh;
 }
-
 
 .App {
   background: var(--main-bg-color);
@@ -153,7 +152,6 @@ p {
   padding: 0 30px 0 30px;
   color: black;
   position: relative;
-  
 }
 
 .authed-container {
@@ -2219,7 +2217,6 @@ button:disabled {
   opacity: 0.3;
 } */
 
-
 /* KeyFrames */
 @-webkit-keyframes gradient-animation {
   0% {
@@ -2397,7 +2394,7 @@ button:disabled {
 
 .header_nav {
   padding: 15px 50px;
-  
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2410,6 +2407,146 @@ button:disabled {
 /* .header_nav img {
   width: 140px;
 } */
+
+/* Terms and Conditions Style */
+
+.termsAndConditions {
+  z-index: 1000;
+  border-radius: 3px;
+  margin: 60px auto;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: all 0.2s;
+  backface-visibility: hidden;
+}
+.termsAndConditionsHeading {
+  margin-top: 70px;
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+.termsParagraphIntro {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.ikonshopWelcome {
+  font-weight: 500;
+}
+.serviceLeadingSection {
+  width: 80%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.sn {
+  font-size: 32px;
+  padding-right: 5px;
+}
+.st {
+  font-size: 32px;
+}
+.spl {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  line-height: 36px;
+}
+.serviceInfoContainer {
+  position: relative;
+  width: 100%;
+  margin-bottom: 40px;
+}
+.serviceLead {
+  font-weight: 700;
+  margin-left: 15px;
+  margin-top: 15px;
+  margin-block-end: 5px;
+}
+.termsAndConditions .serviceDetails {
+  margin-left: 15px;
+}
+
+.termsAndConditions .displayNone {
+  display: none;
+}
+.termsAndConditions .secionLine {
+  height: 40px;
+  width: 5px;
+
+  position: absolute;
+  top: 7px;
+}
+/*Font Colours below*/
+.termsAndConditions .lightGreen {
+  color: rgb(85, 189, 134);
+}
+.termsAndConditions .blue {
+  color: #2998ff;
+}
+.termsAndConditions .orange {
+  color: #ff7730;
+}
+.termsAndConditions .purple {
+  color: #2a0073;
+}
+.termsAndConditions .color1 {
+  color: #2998ff;
+}
+.termsAndConditions .color2 {
+  color: #73004b;
+}
+.termsAndConditions .color3 {
+  color: #004173;
+}
+.termsAndConditions .color4 {
+  color: #ff7730;
+}
+
+/*Set the colours for the lines*/
+
+.lineColorGreen {
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(85, 189, 134),
+    rgb(11, 103, 92)
+  );
+}
+.lineColorBlue {
+  background-image: linear-gradient(to right bottom, #2998ff, #5643fa);
+}
+.lineColorOrange {
+  background-image: linear-gradient(to right bottom, #ffb900, #ff7730);
+}
+.lineColorPurple {
+  background-image: linear-gradient(to bottom right, #b25f88, #2a0073);
+}
+.closeTerms {
+  border-bottom: 1px solid black;
+  margin-top: 75px;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.termsAndConditions .fadeIn {
+  animation-name: fadeIn;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-out;
+  z-index: 1001;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 @media (max-width: 600px) {
   .episode__content {
