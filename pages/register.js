@@ -55,9 +55,9 @@ const App = () => {
                 </button>
               </div>
 
-              <p className="guide_p_register">
+              {/* <p className="guide_p_register">
                 Not sure? <span>Refer to this guide</span>
-              </p>
+              </p> */}
             </div>
           </form>
         </>
