@@ -10,6 +10,7 @@ const Game = () => {
     const [loading, setLoading] = useState(true);
     const [gameStarted, setGameStarted] = useState(false);
     const [gameFinalized, setGameFinalized] = useState(false);
+    
     const characters = [
         {
         name: "468",
@@ -27,6 +28,8 @@ const Game = () => {
         attributes: ["Background Tan", "Eyes Bags Under Eyes", "Mouth Drool", "Hairstyle Blonde Hair", "Outfit Bowtie"]
         }
     ];
+    const [availableCharacters, setAvailableCharacters] = useState(characters);
+    
 
     const startGame = () => {
         // Select a random character from the characters array
@@ -75,11 +78,40 @@ const Game = () => {
             <div className={styles.possibleAttributes}>
                 {possibleAttributes.map((attribute, index) => (
                     <div className="attribute" key={index}>
-                        <p>{attribute}</p>
+                        <p
+                            onClick={() => {
+                                setUserQuestion(attribute);
+                            }}
+                        >
+                            {attribute}
+                        </p>
                     </div>
                 ))}
             </div>
         )
+    }
+
+    const handleUserQuestion = () => {
+        if (secChar.attributes.includes(userQuestion)) {
+            // Remove the guessed attribute from the possibleAttributes array
+            possibleAttributes = possibleAttributes.filter(a => a !== userQuestion);
+            alert("Yes, the character has that attribute!");
+        } else {
+            
+            const chars = availableCharacters.filter(char => !char.attributes.includes(userQuestion));
+            var possAtt = [];
+            chars.forEach(char => {
+                char.attributes.forEach(att => {
+                    if (!possAtt.includes(att)) {
+                        possAtt.push(att);
+                    }
+                })
+            })
+            setPossibleAttributes(possAtt);
+            setAvailableCharacters(chars);
+            alert("No, the character does not have that attribute.");
+
+        }
     }
 
     const renderQuestionContainer = () => {
@@ -88,20 +120,14 @@ const Game = () => {
                 <p>Does the character have the following attribute?</p>
                 <input
                     type="text"
-                    placeholder="Enter attribute"
+                    placeholder={userQuestion ? userQuestion : "Click attribute"}
                     onChange={(e) => {setUserQuestion(e.target.value)}
                 }/>
                 <button
                     onClick={() => {
                         //remove remaining questions
-                        setRemainingQuestions(remainingQuestions - 1);
-                        if (secChar.attributes.includes(userQuestion)) {
-                            alert("Yes, the character has that attribute!");
-                            // Remove the guessed attribute from the possibleAttributes array
-                            possibleAttributes = possibleAttributes.filter(a => a !== userQuestion);
-                        } else {
-                            alert("No, the character does not have that attribute.");
-                        }
+                        setRemainingQuestions(remainingQuestions - 1),
+                        handleUserQuestion();
                     }}
                 >Submit</button>
             </div>
@@ -111,6 +137,18 @@ const Game = () => {
     const renderEarlyGuessContainer = () => {
         return (
             <div className={styles.early_guess_container}>
+                {availableCharacters.map((char, index) => (
+                        <div className={styles.character_card}  key={index}>
+                            <p>{char.name}</p>
+                            <img 
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                }}
+                                src={char.image} alt={char.name}
+                            />
+                        </div>
+                ))}
                 <p>Do you think you know who the character is?</p>
                 <input
                     type="text"
@@ -124,6 +162,8 @@ const Game = () => {
                             setScore(remainingQuestions * 5);
                             alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
                             // reset game
+                            setAvailableCharacters(characters);
+                            setUserQuestion('');
                             setGameStarted(false);
                             setGameFinalized(true);
                             setRemainingQuestions(3);
@@ -131,6 +171,8 @@ const Game = () => {
                         } else {
                             alert("Sorry, that is not the correct character, Game Over.");
                             // reset game
+                            setAvailableCharacters(characters);
+                            setUserQuestion('');
                             setShowEarlyGuess(false);
                             setGameStarted(false);
                             setGameFinalized(false);
@@ -154,6 +196,58 @@ const Game = () => {
         )
     }
 
+    const renderFinalAnswer = () => {
+        return (
+            <div className={styles.game_board}>
+                <div className={styles.character_card_container}>
+                    {availableCharacters.map((char, index) => (
+                        <div className={styles.character_card}  key={index}>
+                            <p>{char.name}</p>
+                            <img 
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                }}
+                                src={char.image} alt={char.name}
+                            />
+                        </div>
+                    ))}
+                </div>
+                <p>Do you think you know who the character is?</p>
+                <input
+                    type="text"
+                    placeholder="Enter character name"
+                    onChange={(e) => {setUserQuestion(e.target.value)}
+                }/>
+                <button
+                    onClick={() => {
+                        // Check if the user guessed correctly, if so their score is the remaining questions * 5
+                        if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
+                            setScore(remainingQuestions * 5);
+                            alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
+                            // reset game
+                            setGameStarted(false);
+                            setGameFinalized(true);
+                            setRemainingQuestions(3);
+                            setShowEarlyGuess(false);
+                        } else {
+                            alert("Sorry, that is not the correct character, Game Over.");
+                            // reset game
+                            setAvailableCharacters(characters);
+                            setShowEarlyGuess(false);
+                            setGameStarted(false);
+                            setGameFinalized(false);
+                            setRemainingQuestions(3);
+                            setScore(0);
+                        }
+                    }}
+                >
+                    Submit
+                </button>
+            </div>
+        )
+    }
+
 
 
     const renderGameBoard = () => {
@@ -169,7 +263,7 @@ const Game = () => {
                 <p>Remaining questions: {remainingQuestions}</p>
                 <p>Score: {score}</p>
                 <div className={styles.character_card_container}>
-                    {characters.map((character, index) => (
+                    {availableCharacters.map((character, index) => (
                         <div className={styles.character_card} key={index}>
                             <img 
                                 style={{
@@ -197,18 +291,38 @@ const Game = () => {
                     </>
                 )
                 }
-                {showEarlyGuess && renderEarlyGuessContainer()}
+                
 
             </div>
         )
     }
+
+    const handleReset = () => {
+        setAvailableCharacters(characters);
+        setUserQuestion('');
+        setGameFinalized(false);
+        setRemainingQuestions(3);
+        setScore(0);
+        setShowEarlyGuess(false);
+        var possAtt = [];
+        for(let i = 0; i < characters.length; i++) {
+            for(let j = 0; j < characters[i].attributes.length; j++) {
+                if(!possAtt.includes(characters[i].attributes[j])) {
+                    possAtt.push(characters[i].attributes[j]);
+                }
+            }
+        }
+        setPossibleAttributes(possAtt);
+    }
+
     
 
     useEffect(() => {
         // Set the possibleAttributes array to the attributes of the first character in the characters array
+        setAvailableCharacters(characters);
         let possAttributes = [];
-        for(let i = 0; i < characters.length; i++) {
-            for(let j = 0; j < characters[i].attributes.length; j++) {
+        for(let i = 0; i < availableCharacters.length; i++) {
+            for(let j = 0; j < availableCharacters[i].attributes.length; j++) {
                 if(!possAttributes.includes(characters[i].attributes[j])) {
                     possAttributes.push(characters[i].attributes[j]);
                 }
@@ -222,16 +336,33 @@ const Game = () => {
 
     return (
         <div className={styles.game_container}>
-            {gameFinalized && <p className={styles.game_score}>Game over! Your final score is {score}.</p>}
+            {gameFinalized && (
+                <>
+                    <p className={styles.game_score}>Game over! Your final score is {score}.</p>
+                    {/* reset button */}
+                    <button onClick={() => {
+                        setGameFinalized(false);
+                        setGameStarted(false);
+                        setScore(0);
+                        setRemainingQuestions(3);
+                    }}>Play Again</button>
+                </>
+            )}
 
             {!gameStarted && !gameFinalized && (
                 <div className={styles.pre_start}>
                     <p>Click the button below to start the game.</p>
-                    <button onClick={() => setGameStarted(true)}>Start Game</button>
+                    <button onClick={() =>( 
+                        handleReset(),
+                        setGameStarted(true)
+                    )}>
+                        Start Game
+                    </button>
                 </div>
             )}
-            {gameStarted && !gameFinalized && renderGameBoard()}
-            {/*  */}
+            {showEarlyGuess && renderEarlyGuessContainer()}
+            {gameStarted && !gameFinalized && !showEarlyGuess && remainingQuestions > 0 && renderGameBoard()}
+            {gameStarted && !gameFinalized && remainingQuestions === 0 && renderFinalAnswer()}
         </div>
     )
 
