@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles/Game.module.css';
+import { Metaplex } from "@metaplex-foundation/js";
+import * as web3 from "@solana/web3.js";
+
+
+
+
+
 const Game = () => {
+    const axios = require('axios')
+    const url = `https://api.helius.xyz/v1/active-listings?api-key=bb0cb5ed-9c3e-421b-a379-2dc684ad0e9f`
+    const metadata_url = "https://api.helius.xyz/v0/token-metadata?api-key=bb0cb5ed-9c3e-421b-a379-2dc684ad0e9f"
+    const connection = new web3.Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
+        "confirmed"
+      );    
+    const metaplex = new Metaplex(connection);
+    const creator = '8uEAbsrxY1PEe3iQszNzW2CvertueShZxrEW3VKDW2z8';
+    
     const [score, setScore] = useState(0);
-    const [remainingQuestions, setRemainingQuestions] = useState(3);
+    const [remainingQuestions, setRemainingQuestions] = useState(10);
     const [possibleAttributes, setPossibleAttributes] = useState([]);
     const [userQuestion, setUserQuestion] = useState('');
     const [showEarlyGuess, setShowEarlyGuess] = useState(false);
@@ -10,7 +27,7 @@ const Game = () => {
     const [loading, setLoading] = useState(true);
     const [gameStarted, setGameStarted] = useState(false);
     const [gameFinalized, setGameFinalized] = useState(false);
-    
+    const [activeListings, setActiveListings] = useState([]);
     const characters = [
         {
         name: "468",
@@ -28,7 +45,7 @@ const Game = () => {
         attributes: ["Background Tan", "Eyes Bags Under Eyes", "Mouth Drool", "Hairstyle Blonde Hair", "Outfit Bowtie"]
         }
     ];
-    const [availableCharacters, setAvailableCharacters] = useState(characters);
+    const [availableCharacters, setAvailableCharacters] = useState();
     
 
     const startGame = () => {
@@ -152,7 +169,7 @@ const Game = () => {
                 <p>Do you think you know who the character is?</p>
                 <input
                     type="text"
-                    placeholder="Enter character name"
+                    placeholder="Enter Ikon #"
                     onChange={(e) => {setUserQuestion(e.target.value)}
                 }/>
                 <button
@@ -162,21 +179,21 @@ const Game = () => {
                             setScore(remainingQuestions * 5);
                             alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
                             // reset game
-                            setAvailableCharacters(characters);
+                            // setAvailableCharacters(characters);
                             setUserQuestion('');
                             setGameStarted(false);
                             setGameFinalized(true);
-                            setRemainingQuestions(3);
+                            setRemainingQuestions(10);
                             setShowEarlyGuess(false);
                         } else {
                             alert("Sorry, that is not the correct character, Game Over.");
                             // reset game
-                            setAvailableCharacters(characters);
+                            // setAvailableCharacters(characters);
                             setUserQuestion('');
                             setShowEarlyGuess(false);
                             setGameStarted(false);
                             setGameFinalized(false);
-                            setRemainingQuestions(3);
+                            setRemainingQuestions(10);
                             setScore(0);
                         }
                     }}
@@ -216,7 +233,7 @@ const Game = () => {
                 <p>Do you think you know who the character is?</p>
                 <input
                     type="text"
-                    placeholder="Enter character name"
+                    placeholder="Enter Ikon #"
                     onChange={(e) => {setUserQuestion(e.target.value)}
                 }/>
                 <button
@@ -228,16 +245,16 @@ const Game = () => {
                             // reset game
                             setGameStarted(false);
                             setGameFinalized(true);
-                            setRemainingQuestions(3);
+                            setRemainingQuestions(10);
                             setShowEarlyGuess(false);
                         } else {
                             alert("Sorry, that is not the correct character, Game Over.");
                             // reset game
-                            setAvailableCharacters(characters);
+                            // setAvailableCharacters(characters);
                             setShowEarlyGuess(false);
                             setGameStarted(false);
                             setGameFinalized(false);
-                            setRemainingQuestions(3);
+                            setRemainingQuestions(10);
                             setScore(0);
                         }
                     }}
@@ -298,10 +315,10 @@ const Game = () => {
     }
 
     const handleReset = () => {
-        setAvailableCharacters(characters);
+        // setAvailableCharacters(characters);
         setUserQuestion('');
         setGameFinalized(false);
-        setRemainingQuestions(3);
+        setRemainingQuestions(10);
         setScore(0);
         setShowEarlyGuess(false);
         var possAtt = [];
@@ -312,28 +329,241 @@ const Game = () => {
                 }
             }
         }
-        setPossibleAttributes(possAtt);
+        // setPossibleAttributes(possAtt);
     }
 
     
 
+    // useEffect(() => {
+    //     // Set the possibleAttributes array to the attributes of the first character in the characters array
+    //     setAvailableCharacters(characters);
+    //     let possAttributes = [];
+    //     for(let i = 0; i < availableCharacters.length; i++) {
+    //         for(let j = 0; j < availableCharacters[i].attributes.length; j++) {
+    //             if(!possAttributes.includes(characters[i].attributes[j])) {
+    //                 possAttributes.push(characters[i].attributes[j]);
+    //             }
+    //         }
+    //     }
+    //     setPossibleAttributes(possAttributes);
+    //     const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
+    //     setSecChar(secretCharacter)
+    //     setLoading(false);
+    // }, []);
+
     useEffect(() => {
-        // Set the possibleAttributes array to the attributes of the first character in the characters array
-        setAvailableCharacters(characters);
-        let possAttributes = [];
-        for(let i = 0; i < availableCharacters.length; i++) {
-            for(let j = 0; j < availableCharacters[i].attributes.length; j++) {
-                if(!possAttributes.includes(characters[i].attributes[j])) {
-                    possAttributes.push(characters[i].attributes[j]);
+        console.log('checking for nfts')
+        var char = []
+        var meta = []
+        const getMetadata = async () => {
+            console.log('getting metadata for: ', char)
+            const { data } = await axios.post(metadata_url, {
+                mintAccounts: char,
+                includeOffChain: true,
+            });
+            console.log("metadata: ", data);
+            // data.offChainMetadata.metadata.attributes returns an array of attributes like:
+            // [
+            // {traitType: 'Background', value: 'Orange'},
+            // {traitType: 'Eyes', value: 'Side Glance'},
+            // {traitType: 'Mouth', value: 'Grin 3'},
+            // {traitType: 'Nose', value: '4'},
+            // {traitType: 'Hairstyle', value: 'Hipster'},
+            // {traitType: 'Outfit', value: 'Disco Scarf'}
+            // ]
+            // data.offChainMetadata.metadata.image returns the image url
+            // data.offChainMetadata.metadata.name returns the name
+
+            //parse each of the items in data for the attributes, image url, and name.
+            //if the attribute value has a number then do not add it
+            //example: {
+                // name: 'Ikon 671',
+                // image: 'https://arweave.net/...',
+                // attributes: [
+                    // 'Background Orange',
+                    // 'Eyes Side Glance',
+                    // 'Hairstyle Hipster',
+                    // 'Mouth Grin 3', skip because it has a number
+                    // 'Nose 4', skip because it has a number
+                    // 'Outfit Disco Scarf'
+                // ]
+            // }
+
+            for(let i = 0; i < data.length; i++) {
+                let attributes = [];
+                for(let j = 0; j < data[i].offChainMetadata.metadata.attributes.length; j++) {
+                    // if the attribute value has a number then do not add it
+                    if(!data[i].offChainMetadata.metadata.attributes[j].value.includes(
+                        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+                    )) {
+                        
+                    attributes.push(`${data[i].offChainMetadata.metadata.attributes[j].traitType} ${data[i].offChainMetadata.metadata.attributes[j].value}`);
+
+                    }
+                
+                }
+                meta.push({
+                    name: data[i].offChainMetadata.metadata.name,
+                    image: data[i].offChainMetadata.metadata.image,
+                    attributes: attributes
+                })
+            }
+
+            
+
+            // set the characters array to the meta array
+            setAvailableCharacters(meta);
+
+            // set the possibleAttributes array to the attributes of the first character in the characters array
+            let possAttributes = [];
+            for(let i = 0; i < meta.length; i++) {
+                for(let j = 0; j < meta[i].attributes.length -1; j++) {
+                    try{
+                        console.log('checking if attribute is already in array: ', meta[i].attributes[j])
+                        if(!possAttributes.includes(meta[i].attributes[j])) {
+                            console.log('adding attribute to array: ', meta[i].attributes[j])
+                            possAttributes.push(meta[i].attributes[j]);
+                        }
+                    } catch (e) {
+                        console.log('error: ', e)
+                        j++
+                    }
                 }
             }
-        }
-        setPossibleAttributes(possAttributes);
-        const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
-        setSecChar(secretCharacter)
-        setLoading(false);
-    }, []);
+            console.log('possAttributes: ', possAttributes)
+            setPossibleAttributes(possAttributes);
+            const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
+            setSecChar(secretCharacter)
+            setLoading(false);
 
+        };
+
+        const getActiveListings = async () => {
+            const { data } = await axios.post(url, {
+                "query": {
+                    // Ikon collection
+                    "firstVerifiedCreators": [creator]
+                }
+            });
+            console.log("Active listings: ", data.result);
+            // set the data.result.mint and data.result.name to the char array
+            for(let i = 0; i < data.result.length; i++) {
+                char.push(data.result[i].mint);
+            }
+            getMetadata();
+        };
+         
+        getActiveListings();
+        
+       
+    }, []);
+    useEffect(() => {
+        console.log('checking for nfts')
+        var char = []
+        var meta = []
+        const getMetadata = async () => {
+            console.log('getting metadata for: ', char)
+            const { data } = await axios.post(metadata_url, {
+                mintAccounts: char,
+                includeOffChain: true,
+            });
+            console.log("metadata: ", data);
+            // data.offChainMetadata.metadata.attributes returns an array of attributes like:
+            // [
+            // {traitType: 'Background', value: 'Orange'},
+            // {traitType: 'Eyes', value: 'Side Glance'},
+            // {traitType: 'Mouth', value: 'Grin 3'},
+            // {traitType: 'Nose', value: '4'},
+            // {traitType: 'Hairstyle', value: 'Hipster'},
+            // {traitType: 'Outfit', value: 'Disco Scarf'}
+            // ]
+            // data.offChainMetadata.metadata.image returns the image url
+            // data.offChainMetadata.metadata.name returns the name
+
+            //parse each of the items in data for the attributes, image url, and name.
+            //if the attribute value has a number then do not add it
+            //example: {
+                // name: 'Ikon 671',
+                // image: 'https://arweave.net/...',
+                // attributes: [
+                    // 'Background Orange',
+                    // 'Eyes Side Glance',
+                    // 'Hairstyle Hipster',
+                    // 'Mouth Grin 3', skip because it has a number
+                    // 'Nose 4', skip because it has a number
+                    // 'Outfit Disco Scarf'
+                // ]
+            // }
+
+            for(let i = 0; i < data.length; i++) {
+                let attributes = [];
+                for(let j = 0; j < data[i].offChainMetadata.metadata.attributes.length; j++) {
+                    // if the attribute value has a number then do not add it
+                    if(!data[i].offChainMetadata.metadata.attributes[j].value.includes(
+                        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+                    )) {
+                        
+                    attributes.push(`${data[i].offChainMetadata.metadata.attributes[j].traitType} ${data[i].offChainMetadata.metadata.attributes[j].value}`);
+
+                    }
+                
+                }
+                meta.push({
+                    name: data[i].offChainMetadata.metadata.name,
+                    image: data[i].offChainMetadata.metadata.image,
+                    attributes: attributes
+                })
+            }
+
+            
+
+            // set the characters array to the meta array
+            setAvailableCharacters(meta);
+
+            // set the possibleAttributes array to the attributes of the first character in the characters array
+            let possAttributes = [];
+            for(let i = 0; i < meta.length; i++) {
+                for(let j = 0; j < meta[i].attributes.length -1; j++) {
+                    try{
+                        console.log('checking if attribute is already in array: ', meta[i].attributes[j])
+                        if(!possAttributes.includes(meta[i].attributes[j])) {
+                            console.log('adding attribute to array: ', meta[i].attributes[j])
+                            possAttributes.push(meta[i].attributes[j]);
+                        }
+                    } catch (e) {
+                        console.log('error: ', e)
+                        j++
+                    }
+                }
+            }
+            console.log('possAttributes: ', possAttributes)
+            setPossibleAttributes(possAttributes);
+            const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
+            setSecChar(secretCharacter)
+            console.log('secret char is', secretCharacter)
+            setLoading(false);
+
+        };
+
+        const getActiveListings = async () => {
+            const { data } = await axios.post(url, {
+                "query": {
+                    // Ikon collection
+                    "firstVerifiedCreators": [creator]
+                }
+            });
+            console.log("Active listings: ", data.result);
+            // set the data.result.mint and data.result.name to the char array
+            for(let i = 0; i < data.result.length; i++) {
+                char.push(data.result[i].mint);
+            }
+            getMetadata();
+        };
+         
+        getActiveListings();
+        
+       
+    }, [gameFinalized]);
     return (
         <div className={styles.game_container}>
             {gameFinalized && (
@@ -344,7 +574,7 @@ const Game = () => {
                         setGameFinalized(false);
                         setGameStarted(false);
                         setScore(0);
-                        setRemainingQuestions(3);
+                        setRemainingQuestions(10);
                     }}>Play Again</button>
                 </>
             )}
