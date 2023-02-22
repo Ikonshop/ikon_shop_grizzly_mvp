@@ -13,7 +13,7 @@ import UserOrders from "../../components/User/User-Orders";
 import PayRequests from "../../components/Merchant/PayRequests";
 import Profile from "../../components/User/Profile";
 import CreateLink from "../../components/User/Create-Link";
-import { getCollectionOwner } from "../../lib/api";
+import { getCollectionOwner, GetUserDashLinkTotals, GetUserDashTipjarTotals } from "../../lib/api";
 import { 
   GetPublickeyCreditScore,
   GetPublickeyTwitterPfpScore,
@@ -67,7 +67,11 @@ function Dashboard() {
   const [showLinkOrders, setShowLinkOrders] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [userLinks, setUserLinks] = useState([]);
+  const [totalLinkSales, setTotalLinkSales] = useState(0);
+  const [totalLinkCount, setTotalLinkCount] = useState(0);
   const [userTipJar, setUserTipJar] = useState([]);
+  const [totalTipJarSales, setTotalTipJarSales] = useState(0);
+  const [totalTipJarCount, setTotalTipJarCount] = useState(0);
 
   // ATADIA CONSTANTS
   const [atadiaLoading, setAtadiaLoading] = useState(false);
@@ -322,7 +326,7 @@ function Dashboard() {
       <div className={styles.atadian_credit}>
         <div className={styles.paylink_head}>
           <h4 className={styles.paylink_header}>Total Recieved</h4>
-          <label className={styles.dropdown}>
+          {/* <label className={styles.dropdown}>
             <div className={styles.dd_button}>By Quarter </div>
 
             <input type="checkbox" className={styles.dd_input} id="test" />
@@ -332,25 +336,24 @@ function Dashboard() {
               <li>Q2 2022</li>
               <li>Q3 2022</li>
               <li>Q4 2022</li>
-              {/* <li className={styles.divider}></li> */}
             </ul>
-          </label>
+          </label> */}
         </div>
         <div className={styles.royalties_paid}>
           <div>
-            <h3>$27,000</h3>
+            <h3>${(totalLinkSales + totalTipJarSales).toFixed(2)}</h3>
           </div>
         </div>
         <div className={styles.atadian_report}>
           <div className={styles.total_wrapper}>
             <div className={styles.d1}>
               <div>
-                <span>80%</span>
+                <span>{((totalLinkCount / (totalLinkCount + totalTipJarCount))).toFixed(2) * 100}%</span>
               </div>
             </div>
             <div className={styles.d2}>
               <div>
-                <span>20%</span>
+                <span>{((totalTipJarCount / (totalLinkCount + totalTipJarCount))).toFixed(2) * 100}%</span>
               </div>
             </div>
           </div>
@@ -659,7 +662,22 @@ function Dashboard() {
           }
         }
       };
+
+      const getTotals = async () => {
+
+        const tjTotatls = await GetUserDashTipjarTotals(publicKey.toString());
+        console.log("tjTotatls", tjTotatls);
+        setTotalTipJarSales(tjTotatls.totalTipjarSales);
+        setTotalTipJarCount(tjTotatls.totalTipjars);
+     
+        const linkTotals = await GetUserDashLinkTotals(publicKey.toString());
+        console.log("linkTotals", linkTotals);
+        setTotalLinkSales(linkTotals.totalLinkSales);
+        setTotalLinkCount(linkTotals.totalLinks);
+      };
+
       getAllProducts();
+      getTotals();
       console.log("these are the owners products", ownerProducts);
       console.log("these are the user links", userLinks);
       console.log("these are the user tip jar", userTipJar);
