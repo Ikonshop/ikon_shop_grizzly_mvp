@@ -356,38 +356,11 @@ const Game = () => {
         var char = []
         var meta = []
         const getMetadata = async () => {
-            console.log('getting metadata for: ', char)
+            // console.log('getting metadata for: ', char)
             const { data } = await axios.post(metadata_url, {
                 mintAccounts: char,
                 includeOffChain: true,
             });
-            console.log("metadata: ", data);
-            // data.offChainMetadata.metadata.attributes returns an array of attributes like:
-            // [
-            // {traitType: 'Background', value: 'Orange'},
-            // {traitType: 'Eyes', value: 'Side Glance'},
-            // {traitType: 'Mouth', value: 'Grin 3'},
-            // {traitType: 'Nose', value: '4'},
-            // {traitType: 'Hairstyle', value: 'Hipster'},
-            // {traitType: 'Outfit', value: 'Disco Scarf'}
-            // ]
-            // data.offChainMetadata.metadata.image returns the image url
-            // data.offChainMetadata.metadata.name returns the name
-
-            //parse each of the items in data for the attributes, image url, and name.
-            //if the attribute value has a number then do not add it
-            //example: {
-                // name: 'Ikon 671',
-                // image: 'https://arweave.net/...',
-                // attributes: [
-                    // 'Background Orange',
-                    // 'Eyes Side Glance',
-                    // 'Hairstyle Hipster',
-                    // 'Mouth Grin 3', skip because it has a number
-                    // 'Nose 4', skip because it has a number
-                    // 'Outfit Disco Scarf'
-                // ]
-            // }
 
             for(let i = 0; i < data.length; i++) {
                 let attributes = [];
@@ -409,8 +382,6 @@ const Game = () => {
                 })
             }
 
-            
-
             // set the characters array to the meta array
             setAvailableCharacters(meta);
 
@@ -430,7 +401,6 @@ const Game = () => {
                     }
                 }
             }
-            console.log('possAttributes: ', possAttributes)
             setPossibleAttributes(possAttributes);
             const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
             setSecChar(secretCharacter)
@@ -445,7 +415,6 @@ const Game = () => {
                     "firstVerifiedCreators": [creator]
                 }
             });
-            console.log("Active listings: ", data.result);
             // set the data.result.mint and data.result.name to the char array
             for(let i = 0; i < data.result.length; i++) {
                 char.push(data.result[i].mint);
@@ -462,38 +431,10 @@ const Game = () => {
         var char = []
         var meta = []
         const getMetadata = async () => {
-            console.log('getting metadata for: ', char)
             const { data } = await axios.post(metadata_url, {
                 mintAccounts: char,
                 includeOffChain: true,
             });
-            console.log("metadata: ", data);
-            // data.offChainMetadata.metadata.attributes returns an array of attributes like:
-            // [
-            // {traitType: 'Background', value: 'Orange'},
-            // {traitType: 'Eyes', value: 'Side Glance'},
-            // {traitType: 'Mouth', value: 'Grin 3'},
-            // {traitType: 'Nose', value: '4'},
-            // {traitType: 'Hairstyle', value: 'Hipster'},
-            // {traitType: 'Outfit', value: 'Disco Scarf'}
-            // ]
-            // data.offChainMetadata.metadata.image returns the image url
-            // data.offChainMetadata.metadata.name returns the name
-
-            //parse each of the items in data for the attributes, image url, and name.
-            //if the attribute value has a number then do not add it
-            //example: {
-                // name: 'Ikon 671',
-                // image: 'https://arweave.net/...',
-                // attributes: [
-                    // 'Background Orange',
-                    // 'Eyes Side Glance',
-                    // 'Hairstyle Hipster',
-                    // 'Mouth Grin 3', skip because it has a number
-                    // 'Nose 4', skip because it has a number
-                    // 'Outfit Disco Scarf'
-                // ]
-            // }
 
             for(let i = 0; i < data.length; i++) {
                 let attributes = [];
@@ -525,9 +466,7 @@ const Game = () => {
             for(let i = 0; i < meta.length; i++) {
                 for(let j = 0; j < meta[i].attributes.length -1; j++) {
                     try{
-                        console.log('checking if attribute is already in array: ', meta[i].attributes[j])
                         if(!possAttributes.includes(meta[i].attributes[j])) {
-                            console.log('adding attribute to array: ', meta[i].attributes[j])
                             possAttributes.push(meta[i].attributes[j]);
                         }
                     } catch (e) {
@@ -536,7 +475,6 @@ const Game = () => {
                     }
                 }
             }
-            console.log('possAttributes: ', possAttributes)
             setPossibleAttributes(possAttributes);
             const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
             setSecChar(secretCharacter)
@@ -552,7 +490,6 @@ const Game = () => {
                     "firstVerifiedCreators": [creator]
                 }
             });
-            console.log("Active listings: ", data.result);
             // set the data.result.mint and data.result.name to the char array
             for(let i = 0; i < data.result.length; i++) {
                 char.push(data.result[i].mint);
