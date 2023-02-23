@@ -26,7 +26,6 @@ const Register = (req) => {
   const { publicKey, disconnect } = useWallet();
   const [userPubKey, setUserPubKey] = useState(null);
   const [confirmRegister, setConfirmRegister] = useState(false);
-  const [ikonNfts, setIkonNfts] = useState([]);
   const userName = req.userName;
   const storeName = req.storeName;
   const email = req.email;
@@ -44,49 +43,6 @@ const Register = (req) => {
     { ssr: false }
   );
 
-  // METAPLEX FUNCTIONS
-  const checkForNfts = async () => {
-    console.log("checking for nfts for ", userPubKey);
-    const ikonCollectionAddress =
-      "EgVDqrPZAiNCQdf7zC2Lj8CVTv25YSwQRF2k8aTmGEnM";
-    const key = publicKey ? publicKey : new web3.PublicKey(userPubKey);
-    var nfts = [];
-    const myNfts = await metaplex.nfts().findAllByOwner({
-      owner: key,
-    });
-
-    for (let i = 0; i < myNfts.length; i++) {
-      if (
-        myNfts[i].collection != null &&
-        myNfts[i].collection.address.toString() === ikonCollectionAddress
-      ) {
-        nfts.push(myNfts[i]);
-      }
-    }
-
-    console.log("myNfts", myNfts);
-    console.log("ikon nfts", nfts);
-    setIkonNfts(nfts);
-  };
-
-  const handleMerchantRegister = async () => {
-    const data = JSON.stringify({
-      email: email,
-      owner: userPubKey,
-      storeName: storeName,
-      name: userName,
-    });
-    const createUser = await UpsertWallet(data);
-    const isCollectionOwner = await CheckForCollectionByOwner(userPubKey);
-    console.log("user created", createUser);
-    console.log("isCollectionOwner", isCollectionOwner);
-    if (!isCollectionOwner) {
-      CreateCollectionFromMagic(data);
-    }
-    console.log("logged in and collection created");
-    router.push("/merchant/dashboard?settings=true");
-  };
-
   const handleUserRegister = async () => {
     const data = JSON.stringify({
       email: email,
@@ -99,86 +55,31 @@ const Register = (req) => {
     router.push("/user/dashboard/?settings=true");
   };
 
-  const handleLogin = async () => {
-    const data = JSON.stringify({
-      email: email,
-      owner: userPubKey,
-      storeName: storeName,
-      name: userName,
-    });
-    const isCollectionOwner = await CheckForCollectionByOwner(
-      publicKey.toString()
-    );
-    console.log("isCollectionOwner", isCollectionOwner);
-    await checkForNfts();
-    setConfirmRegister(true);
-  };
-
-  const renderConfirmRegister = () => {
-    return (
-      <div className={styles.register_modal}>
-        <div className={styles.register_container}>
-          <div className={styles.register_container_left}>
-            <div className={styles.register_container_left_data}>
-              <p>
-                <span>
-                  <IoPersonOutline />
-                </span>{" "}
-                {userName}
-              </p>
-              <p>
-                <span>
-                  <IoMailOutline />
-                </span>{" "}
-                {email}
-              </p>
-            </div>
-          </div>
-          <div className={styles.register_container_right}>
-            <div className={styles.register_container_right_data}>
-              <div className={styles.register_container_right_data_user}>
-                <p>User</p>
-                <p>
-                  As a user, you can browse the marketplace, purchase products
-                  from merchants, and create your own Tip Jar and Pay Request
-                  links.
-                </p>
-                <button
-                  className={styles.register_button}
-                  onClick={() => handleUserRegister()}
-                >
-                  Register as User
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     if (publicKey) {
       setUserPubKey(publicKey.toString());
-      handleLogin();
+      handleUserRegister();
     }
   }, [publicKey]);
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
+      try{
       const userData = localStorage.getItem("userMagicMetadata");
       const user = JSON.parse(userData);
       console.log("user", user);
       const newPubKey = new web3.PublicKey(user.publicAddress);
       setUserPubKey(newPubKey.toString());
-      setConfirmRegister(true);
+      handleUserRegister();
+      }catch(e){
+        console.log("error", e)
+      }
     });
   }, []);
 
   return (
     <>
-      {confirmRegister ? renderConfirmRegister() : null}
-      {!confirmRegister && (
+
         <div className="signup_row1">
           <div className="">
             <div className={styles.current_info}>
@@ -232,7 +133,7 @@ const Register = (req) => {
             </div>
           </div>
         </div>
-      )}
+  
     </>
   );
 };
