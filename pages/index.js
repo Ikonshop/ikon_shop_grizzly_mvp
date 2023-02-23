@@ -118,6 +118,17 @@ const App = (props) => {
             </div>
           </section>
 
+          {/* <Container>
+            <div className="hero_social_proof">
+              <p className="trusted_text">Trusted by your favorites:</p>
+              <div className="social_imgs">
+                <img src="/pen.png" />
+                <img src="/slabz.png" />
+                <img src="/abc.png" />
+              </div>
+            </div>
+          </Container> */}
+
           <section className="info_section section2">
             <div className="container_info_img">
               <img src="/img1.png" alt="" />
@@ -195,7 +206,7 @@ const App = (props) => {
             </Container>
           </section>
 
-          <div className="features">
+          {/* <div className="features">
             <div className="ft_bg"></div>
             <Container>
               <div className="features_container" id="learn_more">
@@ -223,19 +234,19 @@ const App = (props) => {
                     We offer a familiar online shopping experience - browse
                     products, read descriptions, easy & secure checkout,
                     tracking information, order history, and so much more!
-                  </p>
+                  </p> */}
 
-                  {/* <div
+          {/* <div
                     className="features_btn"
                     data-aos="fade-up"
                     data-aos-delay="500"
                   >
                     Shop Now
                   </div> */}
-                </div>
+          {/* </div>
               </div>
             </Container>
-          </div>
+          </div> */}
 
           <div className="why_section">
             <div className="ft_bigred" data-aos="fade-down-right"></div>
@@ -320,6 +331,7 @@ const App = (props) => {
             <div className="comp_smallred"></div>
             <div className="comp_outlineblue"></div>
             <Container>
+              <img src="/compatible_icon.png" />
               <h2 data-aos="fade-up">
                 IkonShop is compatible with your favorite tools.
               </h2>
@@ -346,25 +358,34 @@ const App = (props) => {
           </div>
 
           <div className="features features_ft2">
-            <div className="ft_bg"></div>
+            {/* <div className="ft_bg"></div> */}
             <Container>
               <div className="features_container">
-                <div className="features_row">
-                  <h2 className="big_header">
-                    Start your Web3 business today!
-                  </h2>
-                  <p className="features_body">
-                    The future of commerce is here. Join IkonShop and take
-                    control of your business and the way you earn money.
-                  </p>
-
-                  <a href="https://forms.gle/Hufp94teN3h1QdAw5">
-                    <div className="features_btn">Get Started</div>
+                <div class="avatars">
+                  <a href="#" class="avatars__item">
+                    <img class="avatar" src="/ik1.png" alt="" />
+                  </a>
+                  <a href="#" class="avatars__item">
+                    <img class="avatar" src="/ik2.png" alt="" />
+                  </a>
+                  <a href="#" class="avatars__item">
+                    <img class="avatar" src="/ik3.png" alt="" />
+                  </a>
+                  <a href="#" class="avatars__item">
+                    <img class="avatar" src="/ik4.png" alt="" />
+                  </a>
+                  <a href="#" class="avatars__item">
+                    <img class="avatar" src="/ik5.png" alt="" />
                   </a>
                 </div>
-                <div className="features_row">
-                  <img className="features_img2" src="/ft2.png" />
-                </div>
+                <h2 className="big_header">
+                  Join innovative merchants & consumers who use IkonShop
+                  everyday.
+                </h2>
+
+                <a href="#">
+                  <div className="features_btn">Get Started</div>
+                </a>
               </div>
             </Container>
           </div>
