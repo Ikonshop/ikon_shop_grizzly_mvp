@@ -28,72 +28,34 @@ const Game = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [gameFinalized, setGameFinalized] = useState(false);
     const [activeListings, setActiveListings] = useState([]);
-    const characters = [
-        {
-        name: "468",
-        image: "https://arweave.net/8rLD_3z3Mkl1Q7yvitbPaJwJbDjPpA0oqGYMptyh538?ext=png",
-        attributes: ["Background Olive", "Eyes Money", "Mouth Smile Ear to Ear", "Hairstyle Flow", "Outfit Leather Jacket"]
-        },
-        {
-        name: "348",
-        image: 'https://arweave.net/f_FJny9GU7b1rQv0H1ULWNjuh8DmeCahqdcVddTu7oI?ext=png',
-        attributes: ["Background Disco", "Eyes Focus", "Mouth Grin", "Hairstyle Birthday Hat", "Outfit Disco Scarf"]
-        },
-        {
-        name: "41",
-        image: "https://arweave.net/890mTlCRN-cwtbExaHCm8aRp9Ryhf-4cK40-GM-spOE?ext=png",
-        attributes: ["Background Tan", "Eyes Bags Under Eyes", "Mouth Drool", "Hairstyle Blonde Hair", "Outfit Bowtie"]
-        }
-    ];
+    const [characters, setCharacters] = useState([]);
+    const [mountAttributes, setMountAttributes] = useState([]);
     const [availableCharacters, setAvailableCharacters] = useState();
+    const [activeGuess, setActiveGuess] = useState(false);
     
 
-    const startGame = () => {
-        // Select a random character from the characters array
-        const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
-        
-        
-        
-        let guessedCorrectly = false;
-        
-   
-
-        const askQuestion = (attribute) => {
-            const answer = prompt(`Does the character have ${attribute}? (yes or no)`);
-            return answer.toLowerCase() === 'yes';
-        }
-        
-        // Loop through up to 3 rounds of questioning
-        while (remainingQuestions > 0 && !guessedCorrectly) {
-            // Prompt the user for a question and decrement the remainingQuestions counter
-            
-        
-            // Check if the user has guessed the secret character
-            if (remainingQuestions === 0) {
-            const guess = prompt("Who do you think the character is?");
-            if (guess.toLowerCase() === secretCharacter.name.toLowerCase()) {
-                guessedCorrectly = true;
-                alert("Congratulations! You guessed correctly and earned 3 points.");
-            } else {
-                alert("Sorry, that is not the correct character.");
-            }
-            }
-        }
-        
-        // If the user guessed correctly, add 3 points to their score
-        let score = 0;
-        if (guessedCorrectly) {
-            score += 3;
-        }
-        
-        alert(`Your final score is ${score}! The secret character was ${secretCharacter.name}.`);
-        setGameFinalized(true);
+   const resetGame = () => {
+        setLoading(true);
+        setScore(0);
+        setRemainingQuestions(10);
+        setAvailableCharacters(characters);
+        setPossibleAttributes(mountAttributes);
+        const newSec = characters[Math.floor(Math.random() * characters.length)];
+        setSecChar(newSec);
+        setUserQuestion('');
+        setGameStarted(false);
+        setGameFinalized(false);
+        setShowEarlyGuess(false);
+        console.log('characters', characters);
+        console.log('secChar', secChar);
+        setLoading(false);
     }
+
 
     const renderPossibleAttributes = () => {
         return (
             <div className={styles.possibleAttributes}>
-                {possibleAttributes.map((attribute, index) => (
+                {/* {possibleAttributes.map((attribute, index) => (
                     <div className="attribute" key={index}>
                         <p
                             onClick={() => {
@@ -103,16 +65,137 @@ const Game = () => {
                             {attribute}
                         </p>
                     </div>
-                ))}
+                ))} */}
+                <div className={styles.background_section}>
+                    <p className={styles.attribute_header}>Background</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Background') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                    
+                </div>
+                <div className={styles.eyes_section}>
+                    <p className={styles.attribute_header}>Eyes</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Eyes') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
+                <div className={styles.hair_section}>
+                    <p className={styles.attribute_header}>Hairstyle</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Hairstyle') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
+                <div className={styles.mouth_section}>
+                    <p className={styles.attribute_header}>Mouth</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Mouth') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
+                <div className={styles.nose_section}>
+                    <p className={styles.attribute_header}>Nose</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Nose') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
+                <div className={styles.outfit_section}>
+                    <p className={styles.attribute_header}>Outfit</p>
+                    {possibleAttributes.map((attribute, index) => {
+                        if (attribute.split(' ')[0] === 'Outfit') {
+                            return (
+                                <div className={styles.attribute} key={index}>
+                                    <p
+                                        onClick={() => {
+                                            setUserQuestion(attribute);
+                                        }}
+                                    >
+                                        {attribute}
+                                    </p>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
             </div>
         )
     }
 
     const handleUserQuestion = () => {
         if (secChar.attributes.includes(userQuestion)) {
-            // Remove the guessed attribute from the possibleAttributes array
-            possibleAttributes = possibleAttributes.filter(a => a !== userQuestion);
+            
+            // only display the remaining characters that have the guessed attribute
+            const chars = availableCharacters.filter(char => char.attributes.includes(userQuestion));
+            var possAtt = [];
+            chars.forEach(char => {
+                char.attributes.forEach(att => {
+                    if (!possAtt.includes(att) && att !== userQuestion) {
+                        possAtt.push(att);
+                    }
+                })
+            })
+            setPossibleAttributes(possAtt);
+            setAvailableCharacters(chars);
             alert("Yes, the character has that attribute!");
+            
         } else {
             
             const chars = availableCharacters.filter(char => !char.attributes.includes(userQuestion));
@@ -141,20 +224,36 @@ const Game = () => {
                     onChange={(e) => {setUserQuestion(e.target.value)}
                 }/>
                 <button
+                    className={styles.question_button}
                     onClick={() => {
                         //remove remaining questions
                         setRemainingQuestions(remainingQuestions - 1),
                         handleUserQuestion();
                     }}
                 >Submit</button>
+
+                {!showEarlyGuess && (
+                    <>
+                        <p>
+                            Think you know who it is?
+                        </p>
+                        <button
+                            className={styles.question_button}
+                            onClick={() => {
+                                setShowEarlyGuess(true);
+                            }}
+                        >Heck yea, let me guess!</button>
+                    </>
+                )}
             </div>
         )
     }
 
     const renderEarlyGuessContainer = () => {
         return (
-            <div className={styles.early_guess_container}>
-                {availableCharacters.map((char, index) => (
+            <div className={styles.game_board}>
+                <div className={styles.character_card_container}>
+                    {availableCharacters.map((char, index) => (
                         <div className={styles.character_card}  key={index}>
                             <p>{char.name}</p>
                             <img 
@@ -165,50 +264,40 @@ const Game = () => {
                                 src={char.image} alt={char.name}
                             />
                         </div>
-                ))}
-                <p>Do you think you know who the character is?</p>
-                <input
-                    type="text"
-                    placeholder="Enter Ikon #"
-                    onChange={(e) => {setUserQuestion(e.target.value)}
-                }/>
-                <button
-                    onClick={() => {
-                        // Check if the user guessed correctly, if so their score is the remaining questions * 5
-                        if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
-                            setScore(remainingQuestions * 5);
-                            alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
-                            // reset game
-                            // setAvailableCharacters(characters);
-                            setUserQuestion('');
-                            setGameStarted(false);
-                            setGameFinalized(true);
-                            setRemainingQuestions(10);
-                            setShowEarlyGuess(false);
-                        } else {
-                            alert("Sorry, that is not the correct character, Game Over.");
-                            // reset game
-                            // setAvailableCharacters(characters);
-                            setUserQuestion('');
-                            setShowEarlyGuess(false);
-                            setGameStarted(false);
-                            setGameFinalized(false);
-                            setRemainingQuestions(10);
-                            setScore(0);
-                        }
-                    }}
-                >
-                    Submit
-                </button>
+                    ))}
+                </div>
+                    Guess?
+                    <input
+                        type="text"
+                        placeholder={activeGuess ? activeGuess.name : "Enter your guess"}
+                        onChange={(e) => {setUserQuestion(e.target.value)}
+                    }/>
+                    <button
+                        className={styles.button}
+                        onClick={() => {
+                            // Check if the user guessed correctly, if so their score is the remaining questions * 5
+                            if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
+                                setScore(remainingQuestions * 5);
+                                alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
+                                setGameFinalized(true);
+                            } else {
+                                alert("Sorry, that is not the correct character, Game Over.");
+                                setGameFinalized(true);
+                            }
+                        }}
+                    >
+                        Submit
+                    </button>
 
-                <button
-                    onClick={() => {
-                        setShowEarlyGuess(false);
-                    }}
-                >
-                    No, I want to keep guessing
-                </button>
-
+                    <button
+                        className={styles.button}
+                        onClick={() => {
+                            setShowEarlyGuess(false);
+                        }}
+                    >
+                        Sike, let me ask more questions.
+                    </button>
+               
             </div>
         )
     }
@@ -242,20 +331,10 @@ const Game = () => {
                         if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
                             setScore(remainingQuestions * 5);
                             alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
-                            // reset game
-                            setGameStarted(false);
                             setGameFinalized(true);
-                            setRemainingQuestions(10);
-                            setShowEarlyGuess(false);
                         } else {
                             alert("Sorry, that is not the correct character, Game Over.");
-                            // reset game
-                            // setAvailableCharacters(characters);
-                            setShowEarlyGuess(false);
-                            setGameStarted(false);
-                            setGameFinalized(false);
-                            setRemainingQuestions(10);
-                            setScore(0);
+                            setGameFinalized(true);
                         }
                     }}
                 >
@@ -278,59 +357,35 @@ const Game = () => {
             <div className={styles.game_board}>
                 <h1>Guess the Character</h1>
                 <p>Remaining questions: {remainingQuestions}</p>
+                <p>Remaining Ikons: {availableCharacters.length}</p>
                 <p>Score: {score}</p>
                 <div className={styles.character_card_container}>
                     {availableCharacters.map((character, index) => (
                         <div className={styles.character_card} key={index}>
                             <img 
-                                style={{
-                                    width: '100px',
-                                    height: '100px',
-                                }}
+                                className={styles.character_image}
                                 src={character.image} alt={character.name} 
+                                onClick={() => {
+                                    setShowEarlyGuess(true);
+                                    setActiveGuess(character);
+                                }}
                             />
                             <p>{character.name}</p>
                         </div>
                     ))}
                 </div>
-                {renderPossibleAttributes()}
                 {renderQuestionContainer()}
-                {!showEarlyGuess && (
-                    <>
-                        <p>
-                            Think you know who it is?
-                        </p>
-                        <button
-                            onClick={() => {
-                                setShowEarlyGuess(true);
-                            }}
-                        >Heck yea, let me guess!</button>
-                    </>
-                )
-                }
+                
+                {renderPossibleAttributes()}
+                
+                
                 
 
             </div>
         )
     }
 
-    const handleReset = () => {
-        // setAvailableCharacters(characters);
-        setUserQuestion('');
-        setGameFinalized(false);
-        setRemainingQuestions(10);
-        setScore(0);
-        setShowEarlyGuess(false);
-        var possAtt = [];
-        for(let i = 0; i < characters.length; i++) {
-            for(let j = 0; j < characters[i].attributes.length; j++) {
-                if(!possAtt.includes(characters[i].attributes[j])) {
-                    possAtt.push(characters[i].attributes[j]);
-                }
-            }
-        }
-        // setPossibleAttributes(possAtt);
-    }
+    
 
     
 
@@ -362,18 +417,13 @@ const Game = () => {
                 includeOffChain: true,
             });
 
-            for(let i = 0; i < data.length; i++) {
+            // for(let i = 0; i < data.length; i++) {
+                for(let i = 0; i < 20; i++) {
                 let attributes = [];
                 for(let j = 0; j < data[i].offChainMetadata.metadata.attributes.length; j++) {
-                    // if the attribute value has a number then do not add it
-                    if(!data[i].offChainMetadata.metadata.attributes[j].value.includes(
-                        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
-                    )) {
-                        
+                   
                     attributes.push(`${data[i].offChainMetadata.metadata.attributes[j].traitType} ${data[i].offChainMetadata.metadata.attributes[j].value}`);
 
-                    }
-                
                 }
                 meta.push({
                     name: data[i].offChainMetadata.metadata.name,
@@ -384,7 +434,7 @@ const Game = () => {
 
             // set the characters array to the meta array
             setAvailableCharacters(meta);
-
+            setCharacters(meta);
             // set the possibleAttributes array to the attributes of the first character in the characters array
             let possAttributes = [];
             for(let i = 0; i < meta.length; i++) {
@@ -402,7 +452,8 @@ const Game = () => {
                 }
             }
             setPossibleAttributes(possAttributes);
-            const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
+            setMountAttributes(possAttributes);
+            const secretCharacter = meta[Math.floor(Math.random() * meta.length)];
             setSecChar(secretCharacter)
             setLoading(false);
 
@@ -426,108 +477,66 @@ const Game = () => {
         
        
     }, []);
-    useEffect(() => {
-        console.log('checking for nfts')
-        var char = []
-        var meta = []
-        const getMetadata = async () => {
-            const { data } = await axios.post(metadata_url, {
-                mintAccounts: char,
-                includeOffChain: true,
-            });
-
-            for(let i = 0; i < data.length; i++) {
-                let attributes = [];
-                for(let j = 0; j < data[i].offChainMetadata.metadata.attributes.length; j++) {
-                    // if the attribute value has a number then do not add it
-                    if(!data[i].offChainMetadata.metadata.attributes[j].value.includes(
-                        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
-                    )) {
-                        
-                    attributes.push(`${data[i].offChainMetadata.metadata.attributes[j].traitType} ${data[i].offChainMetadata.metadata.attributes[j].value}`);
-
-                    }
-                
-                }
-                meta.push({
-                    name: data[i].offChainMetadata.metadata.name,
-                    image: data[i].offChainMetadata.metadata.image,
-                    attributes: attributes
-                })
-            }
-
-            
-
-            // set the characters array to the meta array
-            setAvailableCharacters(meta);
-
-            // set the possibleAttributes array to the attributes of the first character in the characters array
-            let possAttributes = [];
-            for(let i = 0; i < meta.length; i++) {
-                for(let j = 0; j < meta[i].attributes.length -1; j++) {
-                    try{
-                        if(!possAttributes.includes(meta[i].attributes[j])) {
-                            possAttributes.push(meta[i].attributes[j]);
-                        }
-                    } catch (e) {
-                        console.log('error: ', e)
-                        j++
-                    }
-                }
-            }
-            setPossibleAttributes(possAttributes);
-            const secretCharacter = characters[Math.floor(Math.random() * characters.length)];
-            setSecChar(secretCharacter)
-            console.log('secret char is', secretCharacter)
-            setLoading(false);
-
-        };
-
-        const getActiveListings = async () => {
-            const { data } = await axios.post(url, {
-                "query": {
-                    // Ikon collection
-                    "firstVerifiedCreators": [creator]
-                }
-            });
-            // set the data.result.mint and data.result.name to the char array
-            for(let i = 0; i < data.result.length; i++) {
-                char.push(data.result[i].mint);
-            }
-            getMetadata();
-        };
-         
-        getActiveListings();
-        
-       
-    }, [gameFinalized]);
+    
     return (
         <div className={styles.game_container}>
+            {loading && <h1>Pouring a cup while the Ikons gather...</h1>}
+            {loading && (
+                <div className={styles.loading_container}>
+                    
+                    <div class="coffee-container">
+                        <div class="coffee-header">
+                        <div class="coffee-header__buttons coffee-header__button-one"></div>
+                        <div class="coffee-header__buttons coffee-header__button-two"></div>
+                        <div class="coffee-header__display"></div>
+                        <div class="coffee-header__details"></div>
+                        </div>
+                        <div class="coffee-medium">
+                        <div class="coffe-medium__exit"></div>
+                        <div class="coffee-medium__arm"></div>
+                        <div class="coffee-medium__liquid"></div>
+                        <div class="coffee-medium__smoke coffee-medium__smoke-one"></div>
+                        <div class="coffee-medium__smoke coffee-medium__smoke-two"></div>
+                        <div class="coffee-medium__smoke coffee-medium__smoke-three"></div>
+                        <div class="coffee-medium__smoke coffee-medium__smoke-for"></div>
+                        <div class="coffee-medium__cup"></div>
+                        </div>
+                        <div class="coffee-footer"></div>
+                    </div>
+                </div>
+        
+            )}
             {gameFinalized && (
-                <>
+                <div className={styles.final_container}>
                     <p className={styles.game_score}>Game over! Your final score is {score}.</p>
                     {/* reset button */}
-                    <button onClick={() => {
-                        setGameFinalized(false);
-                        setGameStarted(false);
-                        setScore(0);
-                        setRemainingQuestions(10);
-                    }}>Play Again</button>
-                </>
+                    <div className={styles.secret_character_reveal}>
+                        <p>The secret character was <span>{secChar.name}</span></p>
+                        <img src={secChar.image} alt={secChar.name} />
+                    </div>
+                    <button 
+                        className={styles.button}
+                        onClick={() => {
+                        resetGame();
+                    }}>
+                        Play Again
+                    </button>
+                </div>
             )}
 
-            {!gameStarted && !gameFinalized && (
+            {!gameStarted && !gameFinalized && !loading &&(
                 <div className={styles.pre_start}>
                     <p>Click the button below to start the game.</p>
-                    <button onClick={() =>( 
-                        handleReset(),
+                    <button 
+                        className={styles.button}
+                        onClick={() =>( 
                         setGameStarted(true)
                     )}>
                         Start Game
                     </button>
                 </div>
             )}
-            {showEarlyGuess && renderEarlyGuessContainer()}
+            {showEarlyGuess && !gameFinalized && renderEarlyGuessContainer()}
             {gameStarted && !gameFinalized && !showEarlyGuess && remainingQuestions > 0 && renderGameBoard()}
             {gameStarted && !gameFinalized && remainingQuestions === 0 && renderFinalAnswer()}
         </div>

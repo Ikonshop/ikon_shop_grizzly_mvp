@@ -51,19 +51,18 @@
 }
 
 .character_card_container{
-    /* 7 x 10 grid */
+    /* 5 x 4 grid */
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
-    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: .5px;
+    width: 60%;
     height: 100%;
     background-color: #282c34;
     color: white;
     font-size: calc(10px + 2vmin);
     text-align: center;
-    
-}
+}   
 
 .character_card{
     display: flex;
@@ -76,29 +75,179 @@
     text-align: center;
 }
 
-.possibleAttributes{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-gap: 1rem;
-    width: 100%;
-    height: 100%;
-    background-color: #282c34;
-    color: white;
-    font-size: calc(10px + 2vmin);
-    text-align: center;
+.character_image{
+    height: 100px;
+    cursor: pointer;
+}
+/* display every even number index character_image with flipFront */
+.character_card:nth-child(even) .character_image{
+    animation: flipFront 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 2;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
 }
 
-.question_container{
+/* display every odd number index character_image with flipBack */
+.character_card:nth-child(odd) .character_image{
+    animation: flipBack 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 3;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
+}
+
+  @keyframes flipFront {
+    0% {
+      transform: rotateX(0deg);
+      background-color: #444;
+    }
+    50% {
+      transform: rotateX(180deg);
+      background-color: #222;
+    }
+    100% {
+      transform: rotateX(0deg);
+      background-color: #1c1c1c;
+    }
+  }
+  @keyframes flipBack {
+    0% {
+      transform: rotateX(180deg);
+      background-color: #222;
+    }
+    50% {
+      transform: rotateX(360deg);
+      background-color: #444;
+    }
+    100% {
+      transform: rotateX(0deg);
+      background-color: #444;
+    }
+  }
+
+.possibleAttributes{
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
     width: 100vw;
     background-color: #282c34;
     color: white;
     font-size: calc(10px + 2vmin);
     text-align: center;
+}
+
+.attribute{
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.background_section{
+    background-color: rgb(0, 87, 87);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.background_section .attribute:nth-child(even){
+    background-color: rgba(1, 160, 160, 0.53);
+}
+.background_section .attribute:nth-child(odd){
+    background-color: rgba(0, 84, 84, 0.53);
+}
+
+.attribute:hover{
+    color: rgb(143, 243, 4);
+}
+
+.attribute_header{
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.eyes_section{
+    background-color: rgb(212, 127, 0);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.eyes_section .attribute:nth-child(even){
+    background-color: rgba(255, 153, 0, 0.53);
+}
+
+.eyes_section .attribute:nth-child(odd){
+    background-color: rgba(255, 128, 0, 0.53);
+}
+
+.hair_section{
+    background-color: rgb(150, 3, 106);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.hair_section .attribute:nth-child(even){
+    background-color: rgba(255, 0, 255, 0.53);
+}
+
+.hair_section .attribute:nth-child(odd){
+    background-color: rgba(255, 0, 204, 0.53);
+}
+
+.nose_section{
+    background-color: rgb(225, 0, 60);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.nose_section .attribute:nth-child(even){
+    background-color: rgba(255, 0, 102, 0.53);
+}
+
+.nose_section .attribute:nth-child(odd){
+    background-color: rgba(255, 0, 76, 0.53);
+}
+
+.mouth_section {
+    background-color: rgb(49, 165, 0);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.mouth_section .attribute:nth-child(even){
+    background-color: rgba(0, 255, 0, 0.53);
+}
+
+.mouth_section .attribute:nth-child(odd){
+    background-color: rgba(0, 204, 0, 0.53);
+}
+
+.outfit_section{
+    background-color: rgb(0, 0, 255);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.outfit_section .attribute:nth-child(even){
+    background-color: rgba(0, 0, 255, 0.53);
+}
+
+.outfit_section .attribute:nth-child(odd){
+    background-color: rgba(0, 0, 204, 0.53);
+}
+
+
+.question_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40vw;
+    background-color: #00ff8c8e;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 30px;
 }
 
 .question_container p {
@@ -109,6 +258,21 @@
 .question_container input {
     font-size: 1.2rem;
     margin: 0;
+    border-radius: 15px;
+    display: flex;
+    text-align: center;
+}
+
+.question_button{
+    font-size: 1.2rem;
+    margin: 0;
+    width: fit-content;
+    border-radius: 15px;
+    background-color: transparent;
+}
+
+.question_button:hover{
+    background-color: #ffffff8e;
 }
 
 .early_guess_container{
@@ -138,3 +302,93 @@
     margin: 0;
     width: fit-content;
 }
+
+.final_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+}
+
+.secret_character_reveal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+}
+
+.secret_character_reveal span{
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.secret_character_reveal p{
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.secret_character_reveal img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.button {
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.button:hover{
+    background-color: white;
+    color: #282c34;
+}
+
+.button:active{
+    background-color: #282c34;
+    color: white;
+}
+
+.button:focus{
+    outline: none;
+}
+
+.loading_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 90vh;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+}
+
+/* animation for the loading_container */
+/*  */
+
+.game_board input {
+    font-size: 1.2rem;
+    margin: 0;
+    border-radius: 15px;
+    display: flex;
+    text-align: center;
+}
+
