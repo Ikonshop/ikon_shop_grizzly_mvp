@@ -64,11 +64,13 @@ const App = () => {
             />
             <br />
             <div className="signup_row1">
-              <p>
-                By signing up, you agree to IkonShop's{" "}
-                <strong>Terms of Use</strong> and{" "}
-                <strong>Privacy Policy</strong>
-              </p>
+              <a href="/terms">
+                <p>
+                  By signing up, you agree to IkonShop's{" "}
+                  <strong>Terms of Use</strong> and{" "}
+                  <strong>Privacy Policy</strong>
+                </p>
+              </a>
               <button type="submit" className="signup_button">
                 Proceed
               </button>
@@ -155,7 +157,6 @@ const App = () => {
                 </div>
                 <img src="/signup.png" />
               </div>
-              
             </div>
           </div>
         </div>
