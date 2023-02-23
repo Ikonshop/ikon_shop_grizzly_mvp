@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Audio } from "react";
+import React, { useState, useEffect, Audio, useRef } from "react";
 import Link from "next/link";
 import HeadComponent from "../components/Head";
 import Loading from "../components/Loading";
@@ -20,6 +20,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
+import { IoPlayCircle } from "react-icons/io5";
+import AccordionItem from "../components/FAQ";
 
 // Constants
 export const GRAPHCMS_TOKEN = process.env.NEXT_PUBLIC_GRAPHCMS_TOKEN;
@@ -35,7 +37,7 @@ const store5 = "0XDRIP";
 const store6 = "PEN_FRENS";
 const store7 = "LOGVFX";
 
-const App = () => {
+const App = (props) => {
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
@@ -56,6 +58,39 @@ const App = () => {
   const [showUserOrders, setShowUserOrders] = useState(false);
   const [showCreateLink, setShowCreateLink] = useState(false);
 
+  const [active, setActive] = useState(null);
+
+  const faqs = [
+    {
+      id: 1,
+      header: "What is Lorem Ipsum?",
+      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+    },
+    {
+      id: 2,
+      header: "Where does it come from?",
+      text: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. `,
+    },
+    {
+      id: 3,
+      header: "Why do we use it?",
+      text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature,`,
+    },
+    {
+      id: 4,
+      header: "Where can I get some?",
+      text: `There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.`,
+    },
+  ];
+
+  const handleToggle = (index) => {
+    if (active === index) {
+      setActive(null);
+    } else {
+      setActive(index);
+    }
+  };
+
   // CONNECTED DISPLAY
   const renderStoreContainer = () => {
     return (
@@ -63,62 +98,102 @@ const App = () => {
         {/* main container */}
 
         <div className="">
-          <div className="hero">
-            <img
-              src="/circle_blue_outline.png"
-              className="img1"
-              data-aos="fade-right"
-            />
-            <img src="/green_dot.png" className="img2" />
-            <img src="/green_dot.png" className="img4" data-aos="fade-left" />
-            <img src="/pink_dot.png" className="img3" />
-            <div className="hero_group">
-              <h1 data-aos="fade-up">
-                Empowering Web3 with the <mark>tools of commerce.</mark>
+          <section className="info_section">
+            <div className="container_main3">
+              <h1>
+                Create pay links, receive tips, manage a dashboard, on the
+                blockchain
               </h1>
-              <p data-aos="fade-up" data-aos-delay="200">
+              <p className="info_body3">
                 IkonShop offers you the benefits of blockchain technology with
                 the convenience of familiar online shopping & selling.
               </p>
 
-              <a href="#learn_more">
-                <div
-                  className="hero_btn"
-                  data-aos="fade-up"
-                  data-aos-delay="100"
-                >
-                  Learn More
-                </div>
-              </a>
+              <br />
+              <br />
+              <button className="signup_button">Get Started</button>
             </div>
-          </div>
-          <Container>
-            <div className="features2">
-              <div className="features_row">
-                <h3 className="big_header" data-aos="fade-up">
-                  The power of blockchain <mark>technology for everyone.</mark>
-                </h3>
-                <img src="/iklogo.png" className="ft_logo" />
-              </div>
-              <div className="features_row vid_row">
-                {/* <img
-                  className="features_img"
-                  src="/iexv.png"
-                  data-aos="zoom-out"
-                  data-aos-delay="200"
-                /> */}
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  data-aos="zoom-out"
-                  data-aos-delay="200"
-                >
-                  <source src="/ikonshop.mp4" />
-                </video>
+            <div className="container_info_img hero_img">
+              <img src="/hero.png" alt="" />
+            </div>
+          </section>
+
+          <section className="info_section section2">
+            <div className="container_info_img">
+              <img src="/img1.png" alt="" />
+            </div>
+            <div className="container_main">
+              <p className="info_small_header">Merchant</p>
+              <h1>
+                Create a Storefront, create physical/digital products and sell.
+              </h1>
+              <p className="info_body2">
+                Merchants can create storefronts, physical/digital products,
+                manage their orders, products, and many more securely on
+                IkonShop.
+              </p>
+
+              <br />
+              <br />
+              <button className="signup_button">Get Started</button>
+            </div>
+          </section>
+
+          <section className="info_section">
+            <div className="container_main2">
+              <p className="info_small_header">Consumer</p>
+              <h1>
+                Receive payments, tipjars, and get useful insights on your
+                dashboard.
+              </h1>
+              <p className="info_body">
+                For everyday users, degens etc IkonShop serves as a useful and
+                insightful tool to manage you web3 financea
+              </p>
+
+              <br />
+              <br />
+              <div className="buttons">
+                <a href="https://rapisurv.com">
+                  <button className="signup_button">Get Started</button>
+                </a>
+                <button className="signup_button secondary_btn">
+                  <IoPlayCircle
+                    style={{
+                      fontSize: "24px",
+                    }}
+                  />
+                  <p
+                    style={{
+                      marginTop: "15px",
+                    }}
+                  >
+                    Learn how
+                  </p>
+                </button>
               </div>
             </div>
-          </Container>
+            <div className="container_info_img">
+              <img src="/img2.png" alt="" />
+            </div>
+          </section>
+
+          <section className="faqs">
+            <Container>
+              <p className="faqs_small_header">Frequently asked questions</p>
+              <h2>Questions you might have</h2>
+              {faqs.map((faq, index) => {
+                return (
+                  <AccordionItem
+                    key={index}
+                    active={active}
+                    handleToggle={handleToggle}
+                    faq={faq}
+                  />
+                );
+              })}
+            </Container>
+          </section>
 
           <div className="features">
             <div className="ft_bg"></div>
