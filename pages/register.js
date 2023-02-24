@@ -23,16 +23,6 @@ const App = () => {
     const [showRegister, setShowRegister] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      if (name === "name") {
-        setUserName(value);
-      } else if (name === "storeName") {
-        setStoreName(value);
-      } else if (name === "email") {
-        setEmail(value);
-      }
-    };
 
     const renderForm = () => {
       return (

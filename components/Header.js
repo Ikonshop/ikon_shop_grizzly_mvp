@@ -314,7 +314,6 @@ export default function HeaderComponent() {
       }
     });
     window.addEventListener("magic-logged-out", () => {
-      alert("triggered!");
       setMagicMetadata("");
       setMagicPublicKey("");
       setMagicUser(false);
