@@ -56,6 +56,7 @@ export default function HeaderComponent() {
 
   // THEME
   const [theme, setTheme] = useState("light");
+  const [showStoreSymbol, setShowStoreSymbol] = useState(false);
   
   //MAGIC LINK
   const [showMagicLogin, setShowMagicLogin] = useState(false);
@@ -371,19 +372,37 @@ export default function HeaderComponent() {
                       </div>
 
                       {/* ******TOGGLE DASHBOARD********** */}
-                      <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
-                        
-                        <div id="container">
-                          <div 
-                            onClick={()=> router.push("/user/dashboard")}
-                            id="target" 
-                            class="sun"
-                            
-                          > 
-                            <IoStorefrontOutline className="sunny_tog" />
-                          </div>
+                      <Nav.Link
+                        className="menu_link"
+                        style={{ marginLeft: "20px", border: "none" }}
+                        onClick={() => (
+                          setShowStoreSymbol(false),
+                          router.push("/user/dashboard")
+                        )}
+                      >
+                          <div id="container">
+                            {showStoreSymbol ? (
+                              <div
+                                id="target"
+                                class="sun"
+                              >
+                                <IoStorefrontOutline className="sunny_tog" />
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => (
+                                  setShowStoreSymbol(true),
+                                  router.push("/merchant/dashboard")
+                                )}
+                                id="target"
+                                class="moon"
+                              >
+                                <IoAccessibilityOutline className="moon_tog" />
+                              </div>
+                            )}
                         </div>
                       </Nav.Link>
+                
 
                       <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
                         <div id="container">
@@ -472,23 +491,36 @@ export default function HeaderComponent() {
                     </div>
 
                     {/* ******TOGGLE DASHBOARD********** */}
-                    <Nav.Link className="menu_link" style={{ marginLeft: "20px",border: "none" }}>
+                    <Nav.Link
+                      className="menu_link"
+                      style={{ marginLeft: "20px", border: "none" }}
+                      onClick={() => (
+                        setShowStoreSymbol(false),
+                        router.push("/user/dashboard")
+                      )}
+                    >
                         <div id="container">
-                          
-                            <div 
-                              onClick={()=> router.push("/merchant/dashboard")}
-                              id="target" 
-                              class="moon"
-                            > 
-                    
-                                <IoAccessibilityOutline className="moon_tog" />
-                              
-                            
-                   
+                          {showStoreSymbol ? (
+                            <div
+                              id="target"
+                              class="sun"
+                            >
+                              <IoStorefrontOutline className="sunny_tog" />
                             </div>
-                     
-                        </div>
-                      </Nav.Link>
+                          ) : (
+                            <div
+                              onClick={() => (
+                                setShowStoreSymbol(true),
+                                router.push("/merchant/dashboard")
+                              )}
+                              id="target"
+                              class="moon"
+                            >
+                              <IoAccessibilityOutline className="moon_tog" />
+                            </div>
+                          )}
+                      </div>
+                    </Nav.Link>
                     
                     {/* TOGGLE FOR LIGHT MODE AND DARK MODE */}
                     <Nav.Link className="menu_link" style={{ border: "none" }}>
