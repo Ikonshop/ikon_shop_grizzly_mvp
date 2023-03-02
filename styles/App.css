@@ -612,14 +612,15 @@ p {
 }
 
 .big_header {
-  font-size: 40px;
-  max-width: 800px;
+  font-size: 24px;
+  max-width: 500px;
   color: #130b46;
-  line-height: 48px;
+  line-height: 36px;
   font-weight: bold;
   font-family: "Manrope" !important;
   position: relative;
   z-index: 1;
+  text-align: center;
 }
 
 .features_body {
@@ -632,12 +633,13 @@ p {
 }
 
 .features {
-  margin-top: 150px;
+  margin-top: 200px;
+  margin-bottom: 100px;
   position: relative;
   z-index: 1;
   width: 100%;
   height: auto;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .ft_bg {
@@ -651,11 +653,16 @@ p {
 
 .features_container {
   display: flex;
-  gap: 180px;
+  flex-direction: column;
+  position: relative;
+  gap: 10px;
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   align-items: center;
   justify-content: center;
+  background: #130b46;
+  border-radius: 20px;
+  padding: 20px 20px 50px 50px;
 }
 
 .features .big_header {
@@ -731,10 +738,10 @@ p {
 }
 
 .compatible {
-  background: #8affcb;
+  background: #ffded6;
   min-height: 350px;
   margin: 50px 0;
-  padding: 30px 0 50px 0;
+  padding: 70px 0 150px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -742,6 +749,10 @@ p {
   text-align: center;
   position: relative;
   z-index: 1;
+}
+
+.compatible img {
+  max-width: 70px;
 }
 
 .comp_smallred {
@@ -775,18 +786,19 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 20px;
   gap: 30px;
   z-index: 1;
 }
 
 .comp_card {
-  background: #fff;
-
-  width: 300px;
+  background: #fff8f6;
+  border-radius: 15px;
+  width: 270px;
   height: 200px;
-  box-shadow: -1px 0px 18px 1px rgba(65, 75, 80, 0.07);
+  /* box-shadow: -1px 0px 18px 1px rgba(65, 75, 80, 0.07);
   -webkit-box-shadow: -1px 0px 18px 1px rgba(65, 75, 80, 0.07);
-  -moz-box-shadow: -1px 0px 18px 1px rgba(65, 75, 80, 0.07);
+  -moz-box-shadow: -1px 0px 18px 1px rgba(65, 75, 80, 0.07); */
 }
 
 .comp_card img {
@@ -831,6 +843,59 @@ p {
 .compatible_icon {
   max-width: 50px;
   margin: 40px auto 0 auto;
+}
+
+.avatars {
+  display: flex;
+  list-style-type: none;
+  margin: auto;
+  padding: 0px;
+  flex-direction: row;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.avatars__item {
+  background-color: #596376;
+  border: 6px solid #ffded6;
+  border-radius: 100%;
+  color: #fff;
+  display: block;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: 100;
+  height: 50px;
+  width: 50px;
+  line-height: 45px;
+  text-align: center;
+  transition: margin 0.1s ease-in-out;
+  overflow: hidden;
+  margin-left: -15px;
+}
+.avatars__item:first-child {
+  z-index: 5;
+}
+.avatars__item:nth-child(2) {
+  z-index: 4;
+}
+.avatars__item:nth-child(3) {
+  z-index: 3;
+}
+.avatars__item:nth-child(4) {
+  z-index: 2;
+}
+.avatars__item:nth-child(5) {
+  z-index: 1;
+}
+.avatars__item:last-child {
+  z-index: 0;
+}
+.avatars__item img {
+  width: 100%;
+}
+.avatars:hover .avatars__item {
+  margin-right: 3px;
 }
 
 .why_ikonshop {
@@ -3033,6 +3098,16 @@ button:disabled {
     padding: 100px 20px 0 40px !important;
   }
 
+  .hero_img {
+    display: none;
+  }
+
+  .container_main3 {
+    justify-content: flex-start;
+    padding: 100px 20px 0 40px;
+    height: fit-content;
+  }
+
   .buttons {
     flex-direction: column;
     gap: 20px;
@@ -3489,7 +3564,7 @@ button:disabled {
   }
 
   .features {
-    margin-top: 120px;
+    margin-top: 200px;
   }
   /* .row2 {
     margin-top: 300px;
@@ -3651,10 +3726,15 @@ button:disabled {
   .compatible_cards {
     flex-direction: column;
     top: 220px;
+    margin-top: 150px;
   }
 
   .features_ft2 {
     margin-top: 200px;
+  }
+
+  .features {
+    margin-top: 300px;
   }
 }
 
