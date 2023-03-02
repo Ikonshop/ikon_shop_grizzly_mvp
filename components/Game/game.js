@@ -14,12 +14,13 @@ import {
     Program, AnchorProvider, web3
   } from '@project-serum/anchor';
 import { set } from '@project-serum/anchor/dist/cjs/utils/features';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
   
 
 
 const Game = () => {
     const { publicKey } = useWallet();
-    
+    const version = '0.0.1';
     
     const axios = require('axios')
       // SystemProgram is a reference to the Solana runtime!
@@ -145,8 +146,8 @@ const Game = () => {
         setGameStarted(false);
         setGameFinalized(false);
         setShowEarlyGuess(false);
-        console.log('characters', characters);
-        console.log('secChar', secChar);
+        // console.log('characters', characters);
+        // console.log('secChar', secChar);
         setTimer(60);
         setLoading(false);
     }
@@ -168,8 +169,11 @@ const Game = () => {
     const handleSolve = () => {
         if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
             stopTimer();
-            setScore((remainingQuestions * 100) + (timer * 100) + (availableCharacters.length * 10));
-            alert(`Congratulations! You guessed correctly and earned ${((remainingQuestions * 5) * timer)} points.`);
+            // console.log('remainingQuestions', remainingQuestions);
+            // console.log('timer', timer);
+            // console.log('availableCharacters.length', availableCharacters.length);
+            setScore((remainingQuestions * 100) + (timer * 10) + (availableCharacters.length * 100));
+            alert(`Congratulations! You guessed correctly and earned ${((remainingQuestions * 100) + (timer * 10) + (availableCharacters.length * 100))} points.`);
             setGameFinalized(true);
         } else {
             alert("Sorry, that is not the correct character, Game Over.");
@@ -180,8 +184,6 @@ const Game = () => {
     }
 
     const showNotification = (type) => {
-        console.log('notified of type: ', type);
-      
         if(type === 'success') {
             setRenderSuccess(true);
         } else {
@@ -387,7 +389,6 @@ const Game = () => {
             showNotification('success');
             
         } else {
-            console.log('wrong attribute', attribute)
             const chars = availableCharacters.filter(char => !char.attributes.includes(attribute));
             var possAtt = [];
             chars.forEach(char => {
@@ -481,8 +482,8 @@ const Game = () => {
                         <div 
                             className={styles.character_card}
                             onClick={() => {(
-                                setUserQuestion(char.name),
-                                console.log('name: ', char.name)
+                                setUserQuestion(char.name)
+                                // console.log('name: ', char.name)
                             )
                             }}
                             key={index}
@@ -510,7 +511,10 @@ const Game = () => {
                             // Check if the user guessed correctly, if so their score is the remaining questions * 5
                             if (userQuestion.toLowerCase() === secChar.name.toLowerCase()) {
                                 stopTimer();
-                                setScore((remainingQuestions * 100) + (timer * 100) + (availableCharacters.length * 100));
+                                console.log('remainingQuestions', remainingQuestions);
+                                console.log('timer', timer);
+                                console.log('availableCharacters.length', availableCharacters.length);
+                                setScore((remainingQuestions * 100) + (timer * 10) + (availableCharacters.length * 100));
                                 alert(`Congratulations! You guessed correctly and earned ${remainingQuestions * 5} points.`);
                                 setGameFinalized(true);
                             } else {
@@ -549,12 +553,13 @@ const Game = () => {
                             {!publicKey && (
                                 <>
                                     Connect your wallet to submit your score.
+                                    <WalletMultiButton />
                                 </>
                             )}
                             {submittingScore && (
                                 <p>Submitting score...</p>
                             )}
-                            {!scoreSubmitted ? (
+                            {!scoreSubmitted && !submittingScore && publicKey ? (
                                 <button
                                     className={styles.button}
                                     onClick={async() => {
@@ -605,7 +610,7 @@ const Game = () => {
                     <p>Remaining questions: {remainingQuestions}</p>
                     <p>Remaining Ikons: {availableCharacters.length}</p>
                     <p>Timer: {timer}</p>
-                    <p>Score: {(remainingQuestions * 100) + (timer * 100) + (availableCharacters.length * 10)}</p>
+                    <p>Score: {(remainingQuestions * 100) + (timer * 10) + (availableCharacters.length * 100)}</p>
 
                     {!showEarlyGuess && (
                         <div className={styles.early_guess_constant}>
@@ -616,7 +621,6 @@ const Game = () => {
                                 className={styles.question_button}
                                 onClick={() => {
                                     setShowEarlyGuess(true);
-                                    console.log('secret character: ', secChar.name);
                                 }}
                             >
                                 Heck yea, let me guess!
@@ -677,15 +681,14 @@ const Game = () => {
       const getScoreList = async() => {
         try {
           const program = await getProgram(); 
-          console.log('')
           const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
           
-          console.log("Got the account", account)
+        //   console.log("Got the account", account)
           var scores = [];
             for (var i = 0; i < account.scoreList.length; i++) {
                 scores.push(account.scoreList[i]);
             }
-            console.log("scores", scores)
+            // console.log("scores", scores)
           setAllScores(scores);
 
           // account.totalScores is a BN object, so we need to convert it to a number
@@ -693,7 +696,7 @@ const Game = () => {
           setCounter(counterTotal);
       
         } catch (error) {
-          console.log("Error in getGifList: ", error)
+          console.log("Error in getScoreList: ", error)
           setScoreList(null);
         }
     }
@@ -735,39 +738,14 @@ const Game = () => {
             },
             signers: [payer],
           });
-          console.log("Score successfully sent to program", score)
+        //   console.log("Score successfully sent to program", score)
 
         } catch (error) {
           console.log("Error sending Score:", error)
         }
       };
 
-      const payOut = async () => {
-        try {
-            const provider = getProvider();
-            const program = await getProgram();
-            
-            if (score > 5) {
-
-                let txData = await program.rpc.payOut({
-                  accounts: {
-                    baseAccount: baseAccount.publicKey,
-                    user: provider.wallet.publicKey,
-                    systemProgram: SystemProgram.programId,
-                    /// CHECK: This is not dangerous because we don't read or write from this account
-                    fundAccount: payer.publicKey,
-                  },
-                  signers: [payer],
-                });
-        
-                console.log('📝 Your transaction signature', txData)
-            } else {
-                console.log("🚀 Ending test...")
-            }
-        } catch (error) {
-            console.log("Error paying out:", error)
-        }
-    }
+      
       
       useEffect(() => {
         if (publicKey) {
@@ -866,11 +844,12 @@ const Game = () => {
        
     }, []);
 
-    // useEffect(() => {
-    //     if (timer === 0) {
-    //         renderFinalAnswer();
-    //     }
-    // }, [timer]);
+    useEffect(() => {
+        if (timer === 0) {
+            stopTimer();
+            renderFinalAnswer();
+        }
+    }, [timer]);
 
     // FAKE DATA
     // useEffect(() => {
@@ -931,32 +910,35 @@ const Game = () => {
             {!gameStarted && !gameFinalized && !loading &&(
                 <div className={styles.pre_start}>
                     <h1>Guess the Ikon</h1>
+                    <span>Current Network: {network === 'https://api.devnet.solana.com' ? 'devnet' : 'mainnet-beta'} </span>
+                    <span>version: {version}</span>
                     {/* create a rule container that looks like a code display */}
                     <div className={styles.rule_container}>
                         <div className={styles.rule}>
                             <ul>
-                                <li>Each round 20 Actively Listed Ikons will appear</li>
-                                <li>Each round you will have 60 seconds to guess the Secret Ikon</li>
-                                <li>Each round you will have 10 chances to narrow the pool by guessing an attirbute the Secret Ikon has</li>
+                                <h3>Each round: </h3>
+                                <li>20 Actively Listed Ikons will appear</li>
+                                <li>60 seconds to guess the Secret Ikon</li>
+                                <li>10 attirbute guesses</li>
                     
                             </ul>
                         </div>
                         {/* scoring breakdonw */}
                         <div className={styles.rule}>
-                            Scoring System
+                            <h3>Scoring System:</h3>
                             <ul>
-                                <li>Timer Bonus: 100 points per second remaining</li>
-                                <li>Characters Remaining Bonus: 10 points per character remaining</li>
-                                <li>Questions Remaining Bonus: 100 points per question remaining</li>
+                                <li>10 p / second remaining</li>
+                                <li>100 p / character remaining</li>
+                                <li>100 p / question remaining</li>
                             </ul>
                         </div>
                         {/* payout breakdonw */}
                         <div className={styles.rule}>
-                            Pay Out Structure
+                            <h3>Pay Out Structure</h3>
                             <ul>
-                                <li>score 500 - 1000: .5 SOL</li>
-                                <li>score 1000 - 1500: .75 SOL</li>
-                                <li>score ABOVE 1500: 1 SOL</li>
+                                <li>500p - 1000p: .5 SOL</li>
+                                <li>1000p - 1500p: .75 SOL</li>
+                                <li>ABOVE 1500p: 1 SOL</li>
                             </ul>
                         </div>
                     </div>
@@ -966,15 +948,15 @@ const Game = () => {
                     <button 
                         className={styles.button}
                         onClick={() =>( 
-                        setGameStarted(true)
-                        // startTimer()
+                        setGameStarted(true),
+                        startTimer()
                     )}>
                         Start Game
                     </button>
                 </div>
             )}
             {showEarlyGuess && !gameFinalized && renderEarlyGuessContainer()}
-            {timer <= 0 && !gameFinalized && renderFinalAnswer()}
+            {timer <= 0 && !gameFinalized && renderFinalAnswer() }
             {gameStarted && !gameFinalized && !showEarlyGuess && remainingQuestions > 0 && timer > 0 && renderGameBoard()}
             {gameStarted && !gameFinalized && remainingQuestions === 0 && renderFinalAnswer()}
             {renderSuccess && success()}
