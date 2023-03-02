@@ -10,6 +10,21 @@
   text-align: center;
 }
 
+.guess_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+    padding: 10px;
+    box-shadow: 1px 1px 5px 1px #ff00ff;
+    border-radius: 5px;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
 .game_score {
   font-size: 2rem;
   margin: 0;
@@ -30,14 +45,15 @@
 
 .game_board{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     width: 100vw;
     background-color: #282c34;
     color: white;
     font-size: calc(10px + 2vmin);
     text-align: center;
+    flex-wrap: wrap;
 }
 
 .game_board h1{
@@ -51,12 +67,12 @@
 }
 
 .character_card_container{
+    margin-top: 10px;
     /* 5 x 4 grid */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-gap: .5px;
-    width: 60%;
     height: 100%;
     background-color: #282c34;
     color: white;
@@ -127,12 +143,53 @@
     }
   }
 
+.game_constants {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+}
+
+.early_guess_constant{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+    /* give a box shadow that glows purple */
+    box-shadow: 0 0 10px 1px #ff00ff;
+    /* animate  the box shadow to glow */
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+
 .possibleAttributes{
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
+    background-color: #282c34;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    text-align: center;
+}
+
+.attributes_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    width: 100vw;
     background-color: #282c34;
     color: white;
     font-size: calc(10px + 2vmin);
@@ -267,6 +324,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-left: 10px;
     width: 40vw;
     background-color: #00ff8c8e;
     color: white;
@@ -294,7 +352,8 @@
     margin: 0;
     width: fit-content;
     border-radius: 15px;
-    background-color: transparent;
+    background-color: white;
+    color: black
 }
 
 .question_button:hover{
