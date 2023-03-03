@@ -95,12 +95,6 @@ const Register = (req) => {
                 </span>{" "}
                 <p>{email}</p>
               </div>
-              <div>
-                <span>
-                  <IoStorefrontOutline />
-                </span>{" "}
-                <p>{storeName != null ? storeName : null} -</p>
-              </div>
             </div>
 
             <div className={styles.wallet_select}>
