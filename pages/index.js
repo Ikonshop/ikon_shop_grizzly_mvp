@@ -111,7 +111,14 @@ const App = (props) => {
 
               <br />
               <br />
-              <button className="signup_button">Get Started</button>
+              <button 
+                className="signup_button"
+                onClick={() => {
+                  router.push("/register");
+                }}
+              >
+                Get Started
+              </button>
             </div>
             <div className="container_info_img hero_img">
               <img src="/hero.png" alt="" />
@@ -146,7 +153,14 @@ const App = (props) => {
 
               <br />
               <br />
-              <button className="signup_button">Get Started</button>
+              <button 
+                className="signup_button"
+                onClick={() => {
+                  router.push("/register/merchant");
+                }}
+              >
+                Get Started
+              </button>
             </div>
           </section>
 
@@ -166,7 +180,14 @@ const App = (props) => {
               <br />
               <div className="buttons">
                 <a href="https://rapisurv.com">
-                  <button className="signup_button">Get Started</button>
+                  <button 
+                    className="signup_button"
+                    onClick={() => {
+                      router.push("/register/user");
+                    }}
+                  >
+                    Get Started
+                  </button>
                 </a>
                 <button className="signup_button secondary_btn">
                   <IoPlayCircle

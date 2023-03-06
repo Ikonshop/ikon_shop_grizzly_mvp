@@ -324,6 +324,7 @@ export default function HeaderComponent() {
   }, []);
 
   return (
+    // 
     <Navbar
       collapseOnSelect
       expand="lg"
@@ -567,7 +568,10 @@ export default function HeaderComponent() {
             }}
           >
             {currentPath != "/user/dashboard" &&
-              currentPath != "/merchant/dashboard" && (
+              currentPath != "/merchant/dashboard" && 
+              currentPath != "/register" &&
+              currentPath != "/register/merchant" &&
+              currentPath != "/register/user" &&(
                 <div className={styles.wallet_display}>
                   <Nav.Link
                     href="/user/dashboard"
