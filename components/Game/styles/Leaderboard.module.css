@@ -1,0 +1,82 @@
+/* <table
+                className={styles.table}
+            >
+                <thead
+                    className={styles.table_head}
+                >
+                    <tr
+                        className={styles.table_row}
+                    >
+                        <th
+                            scope="col"
+                        >
+                            Rank
+                        </th>
+                        <th
+                            scope="col"
+                        >
+                            Name
+                        </th>
+                        <th
+                            scope="col"
+                        >
+                            Score
+                        </th>
+                        <th
+                            scope="col"
+                        >
+                            User
+                        </th>
+                        <th
+                            scope="col"
+                        >
+                            Date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody
+                    className={styles.table_body}
+                >
+                    {sortedHighscores.map((highscore, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{highscore.name}</td>
+                                <td>{highscore.score}</td>
+                                <td>{highscore.wallet.owner.slice(0,4)}...{highscore.wallet.owner.slice(-4)}</td>
+                                <td>{highscore.createdAt}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table> */
+
+/* give the above style a cool, futuristic, and easy to read look */
+
+.table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.table_head {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.table_body {
+    background-color: #f2f2f2;
+}
+
+.table_row {
+    text-align: left;
+    padding: 8px;
+}
+
+.table_row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Path: components/Game/styles/Leaderboard.module.css */
+

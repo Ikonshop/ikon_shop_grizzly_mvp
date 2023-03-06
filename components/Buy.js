@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Keypair, Transaction, Connection } from "@solana/web3.js";
-import { Magic } from "magic-sdk";
-import { SolanaExtension } from "@magic-ext/solana";
 import { findReference, FindReferenceError } from "@solana/pay";
 import { useWallet } from "@solana/wallet-adapter-react";
-import MagicButton from "./MagicWallet/buy";
-import { createTransaction } from "./MagicWallet/buy"
+
 // import IPFSDownload from "./IpfsDownload";
 // import Green from '../components/Alert/Green';
 // import Red from '../components/Alert/Red';
@@ -18,10 +15,8 @@ import {
   getSingleProductBySku,
 } from "../lib/api";
 // import { hasPurchased } from "../services/index";
-import * as web3 from "@solana/web3.js";
 import styles from "../styles/Product.module.css";
 import Loading from "./Loading";
-const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 const STATUS = {
   Initial: "Initial",
@@ -39,15 +34,15 @@ export default function Buy({
   description,
   imageUrl,
   name,
+  collection,
+  noteToOwner,
 }) {
-  console.log("this is the buy price", product);
+  // console.log("this is the buy price", price);
   const connection = new Connection(
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
     "confirmed"
   );
   const { publicKey, sendTransaction } = useWallet();
-  const [userPublicKey, setUserPublicKey] = useState("");
-  const [buyWithMagic, setBuyWithMagic] = useState(false);
   const orderID = useMemo(() => Keypair.generate().publicKey, []); // Public key used to identify the order
   const [orderComplete, setOrderComplete] = useState(false);
   const [tipJar, setTipJar] = useState(false);
@@ -63,7 +58,7 @@ export default function Buy({
   const [email, setEmail] = useState(""); // Email address of the user
 
   const [showNote, setShowNote] = useState(false); // Whether to show the note input form
-  const [note, setNote] = useState(""); // Note to the seller
+  const [note, setNote] = useState(null); // Note to the seller
   const [noteCaptured, setNoteCaptured] = useState(true); // Whether the note has been grabbed from the user
 
   const [showTwitter, setShowTwitter] = useState(false); // Whether to show the twitter input form
@@ -117,7 +112,6 @@ export default function Buy({
   // Fetch the transaction object from the server (done to avoid tampering)
   const processTransaction = async () => {
     setLoading(true);
-    if(!buyWithMagic) {
     console.log("sending this order", order);
     const txResponse = await fetch("../api/createTransaction", {
       method: "POST",
@@ -138,7 +132,12 @@ export default function Buy({
 
       const txHash = await sendTransaction(tx, connection);
       // Wait for the transaction to be confirmed
-
+      // set the txHash as the order.orderID
+      order.orderID = txHash;
+      
+      console.log("txHash", txHash);
+      // console.log("orderID", orderID);
+      
       console.log(
         `Transaction sent: https://solscan.io/tx/${txHash}?cluster=mainnet`
       );
@@ -157,82 +156,12 @@ export default function Buy({
     } finally {
       setLoading(false);
     }
-  } else {
-    console.log('buying with magic')
-    console.log("sending this order", order);
-    const magic = new Magic("pk_live_FCF04103A9172B45", {
-      extensions: {
-      solana: new SolanaExtension({
-          rpcUrl
-      })
-      }
-    });
-    const recipientPubKey = new web3.PublicKey(owner);
-    const payer = new web3.PublicKey(userPublicKey);
-
-    const hash = await connection.getRecentBlockhash();
-
-    let transactionMagic = new web3.Transaction({
-      feePayer: payer,
-      recentBlockhash: hash.blockhash
-    });
-
-    const transaction = web3.SystemProgram.transfer({
-      fromPubkey: payer,
-      toPubkey: recipientPubKey,
-   
-    });
-
-    transactionMagic.add(...[transaction]);
-
-    const serializeConfig = {
-      requireAllSignatures: false,
-      verifySignatures: true
-    };
-
-    const signedTransaction = await magic.solana.signTransaction(
-      transactionMagic,
-      serializeConfig
-    );
-
-    console.log("Signed transaction", signedTransaction);
-
-    const tx = web3.Transaction.from(signedTransaction.rawTransaction);
-    const signature = await connection.sendRawTransaction(tx.serialize());
-    console.log(`https://explorer.solana.com/tx/${signature}?cluster=devnet`);
-
-
-    try {
-      // await sendTransaction and catch any error it returns
-
-      const txHash = await sendTransaction(tx, connection);
-      // Wait for the transaction to be confirmed
-
-      console.log(
-        `Transaction sent: https://solscan.io/tx/${txHash}?cluster=mainnet`
-      );
-      setStatus(STATUS.Submitted);
-    } catch (error) {
-      console.error(error);
-      if (error.code === 4001) {
-        <Red message="Transaction rejected by user" />;
-      }
-      if (error.code === -32603 || error.code === -32003) {
-        <Red message="Transaction failed, probably due to one of the wallets not having this token" />;
-      }
-      if (error.code === -32000) {
-        <Red message="Transaction failed" />;
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
   };
 
   const order = useMemo(
     () => ({
       id: id,
-      buyer: userPublicKey,
+      buyer: publicKey.toString(),
       orderID: orderID.toString(),
       // if product is a tip jar set the price to tip amount and set the token type to the tip jar token type
       product: product,
@@ -247,11 +176,12 @@ export default function Buy({
       discord: discord,
       shippingInfo: shippingInfo,
       purchaseDate: currentDateTimeISO,
-      note: note,
+      note: note != null ? note : noteToOwner,
       colorOption: colorOption,
+      collection: collection,
     }),
     [
-      userPublicKey,
+      publicKey,
       orderID,
       owner,
       token,
@@ -270,7 +200,124 @@ export default function Buy({
       colorOption,
     ]
   );
-  
+  // console.log("this is the ORDER", order);
+  useEffect(() => {
+    try {
+      async function checkPurchased() {
+        if (publicKey.toString() != "") {
+          const purchased = await getBuyerOrders(publicKey);
+          // console.log("this is the purchased", purchased);
+          if (purchased.length > 0) {
+            for (let i = 0; i < purchased[0].productid.length; i++) {
+              if (purchased[0].productid[i].id === id) {
+                setStatus(STATUS.Paid);
+                const item = await fetchItem(id);
+                setItem(item);
+              }
+            }
+          }
+        }
+      }
+      checkPurchased(id);
+      async function getItem(id) {
+        const item = await fetchItem(id);
+        // console.log("item", item.product.type)
+      }
+      getItem(id);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [publicKey]);
+
+  // inspect item for userRequireEmail and userRequireShipping when item is present
+  useEffect(() => {
+    // async function that awaits the results of getSingleProductBySku
+    async function getReqs(id) {
+      const reqs = await getSingleProductBySku(id);
+      console.log("reqs", reqs);
+
+      if (reqs.product) {
+        // console.log("reqs are", reqs);
+        // console.log("require email?", reqs.product.reqUserEmail);
+        // console.log("require shipping info?", reqs.product.reqUserShipping);
+        if (reqs.product.reqTwitter === true) {
+          setShowTwitter(true);
+          setTwitterCaptured(false);
+        }
+        if (reqs.product.reqDiscord === true) {
+          setShowDiscord(true);
+          setDiscordCaptured(false);
+        }
+        if (reqs.product.reqUserEmail === false) {
+          setInfoCaptured(true);
+          if (reqs.product.reqUserShipping === false) {
+            setShippingCaptured(true);
+          }
+          // console.log("", infoCaptured);
+        }
+        if (reqs.product.reqUserEmail === true) {
+          setShowEmail(true);
+        }
+        if (reqs.product.reqUserShipping === true) {
+          setShippingCaptured(false);
+          setShowShipping(true);
+        }
+        if (reqs.product.reqColor === true) {
+          setShowColorOptions(true);
+        }
+        if (reqs.product.reqNote === true) {
+          setNoteCaptured(false);
+          setShowNote(true);
+        }
+        if (reqs.product.type === "tipjar") {
+          setTipJar(true);
+        }
+      }
+    }
+    getReqs(id);
+  }, [id]);
+
+  useEffect(() => {
+    // Check if transaction was confirmed
+    if (status === STATUS.Submitted) {
+      setLoading(true);
+      const interval = setInterval(async () => {
+        try {
+          const result = await findReference(connection, orderID);
+          
+          console.log("Finding tx reference", result.confirmationStatus);
+          if (
+            result.confirmationStatus === "confirmed" ||
+            result.confirmationStatus === "finalized"
+          ) {
+            clearInterval(interval);
+            setStatus(STATUS.Paid);
+          }
+        } catch (e) {
+          if (e instanceof FindReferenceError) {
+            return null;
+          }
+          console.error("Unknown error", e);
+        }
+      }, 1000);
+      return () => {
+        setLoading(false);
+        clearInterval(interval);
+        alert("Thank you for your purchase!");
+        addOrder(order);
+        updateProductCounts(order.id);
+      };
+    }
+
+    async function getItem(id) {
+      const item = await fetchItem(id);
+      setItem(item);
+    }
+
+    if (status === STATUS.Paid) {
+      getItem(id);
+    }
+  }, [status]);
 
   // render dropdown selection of color options and set selected color to colorOption
   const renderColorOptions = () => {
@@ -552,26 +599,17 @@ export default function Buy({
     );
   };
 
- 
+  if (!publicKey) {
+    return (
+      <div>
+        <p>Connect to app to buy!</p>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if(!publicKey){
-      //check local storage for userMagicMetadata get the public address and convert it to publicKey and set it
-      const userMagicMetadata = localStorage.getItem("userMagicMetadata");
-      console.log("userMagicMetadata", userMagicMetadata)
-      setBuyWithMagic(true);
-      if (userMagicMetadata) {
-        const userMagicMetadataObj = JSON.parse(userMagicMetadata);
-        const userPublicAddress = userMagicMetadataObj.publicAddress;
-        const userPublicKeyObj = new web3.PublicKey(userPublicAddress);
-        setUserPublicKey(userPublicKeyObj.toString());
-        console.log("userPublicKeyObj", userPublicKeyObj.toString());
-      }
-    } else {
-      setUserPublicKey(publicKey.toString());
-    }
-
-  }, [])
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -601,9 +639,9 @@ export default function Buy({
           {shipping.international ? shipping.international : null}
         </p>
       ) : null}
-      {!buyWithMagic && item && infoCaptured ? (
+      {item && infoCaptured ? (
         <>
-          {!buyWithMagic && item.product.type != "tipjar" ? (
+          {item.product.type != "tipjar" ? (
             <>
               <h3 className="purchased">Purchase Complete!</h3>
 
@@ -612,7 +650,7 @@ export default function Buy({
                 className="buy-button"
                 onClick={processTransaction}
               >
-                Buy Again
+                Buy Again for {price} {token.toUpperCase()}
               </button>
             </>
           ) : (
@@ -622,37 +660,35 @@ export default function Buy({
                 className="buy-button"
                 onClick={processTransaction}
               >
-                Send Tip
+                Send {price} {token.toUpperCase()} Tip
               </button>
             </>
           )}
         </>
       ) : (
         <>
-          {!buyWithMagic && tipJar && shippingCaptured ? (
+          {tipJar && shippingCaptured ? (
       
               <button
                 disabled={loading || !infoCaptured || !shippingCaptured}
                 className="buy-button"
                 onClick={processTransaction}
               >
-                Send Tip
+                Send {price} {token.toUpperCase()} Tip
               </button>
           
           ) : (
             null
           )}
-            {!buyWithMagic && !tipJar && shippingCaptured && infoCaptured ? (
+            {!tipJar && shippingCaptured && infoCaptured ? (
               <button
               disabled={loading || !infoCaptured || !shippingCaptured}
               className="buy-button"
               onClick={processTransaction}
             >
-              Pay Now
+              Pay {price} {token.toUpperCase()} Now
             </button>
           ): null}
-
-          {buyWithMagic && <MagicButton order={order} />}
         </>
       )}
     </div>

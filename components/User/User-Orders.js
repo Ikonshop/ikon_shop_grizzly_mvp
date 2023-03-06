@@ -56,7 +56,11 @@ function UserOrders() {
                 <tr key={index}>
                   <td>
                     <a
-                      href={`https://solana.fm/address/${orders.orderID}?cluster=mainnet-qn1`}
+                      href={
+                        new Date(orders.createdAt)> new Date('2023-02-22T00:00:00.000Z')
+                          ? `https://solana.fm/tx/${orders.orderID}`
+                          : `https://solana.fm/address/${orders.orderID}`
+                      }
                       target="_blank"
                     >
                       {

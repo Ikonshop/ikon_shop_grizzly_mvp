@@ -61,6 +61,8 @@ export default function HeaderComponent() {
   // THEME
   const [theme, setTheme] = useState("light");
 
+  const [showStoreSymbol, setShowStoreSymbol] = useState(false);
+
   //MAGIC LINK
   const [showMagicLogin, setShowMagicLogin] = useState(false);
   const [magicMetadata, setMagicMetadata] = useState(null);
@@ -478,6 +480,7 @@ export default function HeaderComponent() {
                   </div>
                 </Nav.Link>
 
+
                 <Nav.Link
                   className="menu_link"
                   style={{ marginLeft: "20px", border: "none" }}
@@ -495,6 +498,7 @@ export default function HeaderComponent() {
                         id="target"
                         class="moon"
                       >
+
                         {theme === "dark" && (
                           <IoMoonOutline className="moon_tog" />
                         )}
