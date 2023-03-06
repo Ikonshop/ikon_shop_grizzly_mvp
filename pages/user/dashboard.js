@@ -13,7 +13,7 @@ import UserOrders from "../../components/User/User-Orders";
 import PayRequests from "../../components/Merchant/PayRequests";
 import Profile from "../../components/User/Profile";
 import CreateLink from "../../components/User/Create-Link";
-import { getCollectionOwner, GetUserDashLinkTotals, GetUserDashTipjarTotals } from "../../lib/api";
+import { getCollectionOwner, GetUserDashLinkTotals, GetUserDashTipjarTotals, UpdateWallet } from "../../lib/api";
 import { 
   GetPublickeyCreditScore,
   GetPublickeyTwitterPfpScore,
@@ -716,53 +716,56 @@ function Dashboard() {
     }
   }, [publicKey]);
 
-  const checkMagicLogin = async() => {
-    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-      extensions: {
-          solana: new SolanaExtension({
-          rpcUrl
-          })
-      }
-    });
-    async function checkUser() {
+  // const checkMagicLogin = async() => {
+  //   const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+  //     extensions: {
+  //         solana: new SolanaExtension({
+  //         rpcUrl
+  //         })
+  //     }
+  //   });
+  //   async function checkUser() {
     
-        magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-            if (magicIsLoggedIn) {
-              magic.user.getMetadata().then((user) => {
-                localStorage.setItem('userMagicMetadata', JSON.stringify(user));
-                const pubKey = new web3.PublicKey(user.publicAddress);
-                setUserPublicKey(pubKey.toString());
-              });
-            } else {
-              setLoading(false);
-            }
-          });
+  //       magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+  //           if (magicIsLoggedIn) {
+  //             magic.user.getMetadata().then((user) => {
+  //               localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+  //               const pubKey = new web3.PublicKey(user.publicAddress);
+  //               if(!publicKey) {
+  //                 setUserPublicKey(pubKey.toString());
+  //                 UpdateWallet(pubKey.toString(), user.email);
+  //               }
+  //               UpdateWallet(publicKey.toString(), user.email);
+  //             });
+  //           } else {
+  //             setLoading(false);
+  //           }
+  //         });
     
-    }
-  checkUser();
-  };
+  //   }
+  // checkUser();
+  // };
 
-  useEffect(() => {
-    if(!publicKey && !userPublicKey) {
-      checkMagicLogin();
-    }
-    window.addEventListener("magic-logged-in", () => {
-      checkMagicLogin();
-    });
-    window.addEventListener("magic-logged-out", () => {
-      setActiveMenu("home");
-      setShowUserDash(false);
-      setShowUserOrders(false);
-      setShowCreateLink(false);
-      setShowLinkOrders(false);
-      setUserEmail(null);
-      setUserPublicKey(null);
-      setCurrentWallet(null);
-      localStorage.removeItem("userMagicMetadata");
-    });
+  // useEffect(() => {
 
-  }, []);
+  //   window.addEventListener("magic-logged-in", () => {
+  //     checkMagicLogin();
+  //   });
+  //   window.addEventListener("magic-logged-out", () => {
+  //     setActiveMenu("home");
+  //     setShowUserDash(false);
+  //     setShowUserOrders(false);
+  //     setShowCreateLink(false);
+  //     setShowLinkOrders(false);
+  //     setUserEmail(null);
+  //     setUserPublicKey(null);
+  //     setCurrentWallet(null);
+  //     localStorage.removeItem("userMagicMetadata");
+  //   });
 
+  // }, []);
+
+  
 
 
   useEffect(() => {

@@ -1,0 +1,22 @@
+[package]
+name = "scoreboard"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "scoreboard"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.26.0"
+serde = "1.0.152"
+solana-program = "1.15.2"
+borsh = "0.10.2"

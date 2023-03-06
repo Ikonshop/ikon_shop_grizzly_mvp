@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import styles from "./styles/Profile.module.css";
-import { GetWalletSettings } from "../../lib/api";
+import { 
+  GetWalletSettings,
+  UpdateWalletSettings,
+} from "../../lib/api";
 import {
   IoArrowForwardOutline,
   IoLinkOutline,
@@ -10,7 +13,10 @@ import {
   IoShieldCheckmarkSharp,
   IoPencil,
   IoCamera,
+  IoCheckmarkDoneSharp,
+
 } from "react-icons/io5";
+import LoginMagic from "../MagicWallet/login";
 
 const Profile = (userPubKey) => {
   // DASH STATES
@@ -21,16 +27,74 @@ const Profile = (userPubKey) => {
 
   const [activeDash, setActiveDash] = useState("Edit Profile");
 
+
+  // PROFILE IMAGE UPLOAD
+
+  // const handleImageUpload = async (e) => {
+  //   const form = new FormData();
+  //   const file = e.target.files[0];
+  //   form.append('operations', JSON.stringify({
+  //     query: `
+  //       mutation ($file: Upload!) {
+  //         uploadFile(file: $file) {
+  //           id
+  //           url
+  //         }
+  //       }
+  //     `,
+  //     variables: {
+  //       file: null,
+  //     },
+  //   }));  
+
+  //   form.append('map', JSON.stringify({
+  //     0: ['variables.file'],
+  //   }));
+
+  //   form.append(0, file, file.name);
+
+  //   const response = await fetch(process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT_UPLOAD, {
+  //     method: 'POST',
+  //     headers: {
+  //       Authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPHCMS_TOKEN}`,
+  //     },
+  //     body: form,
+  //   });
+
+  //   const { data, errors } = await response.json();
+
+  //   console.log('data returned:', data);
+
+  //   if (errors) {
+  //     console.error(errors);
+  //     return;
+  //   }
+  // };
+
   // PROFILE DATA
   const [userName, setUserName] = useState(null);
   const [walletAddress, setWalletAddress] = useState(null);
   const [email, setEmail] = useState(null);
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState(null);
   const [socialLinks, setSocialLinks] = useState(null);
   const [cryptoLinks, setCryptoLinks] = useState(null);
+  const [verified, setVerified] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  const [imageToUpload, setImageToUpload] = useState(null);
+
+  const req = useMemo(() => {
+    return {
+      userPubKey: userPubKey,
+      email: email,
+      name: userName,
+      description: description,
+      // profileImage: profileImage,
+      socialLinks: socialLinks,
+      cryptoLinks: cryptoLinks,
+    };
+  }, [userPubKey, email, userName, description, socialLinks, cryptoLinks]);
 
   const renderEditProfile = () => {
     return (
@@ -39,68 +103,10 @@ const Profile = (userPubKey) => {
           <h1>Edit Profile</h1>
         </div>
         <div className={styles.profile_body}>
-          {/* <div className={styles.profile_body_left}>
-            <div className={styles.profile_body_left_top}>
-              <div className={styles.profile_body_left_top_left}>
-                <img
-                  src={profilePicture != null ? profilePicture : null}
-                  alt="profile"
-                />
-              </div>
-              <div className={styles.profile_body_left_top_right}>
-                <h1>Welcome, {userName}</h1>
-                <p>
-                  <span>Registered Wallet:</span> {walletAddress.slice(0, 4)}...
-                  {walletAddress.slice(-4)}
-                </p>
-                <p>
-                  <span>Email:</span> {email}
-                </p>
-              </div>
-            </div>
-            <div className={styles.profile_body_left_bottom}>
-              <h1>Description</h1>
-              {/* description will be displayed as markdown 
-              <p>{description}</p>
-
-              <h1>Social Links</h1>
-              <ul className={styles.link_list}>
-                {socialLinks != null
-                  ? socialLinks.map((link, index) => {
-                      return (
-                        <li key={index}>
-                          <a href={link} target="_blank" rel="noreferrer">
-                            {link}
-                          </a>
-                        </li>
-                      );
-                    })
-                  : null}
-              </ul>
-
-              <h1>Crypto Links</h1>
-              <ul className={styles.link_list}>
-                {cryptoLinks != null
-                  ? cryptoLinks.map((link, index) => {
-                      return (
-                        <li key={index}>
-                          <a href={link} target="_blank" rel="noreferrer">
-                            {link}
-                          </a>
-                        </li>
-                      );
-                    })
-                  : null}
-              </ul>
-            </div>
-          </div> */}
           <div className={styles.profile_body_right}>
-            {/* <div className={styles.profile_body_right_top}>
-              <h1>Update Profile</h1>
-            </div> */}
             <div className={styles.profile_image_container}>
               <div className={styles.profile_image}>
-                <div
+                {/* <div
                   style={{
                     position: "absolute",
                     bottom: "-7px",
@@ -121,8 +127,8 @@ const Profile = (userPubKey) => {
                       color: "#fff",
                     }}
                   />
-                </div>
-                <img src="/user_phantom.png" />
+                </div> */}
+                <img src={profileImage != null ? profileImage : "/user_phantom.png"} />
               </div>
             </div>
             <div className={styles.profile_body_right_bottom}>
@@ -132,15 +138,23 @@ const Profile = (userPubKey) => {
                   type="text"
                   className={styles.profile_body_right_input}
                   placeholder={userName ? userName : "Name"}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
               </div>
               <div className={styles.profile_body_right_bottom_right}>
-                <p>Email</p>
+                <p>Email <span>Verified: {verified ? <IoCheckmarkDoneSharp /> : '✗'}</span></p>
                 <input
                   type="text"
                   className={styles.profile_body_right_input}
                   placeholder={email ? email : "Email"}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
+                {!verified && (
+                  <>
+                    <p>To verify, login with Magic</p>
+                    <LoginMagic req={email} />
+                  </>
+                )}
               </div>
             </div>
             <br />
@@ -149,6 +163,7 @@ const Profile = (userPubKey) => {
               <textarea
                 className={styles.profile_body_right_textarea}
                 placeholder={description ? description : "Description"}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className={styles.profile_link_list}>
@@ -156,6 +171,7 @@ const Profile = (userPubKey) => {
               <textarea
                 className={styles.profile_body_right_textarea}
                 placeholder="Social links, separated by a comma"
+                onChange={(e) => setSocialLinks(e.target.value)}
               />
             </div>
             <div className={styles.profile_link_list}>
@@ -163,17 +179,34 @@ const Profile = (userPubKey) => {
               <textarea
                 className={styles.profile_body_right_textarea}
                 placeholder="Crypto links, separated by a comma"
+                onChange={(e) => setCryptoLinks(e.target.value)}
               />
             </div>
-            <div className={styles.profile_body_right_bottom}>
+            {/* <div className={styles.profile_body_right_bottom}>
               <div className={styles.profile_body_image_input}>
                 <p>Profile Picture</p>
-                <input type="file" />
+                <input 
+                  type="file" 
+                  name="file"
+                  onChange={(e) => (
+                    setImageToUpload(e.target.files[0]),
+                    handleImageUpload(e),
+                    console.log("image to upload", e.target.files[0])
+                  )}
+                />
               </div>
-            </div>
+            </div> */}
             <div className={styles.profile_body_right_bottom}>
               <div className={styles.profile_body_update}>
-                <button>Update</button>
+                <button
+                  className={styles.profile_body_update_button}
+                  onClick={() => {
+                    console.log("req", req);
+                    UpdateWalletSettings(req);
+                  }}
+                >
+                  Update
+                </button>
               </div>
             </div>
           </div>
@@ -226,12 +259,13 @@ const Profile = (userPubKey) => {
       console.log("get wallet settings resp", response);
       setEmail(response.email != null ? response.email : "");
       setUserName(response.name != null ? response.name : "");
-      setProfilePicture(
+      setProfileImage(
         response.profileImage != null ? response.profileImage.url : ""
       );
       setDescription(response.description != null ? response.description : "");
       setSocialLinks(response.socialLinks != null ? response.socialLinks : []);
       setCryptoLinks(response.cryptoLinks != null ? response.cryptoLinks : []);
+      setVerified(response.verified);
       setLoading(false);
     };
     getWalletSettings();
@@ -260,7 +294,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div>
-        <div className={styles.profile_header_dash_item}>
+        {/* <div className={styles.profile_header_dash_item}>
           <IoLinkOutline className={styles.profile_header_dash_item_icon} />
           <p
             onClick={() => (
@@ -274,7 +308,7 @@ const Profile = (userPubKey) => {
               className={styles.profile_header_dash_item_icon}
             />
           )}
-        </div>
+        </div> */}
         <div className={styles.profile_header_dash_item}>
           <IoNotificationsSharp
             className={styles.profile_header_dash_item_icon}
@@ -292,7 +326,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div>
-        <div className={styles.profile_header_dash_item}>
+        {/* <div className={styles.profile_header_dash_item}>
           <IoShieldCheckmarkSharp
             className={styles.profile_header_dash_item_icon}
           />
@@ -309,7 +343,7 @@ const Profile = (userPubKey) => {
               className={styles.profile_header_dash_item_icon}
             />
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className={styles.profile_body}>
