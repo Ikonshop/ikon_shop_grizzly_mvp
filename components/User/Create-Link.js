@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../User/styles/CreateLink.module.css";
-import { addProduct } from "../../lib/api";
+import { addLink } from "../../lib/api";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getCollectionOwner } from "../../lib/api";
-import Link from "next/link";
 import Loading from "../../components/Loading";
 import CurrentLinks from "../../components/User/CurrentLinks";
-import Header from "../../components/Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import Container from "react-bootstrap/Container";
-import useClipboard from "../../hooks/useClipboard";
-import shortenLink from "../../hooks/shortenLink";
 import * as web3 from "@solana/web3.js";
-import { IoArrowForward, IoArrowBack, IoCopyOutline } from "react-icons/io5";
+import { IoArrowForward, IoArrowBack, IoCopyOutline, IoCheckmark } from "react-icons/io5";
 
 const CreateLink = () => {
   const router = useRouter();
@@ -22,18 +15,14 @@ const CreateLink = () => {
   const [userPublicKey, setUserPublicKey] = useState("");
   const [showLink, setShowLink] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [ownerProducts, setOwnerProducts] = useState([]);
   const [payLink, setPayLink] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showCurrentLinks, setShowCurrentLinks] = useState(false);
-  const [shortLink, setShortLink] = useState("");
-  const [shortenedLink, setShortenedLink] = useState("");
-  // const productOwner = publicKey.toString();
+  const [copied, setCopied] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
-    collection: "ALL_PROD",
+    collection: "LINK",
     owner: userPublicKey,
     token: "sol",
     image_url:
@@ -49,6 +38,13 @@ const CreateLink = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNewProduct({ ...newProduct, [name]: value });
+  };
+
+  const handleCopy = (e) => {
+    console.log(e);
+    //copy to clipboard
+    window.navigator.clipboard.writeText(e);
+    setCopied(true);
   };
 
   const apiToken = "abf2551047e2f3406b79eb5731cc30b9b38f1434";
@@ -67,7 +63,7 @@ const CreateLink = () => {
     try {
       const product = { ...newProduct };
       // console.log("Sending product to api", product);
-      const response = await addProduct(product);
+      const response = await addLink(product);
       const productId = response.publishProduct.id;
       // console.log("Response from api", response);
       setPayLink(productId);
@@ -92,10 +88,10 @@ const CreateLink = () => {
           <div className={styles.link}>
             <div className={styles.link_img}>
               <div className={styles.link_img_overlay}></div>
-              <img src="/paylink_bg.png" />
+              <img src={newProduct.type === 'link' ? "/paylink_bg.png" : "/tipjar_bg.png"} />
             </div>
-            <h5>Your PayRequest link has been created!</h5>
-            <p>Your PayRequest link was successfully created and is live.</p>
+            <h5>Your {newProduct.type === 'link' ? 'PayRequest' : 'Tip Jar'} has been created!</h5>
+            <p>Your {newProduct.type === 'link' ? 'PayRequest' : 'Tip Jar'} was successfully created and is live.</p>
             <div className={styles.share_link}>
               <div
                 style={{
@@ -117,15 +113,15 @@ const CreateLink = () => {
                   {`ikonshop.io/product/${payLink.slice(0, 7)}...`}
                 </a>
               </div>
-              <button
-                className={styles.share_button}
-                onClick={() => {
-                  copyLink();
-                }}
-              >
-                <IoCopyOutline />
-                <span>Copy Link</span>
-              </button>
+              {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
+              {!copied && (
+                <IoCopyOutline
+                  className={styles.copyIcon}
+                  onClick={() => handleCopy(
+                    `https://www.ikonshop.io/product/${payLink.id}`
+                  )}
+                />
+              )}
             </div>
 
             <div className={styles.link_buttons}>
@@ -448,6 +444,13 @@ const CreateLink = () => {
       </div>
     </div>
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
 
   useEffect(() => {
     if (publicKey) {

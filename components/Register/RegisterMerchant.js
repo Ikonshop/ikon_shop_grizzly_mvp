@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./styles/Register.module.css";
 import LoginForm from "../../components/MagicWallet/loginForm";
+import Loading from "../../components/Loading";
 import dynamic from "next/dynamic";
 import { WalletConnectWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -27,6 +28,7 @@ const Register = (req) => {
   const [userPubKey, setUserPubKey] = useState(null);
   const [confirmRegister, setConfirmRegister] = useState(false);
   const [ikonNfts, setIkonNfts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const userName = req.userName;
   const storeName = req.storeName;
   const email = req.email;
@@ -47,26 +49,68 @@ const Register = (req) => {
   // METAPLEX FUNCTIONS
   const checkForNfts = async () => {
     console.log("checking for nfts for ", userPubKey);
-    const ikonCollectionAddress =
-      "EgVDqrPZAiNCQdf7zC2Lj8CVTv25YSwQRF2k8aTmGEnM";
-    const key = publicKey ? publicKey : new web3.PublicKey(userPubKey);
+    const ikonCollectionAddress = "EgVDqrPZAiNCQdf7zC2Lj8CVTv25YSwQRF2k8aTmGEnM";
+    const key = publicKey ? userPubKey : new web3.PublicKey(userPubKey);
     var nfts = [];
-    const myNfts = await metaplex.nfts().findAllByOwner({
-      owner: key,
-    });
+    // const myNfts = await metaplex.nfts().findAllByOwner({
+    //   owner: key,
+    // });
 
-    for (let i = 0; i < myNfts.length; i++) {
-      if (
-        myNfts[i].collection != null &&
-        myNfts[i].collection.address.toString() === ikonCollectionAddress
-      ) {
-        nfts.push(myNfts[i]);
+    // for (let i = 0; i < myNfts.length; i++) {
+    //   if (
+    //     myNfts[i].collection != null &&
+    //     myNfts[i].collection.address.toString() === ikonCollectionAddress
+    //   ) {
+    //     nfts.push(myNfts[i]);
+    //   }
+    // }
+
+    // not currently supported by solanaJS
+    const axios = require("axios");
+    (async() => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const data = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "qn_fetchNFTs",
+        params: {
+          wallet: userPubKey,
+          omitFields: ["provenance", "traits"],
+          page: 1,
+          perPage: 10,
+        },
+      };
+      console.log("data", data);
+      try{
+      const response = await axios.post(
+        "https://newest-frequent-snowflake.solana-mainnet.discover.quiknode.pro/415e96b029506463ef9de79634982c3e1905d974/", 
+        data,
+        config
+      )
+      console.log("response", response);
+      const myNfts = response.data.result.assets;
+      for (let i = 0; i < myNfts.length; i++) {
+        console.log("myNfts[i].collectionAddress", myNfts[i].collectionAddress, ikonCollectionAddress)
+        if (
+          myNfts[i].collectionAddress.toString() === ikonCollectionAddress
+        ) {
+          console.log('pushing nft', myNfts[i])
+          nfts.push(myNfts[i]);
+        }
       }
-    }
 
-    console.log("myNfts", myNfts);
-    console.log("ikon nfts", nfts);
-    setIkonNfts(nfts);
+      console.log("myNfts", myNfts);
+      console.log("ikon nfts", nfts);
+      setIkonNfts(nfts);
+      setLoading(false);
+    } catch (error) {
+      console.log("error", error);
+    }
+  })();
   };
 
   const handleMerchantRegister = async () => {
@@ -85,18 +129,6 @@ const Register = (req) => {
     }
     console.log("logged in and collection created");
     router.push("/merchant/dashboard?settings=true");
-  };
-
-  const handleUserRegister = async () => {
-    const data = JSON.stringify({
-      email: email,
-      owner: userPubKey,
-      name: userName,
-    });
-
-    const createUser = await UpsertWallet(data);
-    console.log("createUser", createUser);
-    router.push("/user/dashboard");
   };
 
   const handleLogin = async () => {
@@ -146,7 +178,8 @@ const Register = (req) => {
                   sell your products on the IkonShop marketplace.
                 </p> */}
             <img className={styles.confetti} src="/confetti.gif" />
-            {ikonNfts.length > 0 ? (
+            {loading && <Loading />}
+            {!loading && ikonNfts.length > 0 ? (
               <div className={styles.nftContainer}>
                 <p>
                   Total Ikons: <strong>{ikonNfts.length}</strong>
@@ -157,29 +190,29 @@ const Register = (req) => {
                 >
                   Register as Merchant
                 </button>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginTop: "30px",
-                  }}
-                >
-                  <IoWarningOutline
+                  <div
                     style={{
-                      fontSize: "24px",
-                      color: "#fcb901",
-                    }}
-                  />
-                  <p
-                    style={{
-                      marginTop: "15px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginTop: "30px",
                     }}
                   >
-                    You must own at least one <strong>Ikon NFT</strong> to
-                    register as a merchant.
-                  </p>
-                </div>
+                    <IoWarningOutline
+                      style={{
+                        fontSize: "24px",
+                        color: "#fcb901",
+                      }}
+                    />
+                    <p
+                      style={{
+                        marginTop: "15px",
+                      }}
+                    >
+                      You must own at least one <strong>Ikon NFT</strong> to
+                      register as a merchant.
+                    </p>
+                  </div>
               </div>
             ) : (
               <div className={styles.nftContainer}>
@@ -233,10 +266,14 @@ const Register = (req) => {
 
   useEffect(() => {
     if (publicKey) {
+      console.log('handling login for', publicKey.toString())
       setUserPubKey(publicKey.toString());
-      handleLogin();
     }
   }, [publicKey]);
+
+  useEffect(() => {
+    handleLogin();
+  }, [userPubKey]);
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {

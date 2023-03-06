@@ -327,7 +327,7 @@ export default function HeaderComponent() {
       } if(data && connected){
         const parsedData = JSON.parse(data);
         console.log("parsedData: ", parsedData);
-        console.log('publicKey: ', useWallet().publicKey.toString())
+        console.log('publicKey: ', publicKey.toString())
         const publicKey = publicKey;
         getBalance(publicKey);
         getUsdcBalance(publicKey);
@@ -438,7 +438,7 @@ export default function HeaderComponent() {
           className={styles.navbar_collapse}
         >
           {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
-          {currentPath === "/merchant/dashboard" && magicPublicKey && (
+          {currentPath === "/merchant/dashboard" &&  (
             <div className={styles.multi_display}>
               <div className={styles.wallet_display}>
                 <div className="wave">

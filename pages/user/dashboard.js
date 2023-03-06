@@ -555,12 +555,6 @@ function Dashboard() {
     );
   };
 
-  // const renderTipJar = () => {
-  //   return (
-
-  //   );
-  // };
-
   const renderConnectWallet = () => {
     return (
       <>
@@ -576,67 +570,7 @@ function Dashboard() {
       </>
     );
   };
-  const getAllProducts = async () => {
-    const owner = userPublicKey.toString();
-    // remove any current data in userLinks, userTipJar, and ownerProducts to avoid duplicates
-    const clearLinks = () => {
-      setUserLinks([]);
-      setUserTipJar([]);
-      setOwnerProducts([]);
-    };
-    await clearLinks();
-    // get all products from the store
-    const products = await getCollectionOwner(owner);
-    // filter products into userLinks, userTipJar, and ownerProducts
-    for (let i = 0; i < products.products.length; i++) {
-      if (products.products[i].type === "link") {
-        for (let j = 0; j < userLinks.length; j++) {
-          if (userLinks[j].id != products.products[i].id) {
-            setUserLinks((userLinks) => [...userLinks, products.products[i]]);
-          }
-        }
-      }
-      if (products.products[i].type === "tipjar") {
-        for (let k = 0; k < userTipJar.length; k++) {
-          if (userTipJar[k].id != products.products[i].id) {
-            setUserTipJar((userTipJar) => [
-              ...userTipJar,
-              products.products[i],
-            ]);
-          }
-        }
-      }
-      if (
-        products.products[i].type === "product" &&
-        !ownerProducts.includes(products.products[i].id)
-      ) {
-        setOwnerProducts((ownerProducts) => [
-          ...ownerProducts,
-          products.products[i].id,
-        ]);
-      }
-      if (i === products.products.length - 1) {
-        // console.log("userLinks", userLinks);
-        // console.log("userTipJar", userTipJar);
-        // console.log("ownerProducts", ownerProducts);
-        setLoading(false);
-      }
-    }
-  };
-
-  const refreshLinks = () => {
-    return (
-      <button
-        className={styles.refresh_button}
-        onClick={() => {
-          setLoading(true);
-          getAllProducts();
-        }}
-      >
-        Refresh
-      </button>
-    );
-  };
+  
 
   useEffect(() => {
     if (publicKey) {
@@ -746,24 +680,34 @@ function Dashboard() {
   // checkUser();
   // };
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   window.addEventListener("magic-logged-in", () => {
-  //     checkMagicLogin();
-  //   });
-  //   window.addEventListener("magic-logged-out", () => {
-  //     setActiveMenu("home");
-  //     setShowUserDash(false);
-  //     setShowUserOrders(false);
-  //     setShowCreateLink(false);
-  //     setShowLinkOrders(false);
-  //     setUserEmail(null);
-  //     setUserPublicKey(null);
-  //     setCurrentWallet(null);
-  //     localStorage.removeItem("userMagicMetadata");
-  //   });
+    window.addEventListener("magic-logged-in", () => {
+      // JSON PARSE
+      const user = JSON.parse(localStorage.getItem('userMagicMetadata'));
+      const pubKey = new web3.PublicKey(user.publicAddress);
 
-  // }, []);
+      setUserPublicKey(pubKey.toString());
+      UpdateWallet(pubKey.toString(), user.email);
+      
+      if(publicKey && connected) {
+        setUserPublicKey(publicKey.toString())
+        UpdateWallet(publicKey.toString(), user.email);
+      }
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setActiveMenu("home");
+      setShowUserDash(false);
+      setShowUserOrders(false);
+      setShowCreateLink(false);
+      setShowLinkOrders(false);
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
+
+  }, []);
 
   
 
@@ -774,7 +718,7 @@ function Dashboard() {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
     if(window.location.href.includes("?settings=true")) {
-      setShowUserProfile(true), setActiveMenu("profile");
+      setShowUserProfile(true), setsActiveMenu("profile");
     }
   }, []); 
 

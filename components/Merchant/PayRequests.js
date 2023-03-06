@@ -6,23 +6,28 @@ import {
 } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCopy,
   faLink,
-  faEye,
-  faTrash,
   faFilter,
   faJar,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../Merchant/styles/PayRequests.module.css";
 import { useRouter } from "next/router";
-import { IoCopy, IoEye, IoLinkOutline, IoTrashBin } from "react-icons/io5";
+import { IoCopy, IoEye, IoLinkOutline, IoTrashBin, IoCheckmark  } from "react-icons/io5";
 
 export default function PayRequests(publicKey) {
   const router = useRouter();
+  const [copied, setCopied] = useState(false);
   const [payRequests, setPayRequests] = useState([]);
   const [tipJarLinks, setTipJarLinks] = useState([]);
   const [showPayRequests, setShowPayRequests] = useState(true);
   const [showTipJarLinks, setShowTipJarLinks] = useState(true);
+
+  const handleCopy = (e) => {
+    console.log(e);
+    //copy to clipboard
+    window.navigator.clipboard.writeText(e);
+    setCopied(true);
+  };
 
   const renderFilter = () => {
     // when filter is clicked, a dropdown shows up with the options to filter by pay requests or tip jar links, when selected set the state to true or false
@@ -51,6 +56,13 @@ export default function PayRequests(publicKey) {
       </div>
     );
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [copied]);
 
   useEffect(() => {
     async function getData() {
@@ -89,14 +101,15 @@ export default function PayRequests(publicKey) {
               </div>
             </div>
             <div className={styles.icon_container}>
-              <IoCopy
-                className={styles.link_icon}
-                onClick={() =>
-                  navigator.clipboard.writeText(
-                    `https://ikonshop.io/product/${payRequest.id}`
-                  )
-                }
-              />
+              {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
+              {!copied && (
+                <IoCopy
+                  className={styles.link_icon}
+                  onClick={() => handleCopy(
+                    `https://www.ikonshop.io/product/${payRequest.id}`
+                  )}
+                />
+              )}
               <IoEye
                 className={styles.link_icon}
                 onClick={() => router.push(`/product/${payRequest.id}`)}
@@ -131,14 +144,16 @@ export default function PayRequests(publicKey) {
               </div>
             </div>
             <div className={styles.icon_container}>
-              <IoCopy
-                className={styles.link_icon}
-                onClick={() =>
-                  navigator.clipboard.writeText(
-                    `https://ikonshop.io/product/${tipJarLink.id}`
-                  )
-                }
-              />
+              
+              {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
+              {!copied && (
+                <IoCopy
+                  className={styles.link_icon}
+                  onClick={() => handleCopy(
+                    `https://www.ikonshop.io/product/${tipJarLink.id}`
+                  )}
+                />
+              )}
               <IoEye
                 className={styles.link_icon}
                 onClick={() => router.push(`/product/${tipJarLink.id}`)}

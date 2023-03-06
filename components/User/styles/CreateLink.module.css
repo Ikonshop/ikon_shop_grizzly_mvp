@@ -208,6 +208,28 @@
   border-radius: 10px 10px 0 0;
 }
 
+.copyIcon {
+  width: 26px;
+  height: 26px;
+  color: black;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 35px;
+}
+
+.copyIconCheck {
+  width: 16px;
+  height: 16px;
+  color: green;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
 .form_container {
   background-color: transparent;
   /* box-shadow: 1px 6px 24px 0px rgba(0, 0, 0, 0.05);
@@ -770,6 +792,8 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+
+  
 }
 
 /* For Mobile Landscape View */
