@@ -1,20 +1,37 @@
-
-
 /* MOBILE *****************************************************/
-.register_modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80vw;
-    border: none;
-    border-radius: 15px;
-  /* gradient box shadow with animation */
-    box-shadow: 5px 2px 5px 5px rgba(230, 98, 98, 0.2);
-    animation: pulse 2s infinite;
-    background-color: transparent;
-    background-size: 400% 400%;
-    padding: 10px;
-    margin-bottom: 20px;
+.current_info {
+  margin-top: -80px;
+}
+
+.current_info div {
+  display: flex;
+  gap: 10px;
+}
+
+.current_info p {
+  font-size: 16px;
+}
+
+.nftContainer {
+  margin-top: 100px;
+}
+
+.nftContainer p {
+  width: 100%;
+  font-size: 16px;
+}
+
+.register_container_right_data_merchant {
+  position: relative;
+  z-index: 2;
+}
+
+.confetti {
+  position: absolute;
+  top: -120px;
+  left: 200px;
+  z-index: -1;
+  max-width: 200px;
 }
 
 .register_container {
@@ -27,159 +44,159 @@
   background-color: transparent;
 }
 
-.register_container_left{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 50%;
-    background-color: transparent;
+.wallet_select {
+  margin-top: 80px;
 }
 
-.register_container_right{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 50%;
-    background-color: transparent;
-    border: none;
-    margin-top: 15px;
+.wallet_select h3 {
+  font-weight: bold;
+  color: #130b46;
+  line-height: 40px;
+  max-width: 600;
 }
 
-.register_container_left_title{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 20%;
-    background-color: transparent;
-    border: none;
-    font-family: 'Manrope';
-    font-size: 18px;
-    font-weight: 600;
+.register_wallet_buttons {
+  display: flex;
+  gap: 50px;
+  margin-top: 40px;
 }
 
-.register_container_right_title{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 20%;
-    background-color: transparent;
-    border: none;
-    font-family: 'Manrope';
-    font-size: 18px;
-    font-weight: 600;
+.register_wallet_buttons p {
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #6c6c6c;
 }
 
-.sub_text{
-    font-size: 12px;
-    font-style: italic;
-    font-weight: 600;
-    color: red;
-    margin: 5px;
-    padding: 0;
+.register_container_left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50%;
+  background-color: transparent;
 }
 
-.register_container_left_data{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    height: 80%;
-    background-color: transparent;
-    border: none;
-    padding-left: 5px;
+.register_container_right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50%;
+  background-color: transparent;
+  border: none;
+  margin-top: 15px;
+}
+
+.register_container_left_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 20%;
+  background-color: transparent;
+  border: none;
+  font-family: "Manrope";
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.register_container_right_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 20%;
+  background-color: transparent;
+  border: none;
+  font-family: "Manrope";
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.register_container_left_data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 80%;
+  background-color: transparent;
+  border: none;
+  padding-left: 5px;
 }
 
 .register_container_left_data > p > span {
-    font-family: 'Manrope';
-    font-size: 16px;
-    font-weight: 600;
-    color: black;
-    margin: 0;
-    padding: 0;
+  font-family: "Manrope";
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+  margin: 0;
+  padding: 0;
 }
 
 .register_container_left_data > p {
-    font-family: 'Manrope';
-    font-size: 16px;
-    font-weight: 200;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    outline: none;
-    width: 100%;
+  font-family: "Manrope";
+  font-size: 16px;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  width: 100%;
 }
 
-.register_container_right_data{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
+.register_container_right_data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
 }
 
 .register_container_right_data > p > span {
-    font-family: 'Manrope';
-    font-size: 16px;
-    font-weight: 800;
-    color: black;
-    margin: 0;
-    padding: 0;
+  font-family: "Manrope";
+  font-size: 16px;
+  font-weight: 800;
+  color: black;
+  margin: 0;
+  padding: 0;
 }
 
 .register_container_right_data > p {
-    font-family: 'Manrope';
-    font-size: 16ox;
-    font-weight: 200;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    outline: none;
-    width: 60%;
+  font-family: "Manrope";
+  font-size: 16ox;
+  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  width: 60%;
 }
 
 /* media screen for anything wider than 768px */
 @media screen and (min-width: 769px) {
-    
-.register_modal {
+  .register_container {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 60vw;
-    border: none;
-    border-radius: 15px;
-  /* gradient box shadow with animation */
-    box-shadow: 5px 2px 5px 5px rgba(230, 98, 98, 0.2);
-    animation: pulse 2s infinite;
+    width: 100%;
+    height: 100%;
     background-color: transparent;
-    background-size: 400% 400%;
-    padding: 10px;
-}
+  }
 
-.register_container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-}
-
-.register_container_left{
+  .register_container_left {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -187,9 +204,9 @@
     width: 50%;
     height: 100%;
     background-color: transparent;
-}
+  }
 
-.register_container_right{
+  .register_container_right {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -198,9 +215,9 @@
     height: 100%;
     background-color: transparent;
     border: none;
-}
+  }
 
-.register_container_left_title{
+  .register_container_left_title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -209,12 +226,12 @@
     height: 20%;
     background-color: transparent;
     border: none;
-    font-family: 'Manrope';
+    font-family: "Manrope";
     font-size: 1.5rem;
     font-weight: 600;
-}
+  }
 
-.register_container_right_title{
+  .register_container_right_title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -223,21 +240,23 @@
     height: 20%;
     background-color: transparent;
     border: none;
-    font-family: 'Manrope';
+    font-family: "Manrope";
     font-size: 1.5rem;
     font-weight: 600;
-}
+  }
 
-.sub_text{
-    font-size: .8rem;
-    font-style: italic;
-    font-weight: 600;
-    color: #6c6c6c;
+  .sub_text {
+    color: #2d2d2d;
+    font-size: 16px;
     margin: 0;
     padding: 0;
-}
+    display: flex;
+    gap: 10px;
+    margin: 20px auto 0 auto;
+    text-align: center;
+  }
 
-.register_container_left_data{
+  .register_container_left_data {
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -247,19 +266,19 @@
     background-color: transparent;
     border: none;
     padding-left: 5px;
-}
+  }
 
-.register_container_left_data > p > span {
-    font-family: 'Manrope';
+  .register_container_left_data > p > span {
+    font-family: "Manrope";
     font-size: 1.4rem;
     font-weight: 800;
     color: black;
     margin: 0;
     padding: 0;
-}
+  }
 
-.register_container_left_data > p {
-    font-family: 'Manrope';
+  .register_container_left_data > p {
+    font-family: "Manrope";
     font-size: 1.2rem;
     font-weight: 200;
     margin: 0;
@@ -268,9 +287,9 @@
     background-color: transparent;
     outline: none;
     width: 60%;
-}
+  }
 
-.register_container_right_data{
+  .register_container_right_data {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,19 +298,19 @@
     height: 80%;
     background-color: transparent;
     border: none;
-}
+  }
 
-.register_container_right_data > p > span {
-    font-family: 'Manrope';
+  .register_container_right_data > p > span {
+    font-family: "Manrope";
     font-size: 1.4rem;
     font-weight: 800;
     color: black;
     margin: 0;
     padding: 0;
-}
+  }
 
-.register_container_right_data > p {
-    font-family: 'Manrope';
+  .register_container_right_data > p {
+    font-family: "Manrope";
     font-size: 1.2rem;
     font-weight: 200;
     margin: 0;
@@ -300,6 +319,5 @@
     background-color: transparent;
     outline: none;
     width: 60%;
-}
-
+  }
 }

@@ -12,61 +12,47 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 const App = () => {
-  
-  const {publicKey, connected, disconnect} = useWallet();
+  const { publicKey, connected, disconnect } = useWallet();
   const router = useRouter();
 
   // CONNECTED DISPLAY
   const renderRegisterContainer = () => {
-    
     const [userName, setUserName] = useState(null);
     const [storeName, setStoreName] = useState(null);
     const [email, setEmail] = useState(null);
     const [showRegister, setShowRegister] = useState(false);
     const [loading, setLoading] = useState(false);
-    
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      if (name === "name") {
-          setUserName(value);
-      } else if (name === "storeName") {
-          setStoreName(value);
-      } else if (name === "email") {
-          setEmail(value);
-      }
-    };
-   
 
     const renderForm = () => {
       return (
-          <>
-            <form onSubmit={()=>setShowRegister(true)}>
-                
-                <div className="signup_row1">
-                    <p>
-                    Choose your destiny{" "}
-                    <strong>Merchant</strong> or{" "}
-                    <strong>User</strong>
-                    </p>
-                    <button 
-                        className="signup_button"
-                        onClick={()=> router.push('/register/merchant')}
-                    >
-                        Merchant
-                    </button>
+        <>
+          <form onSubmit={() => setShowRegister(true)}>
+            <div className="register_options">
+              <p>How would you like to proceed?</p>
+              <div>
+                <button
+                  className="signup_button user_btn"
+                  onClick={() => router.push("/register/user")}
+                >
+                  Register as User
+                </button>
+                <button
+                  className="signup_button_sec"
+                  onClick={() => router.push("/register/merchant")}
+                >
+                  Register as Merchant
+                </button>
+              </div>
 
-                    <button 
-                        className="signup_button"
-                        onClick={()=> router.push('/register/user')}
-                    >
-                        User
-                    </button>
-                </div>
-            </form>
-          </>
+              {/* <p className="guide_p_register">
+                Not sure? <span>Refer to this guide</span>
+              </p> */}
+            </div>
+          </form>
+        </>
       );
-    }
+    };
 
     const renderRegisterPage = () => {
       return (
@@ -82,73 +68,20 @@ const App = () => {
             Edit Info
           </button>
         </>
-      )
-    }
+      );
+    };
 
     return (
       <>
         {/* main container */}
 
         <div className="">
-          <div className="signup">
-            <div className="signup_container">
-              <div className="signup_row1">
-                <h1>Hello, anon.</h1>
+          <div className="signup2">
+            <div className="signup_container2">
+              <h1>Hello, anon.</h1>
 
-                <div 
-                  className="signup_input_container"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  {!showRegister && renderForm()}
-                  {showRegister && renderRegisterPage()}
-                </div>
-              </div>
-              {!showRegister && (
-                <div className="signup_row2">
-                  <div className="signup_row2_text">
-                    <h4>
-                      "Few things make me feel in control than monitoring my
-                      business sales on my Dashboard. IkonShop makes my life
-                      easier and more efficient."
-                    </h4>
-                    <div className="name_and_stars">
-                      <div>
-                        <h5>Aaron Rodney</h5>
-                        <p>Founder, ABC Collections</p>
-                      </div>
-                      <div>
-                        <span class="rate">
-                          <input type="radio" id="star5" name="rate" />
-                          <label for="star5" title="text">
-                            5 stars
-                          </label>
-                          <input type="radio" id="star4" name="rate" />
-                          <label for="star4" title="text">
-                            4 stars
-                          </label>
-                          <input type="radio" id="star3" name="rate" />
-                          <label for="star3" title="text">
-                            3 stars
-                          </label>
-                          <input type="radio" id="star2" name="rate" />
-                          <label for="star2" title="text">
-                            2 stars
-                          </label>
-                          <input type="radio" id="star1" name="rate" />
-                          <label for="star1" title="text">
-                            1 star
-                          </label>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <img src="/signup.png" />
-                </div>
-              )}
+              {!showRegister && renderForm()}
+              {showRegister && renderRegisterPage()}
             </div>
           </div>
         </div>
@@ -157,7 +90,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    if(publicKey) {
+    if (publicKey) {
       // disconnect the wallet upon mount
       disconnect();
     }
@@ -166,12 +99,8 @@ const App = () => {
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
-  
-  return (
-    <div className="App">
-      {renderRegisterContainer()}
-    </div>
-  );
+
+  return <div className="App">{renderRegisterContainer()}</div>;
 };
 
 export default App;
