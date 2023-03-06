@@ -10,7 +10,7 @@ import { IoPersonCircle } from "react-icons/io5";
 const rpcUrl =
   "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
-const LoginMagic = () => {
+const LoginMagic = (req) => {
   const [email, setEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -174,7 +174,7 @@ const LoginMagic = () => {
               }}
               name="email"
               required="required"
-              placeholder="Magic Email Login"
+              placeholder={email ? email : "Magic Email Login"}
               style={{
                 display: "flex",
                 paddingLeft: "10px",
@@ -259,6 +259,13 @@ const LoginMagic = () => {
       }
 
       checkUser();
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('req', req)
+    if (req) {
+      setEmail(req.req);
     }
   }, []);
 

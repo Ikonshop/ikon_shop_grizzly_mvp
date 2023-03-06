@@ -1,0 +1,101 @@
+
+  
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px 50px;
+  }
+  
+  .left {
+    flex: 2;
+  }
+  
+  .profile_container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background: #3b5998;
+    margin-bottom: 20px;
+  }
+  
+  .profile img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  /* create an overlay for .profile img that blurs the image */
+  .profile_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.905);
+    z-index: 1;
+  }
+  
+  .profile h1 {
+    font-size: 30px;
+    margin: 0;
+  }
+  
+  .about h2, #interests h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .interests ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .interests {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 16px;
+    color: black;
+  }
+  
+  .right {
+    flex: 1;
+  }
+  
+  .friends h2, #comments h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .friends ul, #comments ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .friends li, #comments li {
+    margin-bottom: 10px;
+  }
+  
+  .friends li a {
+    color: #3b5998;
+    text-decoration: none;
+  }
+  
+  .friends li a:hover {
+    text-decoration: underline;
+  }
+  
+  .comments li img {
+    float: left;
+    margin-right: 10px;
+  }
+  
+  .footer {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    border-top: 1px solid #ccc;
+  }
+  

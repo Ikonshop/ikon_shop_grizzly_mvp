@@ -4,6 +4,7 @@ import { SolanaExtension } from "@magic-ext/solana";
 import {
   CheckForWallet,
   CreateWallet,
+  UpdateWallet,
   getCollectionOwner,
   CheckForCollectionByOwner,
 } from "../lib/api";
@@ -64,6 +65,7 @@ export default function HeaderComponent() {
   const [showMagicLogin, setShowMagicLogin] = useState(false);
   const [magicMetadata, setMagicMetadata] = useState(null);
   const [magicUser, setMagicUser] = useState(false);
+  const [email, setEmail] = useState(null);
   const [magicPublicKey, setMagicPublicKey] = useState(null);
   const [magicBalance, setMagicBalance] = useState(0);
   const [magicUsdcBalance, setMagicUsdcBalance] = useState(0);
@@ -276,9 +278,9 @@ export default function HeaderComponent() {
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
-      console.log("event listener fired");
+      // console.log("event listener fired");
       const data = localStorage.getItem("userMagicMetadata");
-      if (data) {
+      if (data && !publicKey) {
         const parsedData = JSON.parse(data);
         console.log("parsedData: ", parsedData);
         const publicKey = new web3.PublicKey(parsedData.publicAddress);
@@ -286,18 +288,29 @@ export default function HeaderComponent() {
         getUsdcBalance(publicKey);
         console.log("publicKey: ", publicKey.toString());
         setMagicMetadata(parsedData);
+        setEmail(parsedData.email);
         setMagicPublicKey(publicKey.toString());
         setMagicUser(true);
         const getData = async () => {
           const walletData = await CheckForWallet(publicKey.toString());
+          console.log('header walletData: ', walletData)
           if (walletData.wallet === null) {
-            const newWallet = CreateWallet(publicKey.toString());
+            // create a wallet for the user using their public key and email from magic
+            const newWallet = CreateWallet(publicKey.toString(), parsedData.email);
             if (newWallet) {
               console.log(
                 "welcome to ikonshop, if you have any issues please reach out to us on discord"
               );
             }
-          } else {
+          } if(walletData.wallet.email === parsedData.email ) {
+            // update the wallet with the email from magic
+            const updateWallet = UpdateWallet(publicKey.toString(), parsedData.email);
+            if (updateWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }          
+          }else {
             console.log(
               "welcome to ikonshop, if you have any issues please reach out to us on discord"
             );
@@ -309,7 +322,60 @@ export default function HeaderComponent() {
           }
         };
         getData();
-      } else {
+      } if(data && connected){
+        const parsedData = JSON.parse(data);
+        console.log("parsedData: ", parsedData);
+        console.log('publicKey: ', useWallet().publicKey.toString())
+        const publicKey = publicKey;
+        getBalance(publicKey);
+        getUsdcBalance(publicKey);
+        console.log("publicKey: ", publicKey.toString());
+        setMagicMetadata(parsedData);
+        setEmail(parsedData.email);
+        setMagicPublicKey(publicKey.toString());
+        setMagicUser(true);
+        const getData = async () => {
+          const walletData = await CheckForWallet(publicKey.toString());
+          console.log('header walletData: ', walletData)
+          if (walletData.wallet === null) {
+            // create a wallet for the user using their public key and email from magic
+            const newWallet = CreateWallet(publicKey.toString(), parsedData.email);
+            if (newWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }
+          } if(walletData.wallet.email === parsedData.email && connected) {
+            console.log('updating wallet with browser wallet')
+            // update the wallet with the email from magic
+            const updateWallet = UpdateWallet(useWallet().publicKey.toString(), parsedData.email);
+            if (updateWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }          
+          }if(walletData.wallet.email === parsedData.email && !connected){
+            console.log('updating wallet with magic wallet')
+            const updateWallet = UpdateWallet(publicKey.toString(), parsedData.email);
+            if (updateWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }   
+          }else {
+            console.log(
+              "welcome to ikonshop, if you have any issues please reach out to us on discord"
+            );
+          }
+          const data = await CheckForCollectionByOwner(publicKey.toString());
+          console.log("data", data);
+          if (data) {
+            setMerchant(true);
+          }
+        };
+        getData();
+
+      }else {
         setMagicUser(false);
       }
     });
@@ -322,6 +388,12 @@ export default function HeaderComponent() {
       setShowQuickActions(false);
     });
   }, []);
+
+  useEffect(() => {
+    if(!connected) {
+      handleLogout();
+    }
+  }, [connected])
 
   return (
     <Navbar

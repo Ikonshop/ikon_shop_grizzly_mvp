@@ -288,6 +288,13 @@
   font-weight: 400;
 }
 
+.profile_body_right_bottom_right p span{
+  font-size: 1rem;
+  font-weight: 100;
+  color: gray;
+  font-style: italic;
+}
+
 /* .profile_body_right_bottom_right input {
   width: 80%;
   height: 30px;
