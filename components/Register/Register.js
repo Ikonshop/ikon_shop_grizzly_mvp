@@ -110,7 +110,7 @@ const Register = (req) => {
                     storeName={storeName}
                     email={email}
                   />
-                  <p>Email wallet using Magic:</p>
+                  <p>Email wallet using Magic</p>
                 </div>
 
                 <div>
@@ -121,7 +121,7 @@ const Register = (req) => {
                       justifyContent: "center",
                     }}
                   />
-                  <p>Browser wallet using Solana:</p>
+                  <p>Browser wallet using Solana</p>
                 </div>
               </div>
             </div>
