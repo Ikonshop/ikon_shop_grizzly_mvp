@@ -392,6 +392,16 @@ export default function HeaderComponent() {
   }, []);
 
   useEffect(() => {
+    // toggle for 'showStoreSymbol' in navbar
+    window.addEventListener("toggle-user", () => {
+      setShowStoreSymbol(false);
+    });
+    window.addEventListener("toggle-merchant", () => {
+      setShowStoreSymbol(true);
+    });
+  }, []);
+
+  useEffect(() => {
     if(!connected) {
       handleLogout();
     }
@@ -438,109 +448,7 @@ export default function HeaderComponent() {
           className={styles.navbar_collapse}
         >
           {/* DYNAMIC PATH RENDER HERE FOR MERCHANT DASHBOARD*/}
-          {currentPath === "/merchant/dashboard" &&  (
-            <div className={styles.multi_display}>
-              <div className={styles.wallet_display}>
-                <div className="wave">
-                  <img src="/wave.png" />
-                  <p>
-                    Hello Wallet:{" "}
-                    <strong>
-                      {magicPublicKey && magicPublicKey.slice(0, 4)}...
-                      {magicPublicKey && magicPublicKey.slice(-4)}
-                    </strong>
-                  </p>
-                  <div className="wallet_amount">
-                    <div className="sol">
-                      <img src="/sol.png" />
-                      {/* truncate magicBalance to the 2nd decimal */}
-                      <p>{magicBalance && magicBalance.toFixed(2)} SOL</p>
-                    </div>
-                    <div className="usdc">
-                      <img src="/usdc.png" />
-                      <p>
-                        {magicUsdcBalance && magicUsdcBalance.toFixed(2)} USDC
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ******TOGGLE DASHBOARD********** */}
-                <Nav.Link
-                  className="menu_link"
-                  style={{ marginLeft: "20px", border: "none" }}
-                >
-                  <div id="container">
-                    <div
-                      onClick={() => router.push("/user/dashboard")}
-                      id="target"
-                      class="sun"
-                    >
-                      <IoStorefrontOutline className="sunny_tog" />
-                    </div>
-                  </div>
-                </Nav.Link>
-
-
-                <Nav.Link
-                  className="menu_link"
-                  style={{ marginLeft: "20px", border: "none" }}
-                >
-                  <div id="container">
-                    {theme === "light" && (
-                      <div onClick={toggleTheme} id="target" class="sun">
-                        <IoSunnyOutline className="sunny_tog" />
-                        <div></div>
-                      </div>
-                    )}
-                    {theme === "dark" && (
-                      <div
-                        onClick={() => router.push("/merchant/dashboard")}
-                        id="target"
-                        class="moon"
-                      >
-
-                        {theme === "dark" && (
-                          <IoMoonOutline className="moon_tog" />
-                        )}
-                        <div></div>
-                      </div>
-                    )}
-                  </div>
-                </Nav.Link>
-                {!publicKey && magicUser && (
-                  <Nav.Link
-                    // setShowQuickActions(true);
-                    onClick={() => setShowQuickActions(true)}
-                    className={styles.navbar_link}
-                  >
-                    <IoWalletOutline
-                      style={{
-                        fontSize: "24px",
-                      }}
-                    />
-                  </Nav.Link>
-                )}
-                {!publicKey && renderMagicLogin()}
-                {publicKey && <WalletMultiButton />}
-              </div>
-            </div>
-          )}
-          {currentPath === "/merchant/dashboard" && !magicPublicKey && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <WalletMultiButton />
-              {renderMagicLogin()}
-            </div>
-          )}
-          {currentPath === "/user/dashboard" && magicPublicKey && (
+          {currentPath === "/dashboard" && (
             <div className={styles.multi_display}>
               <div className={styles.wallet_display}>
                 <div className="wave">
@@ -573,14 +481,27 @@ export default function HeaderComponent() {
                 className="menu_link"
                 style={{ marginLeft: "20px", border: "none" }}
               >
-                <div id="container">
-                  <div
-                    onClick={() => router.push("/merchant/dashboard")}
-                    id="target"
-                    class="moon"
-                  >
-                    <IoAccessibilityOutline className="moon_tog" />
-                  </div>
+                <div 
+                  id="container"
+                  onClick={() => (
+                    showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
+                  )}
+                >
+                  {!showStoreSymbol ? (
+                    <div
+                      id="target"
+                      class="moon"
+                    >
+                      <IoAccessibilityOutline className="moon_tog" />
+                    </div>
+                  ) : (
+                    <div
+                      id="target"
+                      class="sun"
+                    >
+                      <IoStorefrontOutline className="sunny_tog" />
+                    </div>
+                  )}
                 </div>
               </Nav.Link>
 
@@ -621,20 +542,7 @@ export default function HeaderComponent() {
               {publicKey && <WalletMultiButton />}
             </div>
           )}
-          {currentPath === "/user/dashboard" && !magicPublicKey && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <WalletMultiButton />
-              {renderMagicLogin()}
-            </div>
-          )}
+          
           <Nav
             style={{
               alignItems: "center",
@@ -643,8 +551,7 @@ export default function HeaderComponent() {
               background: "#fff",
             }}
           >
-            {currentPath != "/user/dashboard" &&
-              currentPath != "/merchant/dashboard" && 
+            {currentPath != "/dashboard" &&
               currentPath != "/register" &&
               currentPath != "/register/merchant" &&
               currentPath != "/register/user" &&(
@@ -670,23 +577,7 @@ export default function HeaderComponent() {
                   >
                     NFT
                   </Nav.Link>
-                  {/* <div className={styles.social_links}>
-                    <Nav.Link
-                      href="https://twitter.com/IkonShopApp"
-                      className="menu_link"
-                      style={{ border: "none" }}
-                    >
-                      <LogoTwitter />
-                    </Nav.Link>
-
-                    <Nav.Link
-                      href="https://discord.gg/ikons"
-                      className="menu_link"
-                      style={{ border: "none" }}
-                    >
-                      <LogoDiscord />
-                    </Nav.Link>
-                  </div> */}
+                  
                   {!publicKey && magicUser && (
                     <Nav.Link
                       // setShowQuickActions(true);
