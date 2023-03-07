@@ -150,7 +150,6 @@ const LoginMagic = (req) => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          width: "200px",
         }}
       >
         {!isLoggedIn && (
@@ -161,7 +160,7 @@ const LoginMagic = (req) => {
               alignItems: "center",
               alignContent: "center",
               alignText: "center",
-              width: "100px",
+              width: "150px",
             }}
             onSubmit={login}
           >
@@ -184,6 +183,7 @@ const LoginMagic = (req) => {
                 backgroundColor: "transparent",
                 marginRight: "10px",
                 height: "50px",
+                cursor: "pointer",
               }}
             />
             <button
@@ -194,7 +194,10 @@ const LoginMagic = (req) => {
                 // displace placeholder text in center of input box
                 borderRadius: "15px",
                 marginRight: "10px",
+                border: "1px solid #000000",
                 height: "50px",
+                cursor: "pointer",
+                zIndex: "1",
               }}
             >
               <img src="/magicWand.svg" alt="magicWand" width="30px" />

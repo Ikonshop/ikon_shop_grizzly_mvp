@@ -588,10 +588,8 @@ function UserDashboard() {
           if (products.products[i].type === "product") {
             ownerProducts.push(products.products[i]);
           }
-          if (i === products.products.length - 1) {
-            setLoading(false);
-          }
         }
+        setLoading(false);
       };
 
       const getTotals = async () => {
@@ -683,31 +681,41 @@ function UserDashboard() {
       // JSON PARSE
       const user = JSON.parse(localStorage.getItem('userMagicMetadata'));
       const pubKey = new web3.PublicKey(user.publicAddress);
-
-      setUserPublicKey(pubKey.toString());
-      UpdateWallet(pubKey.toString(), user.email);
-      
+      if(!publicKey){
+        setUserPublicKey(pubKey.toString());
+        UpdateWallet(pubKey.toString(), user.email);
+      }
       if(publicKey && connected) {
-        setUserPublicKey(publicKey.toString())
+        // setUserPublicKey(publicKey.toString())
         UpdateWallet(publicKey.toString(), user.email);
       }
     });
-    window.addEventListener("magic-logged-out", () => {
-      setActiveMenu("home");
-      setShowUserDash(false);
-      setShowUserOrders(false);
-      setShowCreateLink(false);
-      setShowLinkOrders(false);
-      setUserEmail(null);
-      setUserPublicKey(null);
-      setCurrentWallet(null);
-      localStorage.removeItem("userMagicMetadata");
-    });
+    // window.addEventListener("magic-logged-out", () => {
+    //   setActiveMenu("home");
+    //   setShowUserDash(false);
+    //   setShowUserOrders(false);
+    //   setShowCreateLink(false);
+    //   setShowLinkOrders(false);
+    //   setUserEmail(null);
+    //   setUserPublicKey(null);
+    //   setCurrentWallet(null);
+    //   localStorage.removeItem("userMagicMetadata");
+    // });
 
   }, []);
 
-  
+  useEffect(() => {
 
+    console.log('window.location.pathname', window.location.search)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(
+        urlParams.get('userSettings') === 'true'
+    ) {
+      setShowUserProfile(true);
+    }
+
+  }, [])
 
   useEffect(() => {
     //if the url ends in ?payhub=true, show the payhub
@@ -715,7 +723,7 @@ function UserDashboard() {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
     if(window.location.href.includes("?settings=true")) {
-      setShowUserProfile(true), setsActiveMenu("profile");
+      setShowUserProfile(true), setActiveMenu("profile");
     }
   }, []); 
 

@@ -13,7 +13,19 @@ const DashboardPage = () => {
             setActiveDash("user");
         });
     }, []);
-    
+
+    useEffect(() => {
+        console.log('window.location.pathname', window.location.search)
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        if(
+            urlParams.get('userSettings') === 'true'
+        ) {
+            console.log('userSettings=true')
+            setActiveDash("user");
+        }
+    }, []);
+
     return (
         <div>
             {activeDash === "user" ? (

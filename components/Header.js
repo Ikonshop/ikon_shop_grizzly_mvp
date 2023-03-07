@@ -19,7 +19,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ApplyToSell from "./ApplyToSell";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { LogoDiscord, LogoTwitter } from "react-ionicons";
+import { LogoDiscord, LogoTwitter, PaperPlane } from "react-ionicons";
 import dynamic from "next/dynamic";
 import * as web3 from "@solana/web3.js";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
@@ -53,7 +53,6 @@ export default function HeaderComponent() {
     { ssr: false }
   );
   const { publicKey, connected } = useWallet();
-  const wallet = useWallet();
   const router = useRouter();
   const currentPath = router.pathname;
   const [merchant, setMerchant] = useState(false);
@@ -280,9 +279,9 @@ export default function HeaderComponent() {
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
-      // console.log("event listener fired");
+      console.log("event listener fired");
       const data = localStorage.getItem("userMagicMetadata");
-      if (data && !publicKey) {
+      if (data) {
         const parsedData = JSON.parse(data);
         console.log("parsedData: ", parsedData);
         const publicKey = new web3.PublicKey(parsedData.publicAddress);
@@ -335,7 +334,6 @@ export default function HeaderComponent() {
         setMagicMetadata(parsedData);
         setEmail(parsedData.email);
         setMagicPublicKey(publicKey.toString());
-        setMagicUser(true);
         const getData = async () => {
           const walletData = await CheckForWallet(publicKey.toString());
           console.log('header walletData: ', walletData)
@@ -377,15 +375,13 @@ export default function HeaderComponent() {
         };
         getData();
 
-      }else {
-        setMagicUser(false);
       }
     });
-    window.addEventListener("magic-logged-out", () => {
-      setMagicMetadata("");
-      setMagicPublicKey("");
-      setMagicUser(false);
-    });
+    // window.addEventListener("magic-logged-out", () => {
+    //   setMagicMetadata("");
+    //   setMagicPublicKey("");
+    //   setMagicUser(false);
+    // });
     window.addEventListener("closeQuickActions", () => {
       setShowQuickActions(false);
     });
@@ -539,7 +535,18 @@ export default function HeaderComponent() {
                 </Nav.Link>
               )}
               {!publicKey && renderMagicLogin()}
-              {publicKey && <WalletMultiButton />}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  marginLeft: "40px",
+                }}
+              >
+                {!magicUser && <WalletMultiButton />}
+              </div>
+              
             </div>
           )}
           
@@ -557,7 +564,7 @@ export default function HeaderComponent() {
               currentPath != "/register/user" &&(
                 <div className={styles.wallet_display}>
                   <Nav.Link
-                    href="/user/dashboard"
+                    href="/dashboard"
                     className="menu_link nav-link nav-link-fade-up"
                     style={{ border: "none" }}
                   >
