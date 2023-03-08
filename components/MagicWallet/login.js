@@ -5,13 +5,17 @@ import * as web3 from "@solana/web3.js";
 import { CreateCollectionFromMagic, GetCollectionByEmail } from "../../lib/api";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import Loading from "../Loading";
-import { IoPersonCircle } from "react-icons/io5";
+import { 
+  IoPersonCircle,
+  IoLogIn
+} from "react-icons/io5";
 
 const rpcUrl =
   "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 const LoginMagic = (req) => {
   const [email, setEmail] = useState("");
+  const [showForm, setShowForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userMetadata, setUserMetadata] = useState({});
@@ -147,63 +151,43 @@ const LoginMagic = (req) => {
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          border: "1px solid #000000",
+          borderRadius: "10px",
+          height: "57px",
+          marginLeft: "10px",
         }}
       >
-        {!isLoggedIn && (
-          <form
+        <input
+          type="email"
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+          name="email"
+          required="required"
+          placeholder={email ? email : "Enter Email"}
+          style={{
+            display: "flex",
+            paddingLeft: "10px",
+            border: "1px solid #000000",
+            borderRadius: "10px",
+            backgroundColor: "transparent",
+            
+            cursor: "pointer",
+            border: "none"
+          }}
+        />
+          <IoLogIn 
+            onClick={login}
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              alignContent: "center",
-              alignText: "center",
-              width: "150px",
+              fontSize: "30px",
+              color: "#130b46",
+              cursor: "pointer",
+              border: "none",
             }}
-            onSubmit={login}
-          >
-            {/* EMAIL */}
-            <input
-              type="email"
-              width="20px"
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-              name="email"
-              required="required"
-              placeholder={email ? email : "Magic Email Login"}
-              style={{
-                display: "flex",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                border: "1px solid #000000",
-                borderRadius: "10px",
-                backgroundColor: "transparent",
-                marginRight: "10px",
-                height: "50px",
-                cursor: "pointer",
-              }}
-            />
-            <button
-              className="signup_button"
-              onClick={login}
-              style={{
-                display: "flex",
-                // displace placeholder text in center of input box
-                borderRadius: "15px",
-                marginRight: "10px",
-                border: "1px solid #000000",
-                height: "50px",
-                cursor: "pointer",
-                zIndex: "1",
-              }}
-            >
-              <img src="/magicWand.svg" alt="magicWand" width="30px" />
-            </button>
-          </form>
-        )}
+          />  
       </div>
     );
   };
@@ -226,6 +210,19 @@ const LoginMagic = (req) => {
           </form>
         )}
       </>
+    );
+  };
+
+  const renderEmailButton = () => {
+    return (
+      <button
+        className="email_button"
+        onClick={() => {
+          setShowForm(true)
+        }}
+      >
+        Login with Email
+      </button>
     );
   };
 
@@ -275,7 +272,8 @@ const LoginMagic = (req) => {
   return (
     <div>
       {loading && <Loading />}
-      {!loading && !isLoggedIn && renderForm()}
+      {!showForm && renderEmailButton()}
+      {!loading && !isLoggedIn && showForm && renderForm()}
       {!loading && isLoggedIn && renderLogout()}
     </div>
   );

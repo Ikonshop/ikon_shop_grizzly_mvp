@@ -24,6 +24,12 @@ const DashboardPage = () => {
             console.log('userSettings=true')
             setActiveDash("user");
         }
+        if(
+            urlParams.get('merchantSettings') === 'true'
+        ) {
+            console.log('merchantSettings=true')
+            setActiveDash("merchant");
+        }
     }, []);
 
     return (

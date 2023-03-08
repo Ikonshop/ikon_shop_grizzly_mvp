@@ -291,3 +291,13 @@
   font-family: "Manrope", sans-serif;
   cursor: pointer;
 }
+
+.info_item span {
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 10px;
+  font-family: "Manrope", sans-serif;
+  font-style: italic;
+  color: lightslategray;
+}
