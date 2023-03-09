@@ -2709,6 +2709,24 @@ button:disabled {
   /* z-index: 1; */
 }
 
+.sol_span {
+  /* make font color gradient */
+  background: linear-gradient(90deg, #9945FF, #9945FF, #14F195, #14F195);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 2px;
+}
+
+.active_span{
+  /* color: #b5fffe !important; */
+  color: #a08cf6 !important;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 2px;
+}
+
 .container_main {
   position: relative;
   width: 50%;

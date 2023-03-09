@@ -26,18 +26,14 @@ import AccordionItem from "../components/FAQ";
 // Constants
 export const GRAPHCMS_TOKEN = process.env.NEXT_PUBLIC_GRAPHCMS_TOKEN;
 export const WEB3STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN;
-var ownerWalletNfts = [];
-
-// Store Codes
-const store1 = "IKONS";
-const store2 = "MR_SC";
-const store3 = "SLABZIO";
-const store4 = "FUEGO";
-const store5 = "0XDRIP";
-const store6 = "PEN_FRENS";
-const store7 = "LOGVFX";
 
 const App = (props) => {
+  const keywords = [
+    "Tips",
+    "Pay Links",
+    "Products",
+    "Life"
+  ];
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
@@ -59,6 +55,9 @@ const App = (props) => {
   const [showCreateLink, setShowCreateLink] = useState(false);
 
   const [active, setActive] = useState(null);
+  const [activeWord, setActiveWord] = useState(keywords[0]);
+
+  
 
   const faqs = [
     {
@@ -101,12 +100,12 @@ const App = (props) => {
           <section className="info_section">
             <div className="container_main3">
               <h1>
-                Create pay links, receive tips, manage a dashboard, on the
-                blockchain
+                Create, Receive, and Manage : <span className="active_span">{activeWord}</span><br />
+                on <span className="sol_span">Solana</span>
               </h1>
               <p className="info_body3">
-                IkonShop offers you the benefits of blockchain technology with
-                the convenience of familiar online shopping & selling.
+                IkonShop brings the benefits of blockchain technology to
+                your online consumer experience.
               </p>
 
               <br />
@@ -544,6 +543,19 @@ const App = (props) => {
       </>
     );
   };
+
+  useEffect(() => {
+    // every 1s, rotate the set the activeWord to the next word in the keyword array
+    // if the activeWord is the last word in the array, set it to the first word
+    const interval = setInterval(() => {
+      setActiveWord((activeWord) =>
+        activeWord === keywords[keywords.length - 1]
+          ? keywords[0]
+          : keywords[keywords.indexOf(activeWord) + 1]
+      );
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [activeWord]);
 
   return (
     <div className="App">
