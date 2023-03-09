@@ -340,15 +340,15 @@ export default function HeaderComponent() {
     if(publicKey && magicUser) {
       alert('Browser Wallet and Email Wallet detected, we will use the browser wallet for transactions and log you out of the email wallet. If you would like to use the email wallet please log out of the browser wallet first.')
       magicLogout()
-      setMagicUser(false)
-      setMagicPublicKey('')
-      setUserPublicKey(publicKey.toString())
     }
     if(!publicKey && magicUser) {
       setUserPublicKey(magicMetadata.publicAddress)
     }
     if(!publicKey && !magicUser) {
       setUserPublicKey('')
+    }
+    if(publicKey){
+      setUserPublicKey(publicKey.toString())
     }
   }, [publicKey])
 
