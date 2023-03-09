@@ -675,34 +675,48 @@ function UserDashboard() {
   // checkUser();
   // };
 
-  useEffect(() => {
-
-    window.addEventListener("magic-logged-in", () => {
-      // JSON PARSE
-      const user = JSON.parse(localStorage.getItem('userMagicMetadata'));
-      const pubKey = new web3.PublicKey(user.publicAddress);
-      if(!publicKey){
-        setUserPublicKey(pubKey.toString());
-        UpdateWallet(pubKey.toString(), user.email);
-      }
-      if(publicKey && connected) {
-        // setUserPublicKey(publicKey.toString())
-        UpdateWallet(publicKey.toString(), user.email);
+  const checkMagicLogin = async() => {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: {
+          solana: new SolanaExtension({
+          rpcUrl
+          })
       }
     });
-    // window.addEventListener("magic-logged-out", () => {
-    //   setActiveMenu("home");
-    //   setShowUserDash(false);
-    //   setShowUserOrders(false);
-    //   setShowCreateLink(false);
-    //   setShowLinkOrders(false);
-    //   setUserEmail(null);
-    //   setUserPublicKey(null);
-    //   setCurrentWallet(null);
-    //   localStorage.removeItem("userMagicMetadata");
-    // });
+    async function checkUser() {
+      const loggedIn = await magic.user.isLoggedIn();
+      console.log('loggedIn', loggedIn)
+      magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+        if (magicIsLoggedIn) {
+          magic.user.getMetadata().then((user) => {
+            localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+            const pubKey = new web3.PublicKey(user.publicAddress);
+            setUserPublicKey(pubKey.toString());
+          });
+        } else {
+          setLoading(false);
+        }
+      });
+    }
+  checkUser();
+  };
+
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
 
   }, []);
+
 
   useEffect(() => {
 

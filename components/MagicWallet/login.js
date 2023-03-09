@@ -216,7 +216,16 @@ const LoginMagic = (req) => {
   const renderEmailButton = () => {
     return (
       <button
-        className="email_button"
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: "#130b46",
+          color: "#ffffff",
+          border: "none",
+          borderRadius: "10px",
+          height: "45px"
+        }}
         onClick={() => {
           setShowForm(true)
         }}
@@ -272,7 +281,7 @@ const LoginMagic = (req) => {
   return (
     <div>
       {loading && <Loading />}
-      {!showForm && renderEmailButton()}
+      {!isLoggedIn && !showForm && renderEmailButton()}
       {!loading && !isLoggedIn && showForm && renderForm()}
       {!loading && isLoggedIn && renderLogout()}
     </div>

@@ -2658,7 +2658,7 @@ button:disabled {
   justify-content: flex-start;
   flex-direction: column;
   padding: 160px 0 0 80px;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .container_main {
@@ -2706,7 +2706,7 @@ button:disabled {
   font-family: "Manrope" !important;
   font-weight: 800;
   position: relative;
-  z-index: 2;
+  /* z-index: 2; */
 }
 
 .container_main3 img {
