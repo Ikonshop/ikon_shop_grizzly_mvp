@@ -11,8 +11,13 @@ import Orders from "./Link-Orders";
 import UserOrders from "./User-Orders";
 import Profile from "./Profile";
 import CreateLink from "./Create-Link";
-import { getCollectionOwner, GetUserDashLinkTotals, GetUserDashTipjarTotals, UpdateWallet } from "../../lib/api";
-import { 
+import {
+  getCollectionOwner,
+  GetUserDashLinkTotals,
+  GetUserDashTipjarTotals,
+  UpdateWallet,
+} from "../../lib/api";
+import {
   GetPublickeyCreditScore,
   GetPublickeyTwitterPfpScore,
   GetPublickeyDiamondHandScore,
@@ -23,7 +28,7 @@ import {
   GetPublickeyTransactionFrequency,
   GetPublickeyTransactionVolume,
   GetPublickeySecondaryMarketActivity,
-  GetPublickeyProfitLoss
+  GetPublickeyProfitLoss,
 } from "../../lib/Atadia/api";
 import {
   IoArrowBackOutline,
@@ -41,13 +46,16 @@ import {
   IoGift,
   IoCheckmark,
   IoClose,
+  IoEyeOff,
+  IoChevronUp,
 } from "react-icons/io5";
 import { Magic } from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
-const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+const rpcUrl =
+  "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 function UserDashboard() {
   const router = useRouter();
@@ -76,6 +84,14 @@ function UserDashboard() {
   const [atadiaLoading, setAtadiaLoading] = useState(false);
   const [creditScore, setCreditScore] = useState();
   const [creditProb, setCreditProb] = useState();
+
+  // BALANCE CONSTANTS
+  const [magicBalance, setMagicBalance] = useState(0);
+  const [magicBalanceUSD, setMagicBalanceUSD] = useState(0);
+  const [balanceHide, setBalanceHide] = useState(false);
+
+  // USER DASHBOARD CONSTANTS
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const renderLoading = () => <Loading />;
 
@@ -160,7 +176,9 @@ function UserDashboard() {
             id="profile"
             disabled={!userPublicKey}
             className={
-              activeMenu == "profile" ? "active_dash dash-button" : "dash-button"
+              activeMenu == "profile"
+                ? "active_dash dash-button"
+                : "dash-button"
             }
             onClick={() => (
               setShowUserOrders(false),
@@ -216,17 +234,15 @@ function UserDashboard() {
     return (
       <>
         <div className={styles.create_component}>
-          <Profile userPubKey={userPublicKey}/>
+          <Profile userPubKey={userPublicKey} />
         </div>
       </>
     );
   };
 
-
-
   const renderDisplay = () => (
     <div className={styles.dash_container}>
-      <div className={styles.dash_header}>
+      {/* <div className={styles.dash_header}>
         <div className={styles.banner_hero}>
           <div className={styles.dash_hero_text}>
             <h1>
@@ -247,9 +263,97 @@ function UserDashboard() {
           </div>
           <div className={styles.hero_overlay}></div>
         </div>
+      </div> */}
+
+      <div className={styles.wallet_container}>
+        <div className={styles.atadian_credit}>
+          <h4 className={styles.paylink_header}>Wallet Balance</h4>
+
+          <div className={styles.balance_and_hide}>
+            <div className={styles.balance_container}>
+              <div className={styles.sol_balance}>
+                <div
+                  className={styles.sol_balance_fig}
+                  // if balanceHide is true, then set display to none, if false display flex
+                  style={{ display: balanceHide ? "none" : "flex" }}
+                >
+                  <img src="/sol.png" />
+                  <h3>{magicBalance.toFixed(2)}</h3>
+                </div>
+                <div
+                  className={styles.sol_balance_fig}
+                  // if balanceHide is true, then set display to none, if false display flex
+                  style={{ display: balanceHide ? "flex" : "none" }}
+                >
+                  <img src="/sol.png" />
+                  <h3>****</h3>
+                </div>
+              </div>
+
+              <p
+                className={styles.usdc_balance}
+                style={{ display: balanceHide ? "none" : "flex" }}
+              >
+                ${magicBalanceUSD.toFixed(2)}
+              </p>
+              <p
+                className={styles.usdc_balance}
+                style={{ display: balanceHide ? "flex" : "none" }}
+              >
+                ****
+              </p>
+            </div>
+            <div className={styles.paylink_head}>
+              {/*  */}
+              <IoEyeOff
+                className={styles.hide}
+                onClick={() => setBalanceHide(!balanceHide)}
+              />
+            </div>
+          </div>
+          <div className={styles.btn_container_wrap}>
+            <div className="btn_container pay_btn">
+              {!showDropdown && (
+                <div className="button_drop">
+                  <p
+                    onClick={() => (
+                      setCreateLinkType("link"), setShowCreateLink(true)
+                    )}
+                  >
+                    Create a Paylink
+                  </p>
+                  <div
+                    className="arrow_bg"
+                    onClick={() => setShowDropdown(true)}
+                  >
+                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
+                    <IoChevronDown className="arrow_drop" />
+                  </div>
+                </div>
+              )}
+              {showDropdown && (
+                <div className="button_drop_tip">
+                  <p
+                    onClick={() => (
+                      setCreateLinkType("tipjar"), setShowCreateLink(true)
+                    )}
+                  >
+                    Create a Tipjar
+                  </p>
+                  <div
+                    className="arrow_bg_tip"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
+                    <IoChevronUp className="arrow_drop_tip" />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-      
-      
+
       <div className={styles.atadian_credit}>
         <div className={styles.paylink_head}>
           <h4 className={styles.paylink_header}>Total Recieved</h4>
@@ -275,12 +379,24 @@ function UserDashboard() {
           <div className={styles.total_wrapper}>
             <div className={styles.d1}>
               <div>
-                <span>{((totalLinkCount / (totalLinkCount + totalTipJarCount))).toFixed(2) * 100}%</span>
+                <span>
+                  {(
+                    totalLinkCount /
+                    (totalLinkCount + totalTipJarCount)
+                  ).toFixed(2) * 100}
+                  %
+                </span>
               </div>
             </div>
             <div className={styles.d2}>
               <div>
-                <span>{((totalTipJarCount / (totalLinkCount + totalTipJarCount))).toFixed(2) * 100}%</span>
+                <span>
+                  {(
+                    totalTipJarCount /
+                    (totalLinkCount + totalTipJarCount)
+                  ).toFixed(2) * 100}
+                  %
+                </span>
               </div>
             </div>
           </div>
@@ -300,17 +416,16 @@ function UserDashboard() {
 
       {/* LINKS AND TIP JAR RENDER */}
       {renderProductLinks()}
-
     </div>
   );
 
   const renderProductLinks = () => {
     return (
-      <div className={styles.paylink_blob}>
+      <div className={styles.atadian_credit}>
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
-          {userLinks.slice(0, 2).map((product, index) => (
+          {userLinks.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_tip">
                 <IoLink
@@ -356,7 +471,7 @@ function UserDashboard() {
               </div>
             </div>
           ))}
-          {userTipJar.slice(0, 2).map((product, index) => (
+          {userTipJar.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_gift">
                 <IoGift
@@ -401,7 +516,10 @@ function UserDashboard() {
             </div>
           ))}
           <div className="btn_container pay_btn">
-            <div onClick={() => setShowCreateLink(true)} className="button_drop">
+            <div
+              onClick={() => setShowCreateLink(true)}
+              className="button_drop"
+            >
               <p>Create a Paylink</p>
               <div className="arrow_bg">
                 <IoChevronDown className="arrow_drop" />
@@ -428,12 +546,11 @@ function UserDashboard() {
       </>
     );
   };
-  
 
   useEffect(() => {
     if (publicKey) {
       // checkOwnership();
-      console.log('publicKey', publicKey.toString())
+      console.log("publicKey", publicKey.toString());
       setUserPublicKey(publicKey.toString());
       setCurrentWallet(publicKey.toString());
       const owner = publicKey.toString();
@@ -454,12 +571,11 @@ function UserDashboard() {
       };
 
       const getTotals = async () => {
-
         const tjTotatls = await GetUserDashTipjarTotals(publicKey.toString());
         console.log("tjTotatls", tjTotatls);
         setTotalTipJarSales(tjTotatls.totalTipjarSales);
         setTotalTipJarCount(tjTotatls.totalTipjars);
-     
+
         const linkTotals = await GetUserDashLinkTotals(publicKey.toString());
         console.log("linkTotals", linkTotals);
         setTotalLinkSales(linkTotals.totalLinkSales);
@@ -471,19 +587,37 @@ function UserDashboard() {
 
       async function getAtadiaData() {
         setAtadiaLoading(true);
-        const creditScoreData = await GetPublickeyCreditScore(publicKey.toString());
-        const twitterPfpScoreDataData = await GetPublickeyTwitterPfpScore(publicKey.toString());
-        const diamondHandScoreData = await GetPublickeyDiamondHandScore(publicKey.toString());
-        const mintLoverScoreData = await GetPublickeyMintLoverScore(publicKey.toString());
-        const tokenRoyaltyContributionData = await GetTokenAddressRoyaltyContribution(publicKey.toString());
+        const creditScoreData = await GetPublickeyCreditScore(
+          publicKey.toString()
+        );
+        const twitterPfpScoreDataData = await GetPublickeyTwitterPfpScore(
+          publicKey.toString()
+        );
+        const diamondHandScoreData = await GetPublickeyDiamondHandScore(
+          publicKey.toString()
+        );
+        const mintLoverScoreData = await GetPublickeyMintLoverScore(
+          publicKey.toString()
+        );
+        const tokenRoyaltyContributionData =
+          await GetTokenAddressRoyaltyContribution(publicKey.toString());
         const wealthData = await GetPublickeyWealth(publicKey.toString());
-        const demographicData = await GetPublickeyDemographics(publicKey.toString());
-        const txnFreqData = await GetPublickeyTransactionFrequency(publicKey.toString());
-        const txnVolumeData = await GetPublickeyTransactionVolume(publicKey.toString());
-        const secondaryMktActData = await GetPublickeySecondaryMarketActivity(publicKey.toString());
-        const profitLossData = await GetPublickeyProfitLoss(publicKey.toString());
-    
-        
+        const demographicData = await GetPublickeyDemographics(
+          publicKey.toString()
+        );
+        const txnFreqData = await GetPublickeyTransactionFrequency(
+          publicKey.toString()
+        );
+        const txnVolumeData = await GetPublickeyTransactionVolume(
+          publicKey.toString()
+        );
+        const secondaryMktActData = await GetPublickeySecondaryMarketActivity(
+          publicKey.toString()
+        );
+        const profitLossData = await GetPublickeyProfitLoss(
+          publicKey.toString()
+        );
+
         setCreditScore(creditScoreData.credit_score);
         setCreditProb(creditScoreData.credit_prob);
       }
@@ -491,25 +625,17 @@ function UserDashboard() {
     }
   }, [publicKey]);
 
-  
-
-
-
-  
-
   useEffect(() => {
     // SETTINGS
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    if(
-        urlParams.get('userSettings') === 'true'
-    ) {
+    if (urlParams.get("userSettings") === "true") {
       setShowUserProfile(true);
     }
     if (window.location.href.includes("?payhub=true")) {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
-    if(window.location.href.includes("?settings=true")) {
+    if (window.location.href.includes("?settings=true")) {
       setShowUserProfile(true), setActiveMenu("profile");
     }
     //EVENT LISTENERS
@@ -525,26 +651,28 @@ function UserDashboard() {
       setCurrentWallet(null);
       localStorage.removeItem("userMagicMetadata");
     });
-  }, []); 
+  }, []);
 
   useEffect(() => {
-    async function checkAllowance(){
+    async function checkAllowance() {
       isUser(userPublicKey).then((isUser) => {
-        if(isUser) {
+        if (isUser) {
           setAllowance(true);
         }
-      })
+      });
     }
-    if(userPublicKey) {
+    if (userPublicKey) {
       checkAllowance();
     }
-  }, [userPublicKey])
+  }, [userPublicKey]);
 
   return (
     <div className={styles.parent_container}>
       {renderUserDashboard()}
       <div className={styles.main_container}>
-        {!userPublicKey && !publicKey && !loading ? renderConnectWallet() : null}
+        {!userPublicKey && !publicKey && !loading
+          ? renderConnectWallet()
+          : null}
         {allowance && (
           <>
             {userPublicKey && loading ? renderLoading() : null}

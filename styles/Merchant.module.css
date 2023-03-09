@@ -38,7 +38,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 250px;
+  width: 200px;
 }
 
 .merchant_links_name {
@@ -49,10 +49,10 @@
 
 .paylink_container {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   gap: 30px;
-  width: 420px;
 }
 
 .parent_container {
@@ -339,6 +339,78 @@
   max-height: 200px;
 } */
 
+.hello_user {
+  align-items: center;
+  gap: 10px;
+  display: none;
+}
+
+.hello_user img {
+  max-width: 30px;
+}
+
+.hello_user p {
+  margin-top: 20px;
+}
+
+.balance_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.balance_and_hide {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.sol_balance {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.sol_balance_fig {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.sol_balance_fig img {
+  width: 24px;
+}
+
+.sol_balance_fig h3 {
+  font-size: 40px;
+  color: #130b46;
+  font-weight: bold;
+}
+
+.usdc_balance {
+  font-size: 18px;
+  color: #7c798f;
+  margin-left: 36px;
+}
+
+.hide {
+  font-size: 24px;
+  color: #cccccc;
+  cursor: pointer;
+}
+
+.btn_container_wrap {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin-top: 30px;
+}
+
+/* .hello_user,
+.wallet_container {
+  display: flex;
+  flex-direction: column;
+} */
+
 .merchant_containter {
   padding: 40px 20px;
   min-height: 100vh;
@@ -355,24 +427,24 @@
 
 .paylink_blob {
   background: #fff;
-  padding: 20px 30px;
+  /* padding: 20px 30px; */
   width: fit-content;
   border-radius: 20px;
 }
 
-.dash_container{
+.dash_container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 20px 20px 20px 20px;
   height: 100vh;
-  gap:5vw;
+  gap: 20px;
+  /* gap: 5vw; */
   width: 100%;
-  overflow: scroll;
 }
 
-.dash_header{
+.dash_header {
   display: flex;
   flex-direction: column;
 }
@@ -647,9 +719,12 @@
 } */
 
 .atadian_credit {
-  padding: 20px 30px;
+  padding: 10px 30px;
   background: #fff;
+  border: 1px solid #e6e6e6;
   border-radius: 20px;
+  height: fit-content;
+  width: fit-content;
 }
 
 .paylink_head {
