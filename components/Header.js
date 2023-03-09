@@ -116,7 +116,7 @@ export default function HeaderComponent() {
           {/* REGISTER LINK */}
           <div className={styles.menuItem}>
             <Link href="/register" >
-              <a onClick={()=>setShowMenu(false)}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
+              <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
             </Link>
           </div>
           {/* SOCIALS */}
@@ -322,6 +322,22 @@ export default function HeaderComponent() {
       setShowStoreSymbol(true);
     });
   }, []);
+
+  useEffect(() => {
+    console.log('window.location.pathname', window.location.search)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(
+        urlParams.get('userSettings') === 'true'
+    ) {
+        setShowStoreSymbol(false);
+    }
+    if(
+        urlParams.get('merchantSettings') === 'true'
+    ) {
+        setShowStoreSymbol(true);
+    }
+}, []);
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {

@@ -52,7 +52,7 @@ const Register = (req) => {
 
     const createUser = await UpsertWallet(data);
     console.log("createUser", createUser);
-    router.push("/user/dashboard/?settings=true");
+    router.push("/dashboard/?userSettings=true");
   };
 
   useEffect(() => {
