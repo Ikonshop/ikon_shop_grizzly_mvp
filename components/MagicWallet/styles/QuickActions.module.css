@@ -5,7 +5,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 1000;
   backdrop-filter: blur(8px);
   transition: 0.3s;
 }
@@ -28,7 +28,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 800px;
-  height: 400px;
+  max-height: fit-content;
+  min-height: 400px;
   padding: 20px 40px;
   background-color: #fff;
   border-radius: 10px;
@@ -84,7 +85,7 @@
   border: none;
   cursor: pointer;
   margin-top: 2px;
-  margin-left: 40px;
+  margin-left: 10px;
 }
 
 .copyIconCheck {
@@ -95,7 +96,6 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  margin-bottom: 15px;
   margin-left: 10px;
 }
 
@@ -171,7 +171,7 @@
   align-items: center;
   width: 100%;
   /* margin-top: 50px; */
-  margin-bottom: 0px;
+  margin-bottom: 40px;
   height: 16px;
 }
 
@@ -367,8 +367,26 @@
   display: none;
 }
 
+.balanceRefresh {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.balanceRefresh > p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0;
+  margin-right: 2px;
+}
+
 /* media screen for mobile */
-@media screen and (max-device-width: 480px) {
+@media screen and (max-width: 768px){
   .quickActionsOverlay {
     position: fixed;
     top: 0;
@@ -382,7 +400,7 @@
   .closeButton {
     position: absolute;
     top: 2px;
-    right: 2px;
+    right: 20px;
     width: 20px;
     height: 20px;
     color: black;
@@ -396,31 +414,33 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
-    height: 300px;
+    width: 70vw;
+    min-height: 400px;
+    max-height: fit-content;
+    padding: 20px 40px;
     background-color: #fff;
     border-radius: 10px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    z-index: 4000;
   }
 
   .leftContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 20px;
+    gap: 0px;
     align-items: center;
     height: 100%;
     width: 50%;
-    border-right: 1px solid #000;
+    border-right: none;
   }
 
   .addressContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
   }
@@ -437,35 +457,16 @@
   }
 
   .address > h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    display: none;
   }
 
   .copyIcon {
-    width: 16px;
-    height: 16px;
-    color: black;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 5px;
+    /* align to top of parent div */
+    align-self: flex-start;
   }
 
   .copyIconCheck {
-    width: 16px;
-    height: 16px;
-    color: green;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 5px;
+    align-self: flex-start;
   }
 
   .emailContainer {
@@ -480,17 +481,10 @@
     font-size: 12px;
     font-weight: 200;
     color: #000;
-    margin-bottom: 5px;
   }
 
   .email > h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    display: none;
   }
 
   .email > span {
@@ -520,6 +514,7 @@
     font-size: 14px;
     font-weight: 800;
     color: #000;
+    gap: 2px;
   }
 
   .rightContainer {
@@ -529,6 +524,7 @@
     align-items: center;
     height: 100%;
     width: 50%;
+    margin-top: 20px;
   }
 
   .displayOptions {
@@ -538,7 +534,7 @@
     align-items: center;
     width: 100%;
     /* margin-top: 50px; */
-    margin-bottom: 0px;
+    margin-bottom: 20px;
   }
 
   .displayOptionsText {
@@ -553,6 +549,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap:10px;
   }
 
   .depositContainer > p {
@@ -691,7 +688,7 @@
     align-items: center;
     width: 100%;
     font-size: 12px;
-    height: 18px;
+    height: 8px;
   }
 
   .detailRow > span {
@@ -717,13 +714,6 @@
   }
 
   .transferDetails > h4 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000;
-    margin-right: 2px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 0;
+    display: none;
   }
 }

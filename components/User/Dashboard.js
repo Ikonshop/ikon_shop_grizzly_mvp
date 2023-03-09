@@ -686,6 +686,7 @@ function UserDashboard() {
     async function checkUser() {
       const loggedIn = await magic.user.isLoggedIn();
       console.log('loggedIn', loggedIn)
+      window.dispatchEvent(new CustomEvent("magic-logged-in"));
       magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
         if (magicIsLoggedIn) {
           magic.user.getMetadata().then((user) => {
@@ -705,9 +706,7 @@ function UserDashboard() {
     if(!publicKey) {
       checkMagicLogin();
     }
-    window.addEventListener("magic-logged-in", () => {
-      checkMagicLogin();
-    });
+    
     window.addEventListener("magic-logged-out", () => {
       setUserEmail(null);
       setUserPublicKey(null);

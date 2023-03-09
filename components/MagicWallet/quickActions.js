@@ -10,8 +10,13 @@ import {
 } from "react-icons/io5";
 import { encodeURL, createQR } from "@solana/pay";
 import Send from "./send";
+import { getBalance, getUsdcBalance } from "../../hooks/getBalance";
 
 const QuickActions = (req) => {
+  const [solBalance, setSolBalance] = useState(req.magicBalance);
+  const [usdcBalance, setUsdcBalance] = useState(req.magicUsdcBalance);
+  const [tokenSent, setTokenSent] = useState(false);
+
   const [copied, setCopied] = useState(false);
   const [displayQR, setDisplayQR] = useState(false);
   const [depositQR, setDepositQR] = useState(null);
@@ -99,6 +104,31 @@ const QuickActions = (req) => {
     );
   };
 
+  const refreshBalance = () => {
+    getBalance(pubKey).then((balance) => {
+      console.log("sol balance: ", balance);
+      setSolBalance(balance);
+    });
+    getUsdcBalance(pubKey).then((balance) => {
+      console.log("usdc balance: ", balance);
+      setUsdcBalance(balance);
+    });
+  };
+
+  const renderBalanceRefresh = () => {
+    return (
+      <div 
+        className={styles.balanceRefresh}
+        onClick={() => {
+          refreshBalance();
+        }}  
+      >
+        <IoTimeOutline className={styles.balanceRefreshIcon} />
+        <p>Refresh Balance</p>
+      </div>
+    );
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setCopied(false);
@@ -130,6 +160,17 @@ const QuickActions = (req) => {
       setDepositQR(newQr);
     }
   }, [tokenType]);
+
+  useEffect(() => {
+    refreshBalance();
+    window.addEventListener("refreshBalance", () => {
+      // refresh balance after 2 seconds
+      console.log("refreshing balance");
+      setTimeout(() => {
+        refreshBalance();
+      }, 8000);
+    });
+  }, []);
 
   return (
     <div className={styles.quickActionsOverlay}>
@@ -177,14 +218,16 @@ const QuickActions = (req) => {
 
             <div className={styles.balance}>
               <img src="/sol.png" />
-              <p>{req.magicBalance.toFixed(4)} SOL</p>
+              <p>{solBalance.toFixed(4)} SOL</p>
             </div>
 
             <div className={styles.balance}>
               <img src="/usdc.png" />
-              <p>{req.magicUsdcBalance} USDC</p>
+              <p>{usdcBalance} USDC</p>
             </div>
           </div>
+
+          {renderBalanceRefresh()}
         </div>
         <div className={styles.rightContainer}>
           <div className={styles.displayOptions}>
@@ -210,7 +253,13 @@ const QuickActions = (req) => {
               }}
             >
               {!displayQR ? (
-                <button className="dep_button_sec">Deposit</button>
+                <button 
+                  className="signup_button"
+                  onClick={() => {
+                    setDisplayQR(!displayQR);
+                    setDisplayTransfer(false);
+                  }}
+                >Deposit</button>
               ) : (
                 ""
               )}
@@ -222,10 +271,10 @@ const QuickActions = (req) => {
             <div className={styles.transferContainer}>
               {displayTransfer && (
                 <>
-                  <br />
-                  <br />
+
                   <div className={styles.transferInputRow}>
                     <input
+                      type="text"
                       className={styles.transferInput}
                       placeholder="Enter Address"
                       onChange={(e) => setTransferToAddress(e.target.value)}
@@ -233,16 +282,14 @@ const QuickActions = (req) => {
                   </div>
                   <div className={styles.transferInputRow}>
                     <input
+                    // type is only postive numbers to the 2nd decimal
+                      type="number"
+                      step="0.01"
+                      min="0"
                       className={styles.transferInput}
                       placeholder="Amount"
                       onChange={(e) => setTransferAmount(e.target.value)}
-                    ></input>
-                    {/* <div
-                                            className={styles.transferMax}
-                                            onClick={() => setTransferAmount(req.magicBalance - 0.001)}
-                                        >
-                                            Set Max
-                                        </div> */}
+                    />
                   </div>
                   <div className={styles.tokenSelect}>
                     <select onChange={(e) => setTokenType(e.target.value)}>
@@ -259,13 +306,13 @@ const QuickActions = (req) => {
                   <div className={styles.transferDetails}>
                     <h4>Recipient:</h4>
                     <div className={styles.detailRowAddress}>
-                      <span>Recipient:</span> {transferToAddress}
+                      <span>Recipient:</span> {transferToAddress.slice(0, 4)}{transferToAddress ? '...' : null}{transferToAddress.slice(-4)}
                     </div>
                     <div className={styles.detailRow}>
                       <span>Gas:</span> 0.0001 SOL
                     </div>
                     <div className={styles.detailRow}>
-                      <span>Total:</span> {transferAmount + 0.0001}
+                      <span>Total:</span> {transferAmount} + Gas
                     </div>
                   </div>
                 </>

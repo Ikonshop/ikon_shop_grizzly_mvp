@@ -32,6 +32,7 @@ import {
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
 // import QuickActions from "./MagicWallet/quickActions";
+import {getBalance, getUsdcBalance} from "../hooks/getBalance";
 import * as web3 from "@solana/web3.js";
 import styles from "../styles/Header.module.css";
 
@@ -70,18 +71,17 @@ export default function HeaderComponent() {
   const rpcUrl =
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
-  const handleLogout = async () => {
-    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-      extensions: {
-        solana: new SolanaExtension({
-          rpcUrl,
-        }),
-      },
-    });
-    await magic.user.logout();
-    setUserPublicKey("");
-    localStorage.setItem("userMagicMetadata", null);
-    window.dispatchEvent(new CustomEvent("magic-logged-out"));
+  const renderQuickActions = () => {
+    return (
+      <div className={styles.quickActions}>
+        <QuickActions
+          magicMetadata={magicMetadata}
+          magicPublicKey={magicPublicKey}
+          magicBalance={magicBalance}
+          magicUsdcBalance={magicUsdcBalance}
+        />
+      </div>
+    );
   };
 
 
@@ -119,6 +119,12 @@ export default function HeaderComponent() {
               <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
             </Link>
           </div>
+          {/* MAGIC QUICK ACTION LINK */}
+          {magicUser && (
+            <div onClick={()=> setShowQuickActions(true)} className={styles.menuItem}>
+              <IoAccessibilityOutline className={styles.icon} /> <span>Quick Actions</span>
+            </div>
+          )}
           {/* SOCIALS */}
           <div className={styles.socialItem}>
             <a><IoLogoDiscord className={styles.icon} /></a>
@@ -181,37 +187,37 @@ export default function HeaderComponent() {
     )
   }
 
-  async function getBalance(pubKey) {
-    const balance = await connection.getBalance(pubKey);
-    console.log("balance: ", balance);
-    const convertedBalance = balance / 1000000000;
-    setMagicBalance(convertedBalance);
-  }
+  // async function getBalance(pubKey) {
+  //   const balance = await connection.getBalance(pubKey);
+  //   console.log("balance: ", balance);
+  //   const convertedBalance = balance / 1000000000;
+  //   setMagicBalance(convertedBalance);
+  // }
 
-  async function getUsdcBalance(pubKey) {
-    const usdcAddress = new web3.PublicKey(
-      "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-    );
-    // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
-    try {
-      const associatedTokenAddress = await getAssociatedTokenAddress(
-        usdcAddress,
-        pubKey
-      );
-      console.log(
-        "associatedTokenAddress: ",
-        associatedTokenAddress.toString()
-      );
-      const usdcBalance = await connection.getTokenAccountBalance(
-        associatedTokenAddress
-      );
-      console.log("usdcBalance: ", usdcBalance.value.uiAmount);
-      const convertedUsdcBalance = usdcBalance.value.uiAmount;
-      setMagicUsdcBalance(convertedUsdcBalance);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  }
+  // async function getUsdcBalance(pubKey) {
+  //   const usdcAddress = new web3.PublicKey(
+  //     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+  //   );
+  //   // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
+  //   try {
+  //     const associatedTokenAddress = await getAssociatedTokenAddress(
+  //       usdcAddress,
+  //       pubKey
+  //     );
+  //     console.log(
+  //       "associatedTokenAddress: ",
+  //       associatedTokenAddress.toString()
+  //     );
+  //     const usdcBalance = await connection.getTokenAccountBalance(
+  //       associatedTokenAddress
+  //     );
+  //     console.log("usdcBalance: ", usdcBalance.value.uiAmount);
+  //     const convertedUsdcBalance = usdcBalance.value.uiAmount;
+  //     setMagicUsdcBalance(convertedUsdcBalance);
+  //   } catch (error) {
+  //     console.log("error: ", error);
+  //   }
+  // }
 
   async function gatherMagicData() {
     // console.log("event listener fired");
@@ -221,8 +227,14 @@ export default function HeaderComponent() {
       const parsedData = JSON.parse(data);
       console.log("parsedData: ", parsedData);
       const publicKey = new web3.PublicKey(parsedData.publicAddress);
-      getBalance(publicKey);
-      getUsdcBalance(publicKey);
+      await getBalance(publicKey).then(() => {
+        console.log("magic balance: ", magicBalance);
+        setMagicBalance(magicBalance);
+      });
+      await getUsdcBalance(publicKey).then(() => {
+        console.log("magic usdc balance: ", magicUsdcBalance);
+        setMagicUsdcBalance(magicUsdcBalance);
+      });
       console.log("publicKey: ", publicKey.toString());
       setMagicMetadata(parsedData);
       setEmail(parsedData.email);
@@ -302,8 +314,6 @@ export default function HeaderComponent() {
       }catch(error){
         console.log('error: ', error)
       }
-    }else {
-      setMagicUser(false);
     }
   }
 
@@ -342,7 +352,7 @@ export default function HeaderComponent() {
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
       gatherMagicData();
-     
+        setMagicUser(true);
       
     });
     window.addEventListener("magic-logged-out", () => {
@@ -357,12 +367,6 @@ export default function HeaderComponent() {
 
 
   return (
-    // create a navbar component with a logo and a hamburger menu
-    //when the hamburger menu is clicked, the menu will slide out from the left
-    //the menu will have a link to the home page, a link to the marketplace, a link to the user dashboard, and a link to the store dashboard
-    //the menu will also have a link to the user's wallet
-    //use className={styles.INSERT_CLASS_NAME_HERE} to style the navbar
-
     <div className={styles.navbar}>
       <div onClick={()=>router.push('/')} className={styles.logo}>
         <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
@@ -380,6 +384,7 @@ export default function HeaderComponent() {
       </div>
       {showMenu && renderHeaderMenu()}
       {showLoginOptions && renderLoginOptions()}
+      {showQuickActions && renderQuickActions()}
     </div>
     
    

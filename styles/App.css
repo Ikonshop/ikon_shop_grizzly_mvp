@@ -13,6 +13,7 @@
 body {
   width: 100vw;
   height: 100vh;
+  overflow: scroll;
 }
 
 .App {
@@ -2548,7 +2549,7 @@ button:disabled {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100;
+  z-index: 1;
   font-weight: bold;
 }
 
@@ -2573,6 +2574,7 @@ button:disabled {
   border-radius: 100px 0px 0px 100px;
   border-right: 0;
   transform-origin: right;
+  z-index: -1;
 }
 
 .progress .progress_left {
@@ -2601,24 +2603,24 @@ button:disabled {
 
 @keyframes load2 {
   0% {
-    z-index: 100;
+    z-index: 1;
     transform: rotate(180deg);
   }
 
   100% {
-    z-index: 100;
+    z-index: 1;
     transform: rotate(270deg);
   }
 }
 
 @keyframes load3 {
   0% {
-    z-index: 100;
+    z-index: 1;
     transform: rotate(180deg);
   }
 
   100% {
-    z-index: 100;
+    z-index: 1;
     transform: rotate(315deg);
   }
 }

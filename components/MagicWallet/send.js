@@ -8,6 +8,7 @@ import Loading from '../Loading';
 import styles from "../../styles/Product.module.css";
 import { Magic } from 'magic-sdk';
 import { SolanaExtension } from '@magic-ext/solana';
+import Notification from "../Notification/Notification";
 
 
 const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
@@ -204,6 +205,9 @@ const Send = (req) => {
             // wait for transaction to be confirmed
             
             console.log(`https://solana.fm/tx/${signature}`);
+            // one second timeout
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            setSuccess(true);
             setLoading(false);
           }
         } catch (error) {
@@ -223,6 +227,7 @@ const Send = (req) => {
 
     useEffect(() => {
         if (success) {
+            window.dispatchEvent(new Event("refreshBalance"));
             setTimeout(() => {
                 setSuccess(false);
             }, 3000);
@@ -230,14 +235,23 @@ const Send = (req) => {
     }, [success]);
 
     return (
-        <button
-            className="btn btn-primary"
-            onClick={()=> createAndSendTransaction()}
-            disabled={loading}
-        >
-            {success && "Success!"}
-            {loading && !success ? "Loading..." : "Transfer"}
-        </button>
+      <>
+        {!success && (
+          <button
+              className="btn btn-primary"
+              onClick={()=> createAndSendTransaction()}
+              disabled={loading}
+          >
+              {loading && !success ? (<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>) : "Transfer"}
+          </button>
+        )}
+        {success && (
+          // make the alert smaller
+            <div className="alert alert-success" role="alert"> 
+              Transaction successful!
+            </div>
+        )}
+      </>
     
     );
 }
