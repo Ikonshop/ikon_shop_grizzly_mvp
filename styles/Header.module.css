@@ -10,7 +10,6 @@
 
 .logo {
   /* stays top left of parent div */
-
   font-size: 1.5rem;
   font-weight: 700;
   z-index: 3000;
@@ -146,6 +145,10 @@
   cursor: pointer;
 }
 
+.loginOption > a, .loginOption > span {
+  text-decoration: none;
+  color: blue;
+}
 
 .closeButton{
   position: absolute;
@@ -166,20 +169,36 @@
   display: none;
 }
 
-.menu{
-  gap: 20px;;
+.menu {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding-top: 15vh;
+  gap: 10vh;
+  align-items: left;
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 20vw;
+  z-index: 2000;
+  background-color: #ffffff;
 }
 
 .smallLogo{
   display: flex;
   height: auto;
   width: 10vw;
-  margin-left: 2vw;
+  margin-left: 4vw;
 
 }
 
 .menuItem span {
-  display: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  color: black;
 }
 
 .icon {

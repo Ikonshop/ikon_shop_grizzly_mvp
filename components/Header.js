@@ -90,7 +90,7 @@ export default function HeaderComponent() {
   const renderHeaderMenu = () => {
     return  (
       <div className={styles.menuContainer}>
-        <div onClick={()=> setShowMenu(false)} className={styles.menuOverlay}></div>
+        <div onClick={()=> (setShowMenu(false), setShowLoginOptions(false))} className={styles.menuOverlay}></div>
         <div className={styles.menu}>
           {/* DASHBOARD TOGGLE */}
           {userPublicKey && (
@@ -107,21 +107,21 @@ export default function HeaderComponent() {
             </div>
           }
           {/* LOGGED IN  */}
-          {userPublicKey && 
+          {userPublicKey != '' && 
             <div onClick={()=> setShowLoginOptions(true)} className={styles.menuItem}>
               <IoLogOutOutline className={styles.icon} /> <span>Logout</span>
             </div>
           }
           
           {/* REGISTER LINK */}
-          <div className={styles.menuItem}>
+          {/* <div className={styles.menuItem}>
             <Link href="/register" >
               <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
             </Link>
-          </div>
+          </div> */}
           {/* MAGIC QUICK ACTION LINK */}
           {magicUser && (
-            <div onClick={()=> setShowQuickActions(true)} className={styles.menuItem}>
+            <div onClick={()=> setShowQuickActions(!showQuickActions)} className={styles.menuItem}>
               <IoAccessibilityOutline className={styles.icon} /> <span>Quick Actions</span>
             </div>
           )}
@@ -146,7 +146,12 @@ export default function HeaderComponent() {
           Browser Wallet:
           <WalletMultiButton />
         </div>
-
+        <div className={styles.loginOption}>
+          Not Registered? 
+          <Link href="/register" >
+            <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon} style={{color: 'blue'}}/> <span>Click here.</span></a>
+          </Link>
+        </div>
         <button
           className={styles.closeButton}
           onClick={() => setShowLoginOptions(false)}
@@ -321,6 +326,12 @@ export default function HeaderComponent() {
     if(publicKey) {
       setUserPublicKey(publicKey.toString())
     }
+    if(!publicKey && magicUser) {
+      setUserPublicKey(magicMetadata.publicAddress)
+    }
+    if(!publicKey && !magicUser) {
+      setUserPublicKey('')
+    }
   }, [publicKey])
 
   useEffect(() => {
@@ -358,6 +369,7 @@ export default function HeaderComponent() {
     window.addEventListener("magic-logged-out", () => {
       setMagicMetadata("");
       setMagicPublicKey("");
+      setUserPublicKey("");
       setMagicUser(false);
     });
     window.addEventListener("closeQuickActions", () => {
