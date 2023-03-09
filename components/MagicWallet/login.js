@@ -61,7 +61,6 @@ const LoginMagic = (req) => {
     await magic.user.logout();
     localStorage.removeItem("userMagicMetadata");
     window.dispatchEvent(new Event("magic-logged-out"));
-    setIsLoggedIn(false);
   };
 
   async function getBalance(pubKey) {
@@ -276,6 +275,14 @@ const LoginMagic = (req) => {
     if (req) {
       setEmail(req.req);
     }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("magic-logged-out", () => {
+      setIsLoggedIn(false);
+      setUserMetadata(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
   }, []);
 
   return (

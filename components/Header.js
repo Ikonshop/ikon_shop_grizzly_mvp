@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { Magic } from "magic-sdk";
 // import { SolanaExtension } from "@magic-ext/solana";
 import { Magic } from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
 import {
   CheckForWallet,
   CreateWallet,
@@ -28,6 +29,7 @@ import {
   IoLogOutOutline,
   IoAccessibilityOutline,
   IoStorefrontOutline,
+  IoWalletOutline
 } from "react-icons/io5";
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
@@ -68,8 +70,20 @@ export default function HeaderComponent() {
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
     "confirmed"
   );
-  const rpcUrl =
-    "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+  const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+
+  const magicLogout = async () => {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: {
+        solana: new SolanaExtension({
+          rpcUrl,
+        }),
+      },
+    });
+    await magic.user.logout();
+    localStorage.removeItem("userMagicMetadata");
+    window.dispatchEvent(new Event("magic-logged-out"));
+  };
 
   const renderQuickActions = () => {
     return (
@@ -96,19 +110,19 @@ export default function HeaderComponent() {
           {userPublicKey && (
             <div className={styles.menuItem}>
               <Link href="/dashboard">
-                <a onClick={()=>setShowMenu(false)}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
               </Link>
             </div>
           )}
           {/* LOGIN LINK */}
           {!userPublicKey &&
-            <div onClick={()=> setShowLoginOptions(true)}  className={styles.menuItem}>
+            <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))}  className={styles.menuItem}>
               <IoLogInOutline className={styles.icon} /> <span>Login</span>
             </div>
           }
           {/* LOGGED IN  */}
           {userPublicKey != '' && 
-            <div onClick={()=> setShowLoginOptions(true)} className={styles.menuItem}>
+            <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))} className={styles.menuItem}>
               <IoLogOutOutline className={styles.icon} /> <span>Logout</span>
             </div>
           }
@@ -121,8 +135,8 @@ export default function HeaderComponent() {
           </div> */}
           {/* MAGIC QUICK ACTION LINK */}
           {magicUser && (
-            <div onClick={()=> setShowQuickActions(!showQuickActions)} className={styles.menuItem}>
-              <IoAccessibilityOutline className={styles.icon} /> <span>Quick Actions</span>
+            <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false))} className={styles.menuItem}>
+              <IoWalletOutline className={styles.icon} /> <span>Wallet</span>
             </div>
           )}
           {/* SOCIALS */}
@@ -323,7 +337,11 @@ export default function HeaderComponent() {
   }
 
   useEffect(() => {
-    if(publicKey) {
+    if(publicKey && magicUser) {
+      alert('Browser Wallet and Email Wallet detected, we will use the browser wallet for transactions and log you out of the email wallet. If you would like to use the email wallet please log out of the browser wallet first.')
+      magicLogout()
+      setMagicUser(false)
+      setMagicPublicKey('')
       setUserPublicKey(publicKey.toString())
     }
     if(!publicKey && magicUser) {
@@ -371,10 +389,14 @@ export default function HeaderComponent() {
       setMagicPublicKey("");
       setUserPublicKey("");
       setMagicUser(false);
+      if(publicKey) {
+        setUserPublicKey(publicKey.toString())
+      }
     });
     window.addEventListener("closeQuickActions", () => {
       setShowQuickActions(false);
     });
+    
   }, []);
 
 
