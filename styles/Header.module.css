@@ -174,7 +174,6 @@
   position: fixed;
   flex-direction: column;
   justify-content: space-between;
-
   padding-top: 15vh;
   gap: 10vh;
   align-items: left;
@@ -189,9 +188,8 @@
 .smallLogo{
   display: flex;
   height: auto;
-  width: 10vw;
-  margin-left: 4vw;
-
+  width: 5vw;
+  margin-left: 7vw;
 }
 
 .menuItem span {
