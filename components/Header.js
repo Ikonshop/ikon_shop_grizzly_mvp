@@ -41,6 +41,7 @@ import styles from "../styles/Header.module.css";
 export default function HeaderComponent() {
   const { publicKey, connected, disconnect } = useWallet();
   const router = useRouter();
+  const currentPath = router.pathname;
   const [showMenu, setShowMenu] = useState(false);
   const [showStoreSymbol, setShowStoreSymbol] = useState(false);
   const [showLoginOptions, setShowLoginOptions] = useState(false);
@@ -82,37 +83,21 @@ export default function HeaderComponent() {
     localStorage.setItem("userMagicMetadata", null);
     window.dispatchEvent(new CustomEvent("magic-logged-out"));
   };
+
+
+  //how can i make it to where if the user clicks outside of the menu it closes?
   
   const renderHeaderMenu = () => {
     return  (
-      <div className={styles.menuOverlay}>
+      <div className={styles.menuContainer}>
+        <div onClick={()=> setShowMenu(false)} className={styles.menuOverlay}></div>
         <div className={styles.menu}>
-          
           {/* DASHBOARD TOGGLE */}
           {userPublicKey && (
             <div className={styles.menuItem}>
-              <div 
-                id="container"
-                onClick={() => (
-                  showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
-                )}
-              >
-                {!showStoreSymbol ? (
-                  <div
-                    id="target"
-                    class="moon"
-                  >
-                    <IoAccessibilityOutline className="moon_tog" />
-                  </div>
-                ) : (
-                  <div
-                    id="target"
-                    class="sun"
-                  >
-                    <IoStorefrontOutline className="sunny_tog" />
-                  </div>
-                )}
-              </div>
+              <Link href="/dashboard">
+                <a onClick={()=>setShowMenu(false)}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+              </Link>
             </div>
           )}
           {/* LOGIN LINK */}
@@ -130,8 +115,8 @@ export default function HeaderComponent() {
           
           {/* REGISTER LINK */}
           <div className={styles.menuItem}>
-            <Link href="/register">
-              <a><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
+            <Link href="/register" >
+              <a onClick={()=>setShowMenu(false)}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
             </Link>
           </div>
           {/* SOCIALS */}
@@ -165,6 +150,36 @@ export default function HeaderComponent() {
       </div>
     );
   };
+
+  const renderDashToggle = () => {
+    return (
+      <div className={styles.dashItem}>
+        Toggle Dash
+        <div 
+          id="container"
+          onClick={() => (
+            showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
+          )}
+        >
+          {!showStoreSymbol ? (
+            <div
+              id="target"
+              class="moon"
+            >
+              <IoAccessibilityOutline className="moon_tog" />
+            </div>
+          ) : (
+            <div
+              id="target"
+              class="sun"
+            >
+              <IoStorefrontOutline className="sunny_tog" />
+            </div>
+          )}
+              </div>
+      </div>
+    )
+  }
 
   async function getBalance(pubKey) {
     const balance = await connection.getBalance(pubKey);
@@ -334,9 +349,11 @@ export default function HeaderComponent() {
 
     <div className={styles.navbar}>
       <div onClick={()=>router.push('/')} className={styles.logo}>
-        <img className={styles.bigLogo} src="/newLogo.png" alt="logo" />
-        <img className={styles.smallLogo} src="/favicon.ico" alt="logo" />
+        <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
+        <img className={styles.smallLogo} src="/iklogo.png" alt="logo" />
       </div>
+      {/* if currentpath is /dashboard then renderDashToggle */}
+      {currentPath === "/dashboard" && renderDashToggle()}
       <div 
         className={styles.hamburger}
         onClick={()=> setShowMenu(!showMenu)}

@@ -11,7 +11,7 @@
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
-  z-index: 3;
+  z-index: 3000;
   cursor: pointer;
 }
 
@@ -33,6 +33,14 @@
   width: 5rem;
   cursor: pointer;
   z-index: 3;
+}
+
+.menuContainer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .menuOverlay{
@@ -66,6 +74,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.dashItem{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 5px;
 }
 
 .socialItem{
