@@ -57,16 +57,20 @@ const App = () => {
     const renderRegisterPage = () => {
       return (
         <>
-          <Register userName={userName} storeName={storeName} email={email} />
+          {!showRegister && (
+            <>
+              <Register userName={userName} storeName={storeName} email={email} />
 
-          <button
-            className="signup_button"
-            onClick={() => {
-              setShowRegister(false);
-            }}
-          >
-            Edit Info
-          </button>
+              <button
+                className="signup_button"
+                onClick={() => {
+                  setShowRegister(false);
+                }}
+              >
+                Edit Info
+              </button>
+            </>
+          )}
         </>
       );
     };
@@ -79,7 +83,7 @@ const App = () => {
           <div className="signup2">
             <div className="signup_container2">
               <h1>Hello, anon.</h1>
-
+      
               {!showRegister && renderForm()}
               {showRegister && renderRegisterPage()}
             </div>

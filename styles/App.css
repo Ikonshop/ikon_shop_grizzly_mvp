@@ -3591,13 +3591,13 @@ button:disabled {
 @media screen and (max-width: 740px) {
   .signup_row1 {
     align-items: flex-start;
-    padding-left: 70px;
+    padding-left: 5vw;
   }
   .signup_row1 h1 {
     max-width: 300px;
   }
   .signup_row1 p {
-    font-size: 16px;
+    font-size: 12px;
   }
 }
 @media screen and (max-width: 725px) {
