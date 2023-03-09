@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { CheckForWallet, CreateWallet, GetTotalUsers } from "../../lib/api";
+import { GetTotalUsers } from "../../lib/api";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../Loading";
 // MERCHANT COMPONENTS
@@ -13,23 +14,18 @@ import InvoiceOpen from "./Invoices/InvoiceOpen";
 import PayRequests from "./PayRequests";
 import StoreSettings from "./StoreSettings";
 import Overview from "./Overview";
-import { CreateCollectionFromMagic, CheckForCollectionByOwner  } from "../../lib/api";
 // import StoreData from "../../components/Merchant/StoreData";
 import Subscriptions from "../../components/Merchant/Subscriptions/Subscriptions";
+import { isMerchant } from "../../hooks/checkAllowance";
 import {
   IoArrowBackOutline,
-  IoDocumentTextOutline,
   IoInformationCircleOutline,
   IoLayersOutline,
-  IoLinkOutline,
   IoSettingsOutline,
-  IoStatsChartOutline,
-  IoTicketOutline,
   IoArrowForward,
   IoFileTrayFullOutline,
-  IoLayers,
   IoBarChartOutline,
-  IoHourglass,
+  IoRocketOutline,
 } from "react-icons/io5";
 import {Magic} from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
@@ -41,17 +37,8 @@ const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqV
 function MerchantDashboard() {
   const [loading, setLoading] = useState(true);
   const [userPublicKey, setUserPublicKey] = useState();
-  const [userEmail, setUserEmail] = useState();
-  const [currentWallet, setCurrentWallet] = useState([]);
-  const [accessGranted, setAccessGranted] = useState(true);
-  const [renderNfts, setRenderNfts] = useState(false);
-  const [nftDisplay, setNftDisplay] = useState([]);
+  
   const [activeMenu, setActiveMenu] = useState();
-  const fakeNftDisplay = [
-    "https://www.arweave.net/2WNOsLI3Us3d205sZVkvvkgpEIPjrtbgN3c7VrhWxcg?ext=png",
-    "https://wvhvakczb3yg4gnsybgdbss4cczqt2fks7zmjus4ftqcxc7kkrqa.arweave.net/tU9QKFkO8G4ZssBMMMpcELMJ6KqX8sTSXCzgK4vqVGA?ext=png",
-    "https://www.arweave.net/QAt7CY9wwVOf50cuuqrqNdcTqVAKzgg5Xl8tddOoxb8?ext=png",
-  ];
   const [totalUsers, setTotalUsers] = useState(0);
   const router = useRouter();
   const { publicKey } = useWallet();
@@ -68,15 +55,6 @@ function MerchantDashboard() {
   const [merchant, setMerchant] = useState(false);
 
   const renderLoading = () => <Loading />;
-
-  const renderNftDisplay = () => (
-    <div className={styles.merchant_nft_container}>
-      <span>My NFTs</span>
-      {nftDisplay.map((nft) => (
-        <img src={nft} className={styles.merchant_nft} />
-      ))}
-    </div>
-  );
 
   const renderQuickActions = () => (
     //render 2 buttons one for setShowCreate(true) and one for setStoreSettings(true)
@@ -120,14 +98,6 @@ function MerchantDashboard() {
     return (
       <>
         <div className={styles.merchant_dashboard}>
-          {/* <img
-            className={styles.ik_logo_full}
-            src="/newlogo.png"
-            style={{
-              maxWidth: "100px",
-              margin: "20px auto 30px auto",
-            }}
-          /> */}
           <img
             className={styles.ik_logo}
             src="/iklogo.png"
@@ -199,40 +169,6 @@ function MerchantDashboard() {
             <IoFileTrayFullOutline className={styles.side_icon} />
             <span id={styles.full_screen}>Orders</span>
           </button>
-{/* 
-          <button
-            disabled={!publicKey}
-            className="dash-button"
-            onClick={() => (
-              setShowOrders(false),
-              setShowCreate(false),
-              setShowInventory(false),
-              setShowSettings(false),
-              setShowSubHub(false),
-              setShowInvoices(true)
-            )}
-          >
-            <IoHourglass className={styles.side_icon} />
-            <span id={styles.full_screen}>Invoices</span>
-          </button> */}
-
-          {/* <button
-            id="subs"
-            disabled={!publicKey}
-            className={"dash-button"}
-            onClick={() => (
-              setShowOrders(false),
-              setShowCreate(false),
-              setShowInventory(false),
-              setShowSettings(false),
-              setShowSubHub(true),
-              setShowPayRequests(false),
-              setActiveMenu("subs")
-            )}
-          >
-            <IoTicketOutline className={styles.side_icon} />
-            <span id={styles.full_screen}>Subscriptions</span>
-          </button> */}
           <button
             id="settings"
             disabled={!userPublicKey}
@@ -347,76 +283,23 @@ function MerchantDashboard() {
     );
   };
 
-  useEffect(() => {
-    if (publicKey) {
-      setCurrentWallet(publicKey.toString());
-    }
-  }, [publicKey]);
-
-  useEffect(() => {
-    if (publicKey) {
-      setUserPublicKey(publicKey.toString());
-      const getData = async () => {
-        const data = await CheckForCollectionByOwner(publicKey.toString())
-
-        console.log('data', data)
-        if(data === true){
-          console.log('setting merchant to true')
-          setMerchant(true);
-        }
-        const walletData = await CheckForWallet(publicKey.toString());
-        if (walletData.wallet === null) {
-          const newWallet = CreateWallet(publicKey.toString());
-          if (newWallet) {
-            console.log(
-              "welcome to ikonshop, if you have any issues please reach out to us on discord"
-            );
-          }
-        } else {
-          console.log(
-            "welcome to ikonshop, if you have any issues please reach out to us on discord"
-          );
-        }
-         
-        if(data === false){
-          // router.push('/register')
-          console.log('not a merchant')
-        }
-      };
-      getData();
-      setLoading(false);
-    }
-    if(!publicKey, userPublicKey){
-      const getData = async () => {
-        const data = await CheckForCollectionByOwner(userPublicKey)
-
-        console.log('data', data)
-        if(data === true){
-          console.log('setting merchant to true')
-          setMerchant(true);
-        }
-        const walletData = await CheckForWallet(userPublicKey);
-        if (walletData.wallet === null) {
-          const newWallet = CreateWallet(userPublicKey);
-          if (newWallet) {
-            console.log(
-              "welcome to ikonshop, if you have any issues please reach out to us on discord"
-            );
-          }
-        } else {
-          console.log(
-            "welcome to ikonshop, if you have any issues please reach out to us on discord"
-          );
-        }
-         
-        if(data === false){
-          router.push('/register')
-        }
-      };
-      getData();
-      setLoading(false);
-    }
-  }, [publicKey, userPublicKey]);
+  const renderNotMerchant = () => {
+    return (
+      <>
+        <div>
+          <div className={styles.connect_wallet}>
+            <IoInformationCircleOutline className={styles.info_icon} />
+            <div className={styles.connect_wallet_text}>
+              <h4>You are not a Merchant.</h4>
+              <Link href="/register" >
+                <h4 style={{ cursor:'pointer', textDecoration:'underline'}}><IoRocketOutline className={styles.icon}/> <span>Click here.</span></h4>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   useEffect(() => {
     if (publicKey) {
@@ -427,46 +310,36 @@ function MerchantDashboard() {
         setShowOrders(true);
       });
     }
-    async function getUsers () {
-      const data = await GetTotalUsers();
-      console.log('users', data);
-      setTotalUsers(data);
-    }
-    getUsers();
-  }, []);
-
-  const checkMagicLogin = async() => {
-    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-      extensions: {
-          solana: new SolanaExtension({
-          rpcUrl
-          })
-      }
-    });
-    async function checkUser() {
-      const loggedIn = await magic.user.isLoggedIn();
-      console.log('loggedIn', loggedIn)
-      magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
-        if (magicIsLoggedIn) {
-          magic.user.getMetadata().then((user) => {
-            localStorage.setItem('userMagicMetadata', JSON.stringify(user));
-            const pubKey = new web3.PublicKey(user.publicAddress);
-            setUserPublicKey(pubKey.toString());
-          });
-        } else {
-          setLoading(false);
-        }
-      });
-    }
-  checkUser();
-  };
+  }, [publicKey]);
 
   useEffect(() => {
-    if(!publicKey) {
-      checkMagicLogin();
+    // SETTINGS CHECK
+    const urlParams = new URLSearchParams(window.location.search);
+    const settings = urlParams.get("merchantSettings");
+    if (settings === "true") {
+      setShowSettings(true);
     }
+    if (!publicKey && !userPublicKey) {
+      setLoading(false);
+    }
+
+    // SERVER CONSTANTS
+    if(totalUsers === 0){
+      async function getUsers () {
+        const data = await GetTotalUsers();
+        console.log('users', data);
+        setTotalUsers(data);
+      }
+      getUsers();
+    }
+
+    // EVENT LISTENERS
     window.addEventListener("magic-logged-in", () => {
-      checkMagicLogin();
+      localStorage.getItem("userMagicMetadata").then((data) => {
+        const user = JSON.parse(data);
+        const pubKey = new web3.PublicKey(user.publicAddress);
+        setUserPublicKey(pubKey.toString());
+      });
     });
     window.addEventListener("magic-logged-out", () => {
       setUserEmail(null);
@@ -474,25 +347,25 @@ function MerchantDashboard() {
       setCurrentWallet(null);
       localStorage.removeItem("userMagicMetadata");
     });
-
   }, []);
 
   useEffect(() => {
-    if (!publicKey && !userPublicKey) {
-      setLoading(false);
+    async function checkAllowance(){
+      await isMerchant(userPublicKey).then((data) => {
+        if(data === true){
+          setMerchant(true);
+          setLoading(false);
+        }else{
+          console.log('not a merchant');
+          setMerchant(false);
+          setLoading(false);
+        }
+      })
     }
-  }, []);
-
-  useEffect(() => {
-    // if url has query string, set settings = to true
-    // setShowSettings(false);
-    //url: /merchant/dashboard?settings=true
-    const urlParams = new URLSearchParams(window.location.search);
-    const settings = urlParams.get("merchantSettings");
-    if (settings === "true") {
-      setShowSettings(true);
+    if(userPublicKey){
+      checkAllowance();
     }
-  }, []);
+  }, [userPublicKey]);
 
   return (
     <div className={styles.parent_container}>
@@ -518,6 +391,7 @@ function MerchantDashboard() {
         {merchant && userPublicKey && showSubHub && renderSubHubComponent()}
         {merchant && userPublicKey && showInventory && renderInventoryComponent()}
         {merchant && userPublicKey && showSettings && renderSettingsComponent()}
+        {!merchant && userPublicKey && !loading ? renderNotMerchant() : null}
       </div>
     </div>
   );
