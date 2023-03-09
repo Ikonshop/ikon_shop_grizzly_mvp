@@ -4,6 +4,7 @@ import styles from "./styles/Profile.module.css";
 import { 
   GetWalletSettings,
   UpdateWalletSettings,
+  UpsertWallet,
 } from "../../lib/api";
 import {
   IoArrowForwardOutline,
@@ -14,9 +15,14 @@ import {
   IoPencil,
   IoCamera,
   IoCheckmarkDoneSharp,
-
+  IoLogoGoogle,
+  IoLogoDiscord,
 } from "react-icons/io5";
 import LoginMagic from "../MagicWallet/login";
+import { verifyWithDiscord, verifyWithGoogle } from "../../hooks/verify";
+import { Magic } from 'magic-sdk';
+import { OAuthExtension } from '@magic-ext/oauth';
+
 
 const Profile = (userPubKey) => {
   // DASH STATES
@@ -27,6 +33,16 @@ const Profile = (userPubKey) => {
 
   const [activeDash, setActiveDash] = useState("Edit Profile");
 
+
+  const handleVerifyWithDiscord = async () => {
+    const response = await verifyWithDiscord();
+    console.log('response from social login', response)
+  }
+
+  const handleVerifyWithGoogle = async () => {
+    const response = await verifyWithGoogle();
+    console.log('response from social login', response)
+  }
 
   // PROFILE IMAGE UPLOAD
 
@@ -93,6 +109,7 @@ const Profile = (userPubKey) => {
       // profileImage: profileImage,
       socialLinks: socialLinks,
       cryptoLinks: cryptoLinks,
+      verified: verified,
     };
   }, [userPubKey, email, userName, description, socialLinks, cryptoLinks]);
 
@@ -151,8 +168,10 @@ const Profile = (userPubKey) => {
                 />
                 {!verified && (
                   <>
-                    <p>To verify, login with Magic</p>
-                    <LoginMagic req={email} />
+                    <p>Verify with: 
+                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyWithDiscord()}> <IoLogoDiscord /></span>
+                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyWithGoogle()}> <IoLogoGoogle /></span>
+                    </p>
                   </>
                 )}
               </div>
@@ -270,6 +289,66 @@ const Profile = (userPubKey) => {
     };
     getWalletSettings();
   }, []);
+
+
+  useEffect(() => {
+    console.log('window.location.pathname', userPubKey)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const magic = new Magic('pk_live_CD0FA396D4966FE0', {
+        extensions: [new OAuthExtension()],
+    });
+    if(
+        urlParams.get('discordVerify') === 'true'
+    ) {
+        console.log('userSettings=true')
+        async function handleVerifyWithSocial() {
+          const result = await magic.oauth.getRedirectResult();
+          const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+          console.log("profile", profile);
+          const email = result.oauth.userInfo.email;
+          const isVerified = result.oauth.userInfo.emailVerified;
+          setVerified(isVerified);
+          const name = result.oauth.userInfo.sources[`https://discord.com/api/users/@me`].username;
+          setUserName(name);
+          const data = JSON.stringify({
+            email: email,
+            name: name,
+            owner: userPubKey.userPubKey,
+            verified: isVerified,
+          });
+      
+          UpsertWallet(data);
+        }
+      handleVerifyWithSocial();
+    }
+    if(
+      urlParams.get('googleVerify') === 'true'
+  ) {
+      console.log('userSettings=true')
+      async function handleVerifyWithSocial() {
+        const result = await magic.oauth.getRedirectResult();
+        const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+        console.log("profile", profile);
+        const email = result.oauth.userInfo.email;
+        const isVerified = true;
+        setVerified(isVerified);
+        const name = result.oauth.userInfo.name;
+        setUserName(name);
+        const data = JSON.stringify({
+          email: email,
+          name: name,
+          owner: userPubKey.userPubKey,
+          verified: isVerified,
+        });
+    
+        UpsertWallet(data);
+      }
+    handleVerifyWithSocial();
+  }
+}, []);
+      
+
 
   return (
     <div className={styles.profile_container}>

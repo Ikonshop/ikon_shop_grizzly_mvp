@@ -379,7 +379,8 @@ function MerchantDashboard() {
         }
          
         if(data === false){
-          router.push('/register')
+          // router.push('/register')
+          console.log('not a merchant')
         }
       };
       getData();
@@ -487,7 +488,7 @@ function MerchantDashboard() {
     // setShowSettings(false);
     //url: /merchant/dashboard?settings=true
     const urlParams = new URLSearchParams(window.location.search);
-    const settings = urlParams.get("settings");
+    const settings = urlParams.get("merchantSettings");
     if (settings === "true") {
       setShowSettings(true);
     }

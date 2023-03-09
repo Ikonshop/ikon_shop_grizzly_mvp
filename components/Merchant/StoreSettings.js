@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styles from "../Merchant/styles/StoreSettings.module.css";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, GetAccountInfoConfig } from "@solana/web3.js";
+import {Magic} from "magic-sdk";
+import { OAuthExtension } from '@magic-ext/oauth';
 import {
   getCollectionOwner,
   updateCollectionInfo,
@@ -13,7 +15,10 @@ import {
   IoLogoInstagram,
   IoLogoTwitter,
   IoLogoWebComponent,
+  IoCheckmarkDoneSharp,
+  IoLogoGoogle,
 } from "react-icons/io5";
+import { verifyMerchantWithDiscord, verifyMerchantWithGoogle } from "../../hooks/verify";
 import * as web3 from "@solana/web3.js";
 
 const StoreSettings = () => {
@@ -35,6 +40,7 @@ const StoreSettings = () => {
   const [isMultiStoreOwner, setIsMultiStoreOwner] = useState(false);
   const [multiStoreArray, setMultiStoreArray] = useState(null);
   const [previewBanner, setPreviewBanner] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [newCollectionInfo, setNewCollectionInfo] = useState({
     id: "null",
     projectName: "null",
@@ -44,7 +50,19 @@ const StoreSettings = () => {
     twitterHandle: "null",
     instagramHandle: "null",
     discordServer: "null",
+    email: "null",
+    verified: false
   });
+
+  const handleVerifyMerchantWithDiscord = async () => {
+    const response = await verifyMerchantWithDiscord();
+    console.log('response from social login', response)
+  }
+
+  const handleVerifyMerchantWithGoogle = async () => {
+    const response = await verifyMerchantWithGoogle();
+    console.log('response from social login', response)
+  }
 
   const renderStoreSettings = () => {
     console.log("storeInfo: ", storeInfo);
@@ -83,7 +101,7 @@ const StoreSettings = () => {
                 />
               </div>
               <div className={styles.info_item}>
-                <h6>Banner URL</h6>
+                <h6>Banner </h6>
                 <input
                   className={styles.short_input}
                   type="text"
@@ -92,6 +110,30 @@ const StoreSettings = () => {
                     setNewCollectionInfo({
                       ...newCollectionInfo,
                       banner: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className={styles.info_item}>
+                <h6>Email<span>
+                  Verified: {verified ? 
+                  <IoCheckmarkDoneSharp /> : '✗'} 
+                  {!verified && (
+                    <>
+                      {" "}| Verify with:
+                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithDiscord()}> <IoLogoDiscord /></span>
+                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithGoogle()}> <IoLogoGoogle /></span>
+                    </>
+                  )}
+                  </span></h6>
+                <input
+                  className={styles.short_input}
+                  type="text"
+                  placeholder={storeInfo.email}
+                  onChange={(e) =>
+                    setNewCollectionInfo({
+                      ...newCollectionInfo,
+                      email: e.target.value,
                     })
                   }
                 />
@@ -283,6 +325,7 @@ const StoreSettings = () => {
     if(userPublicKey){
       (async () => {
         const store_info = await getCollectionOwner(userPublicKey);
+        console.log('store info', store_info)
         console.log(store_info);
         setStoreInfo(store_info.collections[0]);
         setNewCollectionInfo(store_info.collections[0]);
@@ -351,6 +394,76 @@ const StoreSettings = () => {
     });
 
   }, []);
+  
+  useEffect(() => {
+    if(userPublicKey) {
+    console.log('window.location.pathname', userPublicKey)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const magic = new Magic('pk_live_CD0FA396D4966FE0', {
+        extensions: [new OAuthExtension()],
+    });
+    if(
+        urlParams.get('discordVerify') === 'true'
+    ) {
+        console.log('userSettings=true')
+        
+        async function handleVerifyWithSocial() {
+          const store_info = await getCollectionOwner(userPublicKey);
+          console.log('store info', store_info)
+          const result = await magic.oauth.getRedirectResult();
+          const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+          console.log("profile", profile);
+          const email = result.oauth.userInfo.email;
+          const isVerified = result.oauth.userInfo.emailVerified;
+          setVerified(isVerified);
+          const name = result.oauth.userInfo.sources[`https://discord.com/api/users/@me`].username;
+          // setUserName(name);
+          const data = {
+            ...newCollectionInfo,
+            id: store_info.collections[0].id,
+            banner : store_info.collections[0].banner,
+            description: store_info.collections[0].description,
+            verified: isVerified,
+            email: email,
+          }
+          const update = await updateCollectionInfo(data)
+          console.log('update', update)
+        }
+      handleVerifyWithSocial();
+    }
+    if(
+      urlParams.get('googleVerify') === 'true'
+  ) {
+      console.log('userSettings=true')
+      async function handleVerifyWithSocial() {
+        const store_info = await getCollectionOwner(userPublicKey);
+        console.log('store info', store_info)
+        const result = await magic.oauth.getRedirectResult();
+        const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+        console.log("profile", profile);
+        const email = result.oauth.userInfo.email;
+        const isVerified = true;
+        setVerified(isVerified);
+        const name = result.oauth.userInfo.name;
+        // setUserName(name);
+        const data = {
+          ...newCollectionInfo,
+          id: store_info.collections[0].id,
+          banner : store_info.collections[0].banner,
+          description: store_info.collections[0].description,
+          verified: isVerified,
+          email: email,
+        }
+        const update = await updateCollectionInfo(data);
+        console.log('update', update)
+        setVerified(update.updateCollection.verified)
+        setUserEmail(update.updateCollection.email)
+      }
+    handleVerifyWithSocial();
+  }
+  }
+}, [userPublicKey]);
 
   return (
     <div>

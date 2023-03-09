@@ -128,7 +128,7 @@ const Register = (req) => {
       CreateCollectionFromMagic(data);
     }
     console.log("logged in and collection created");
-    router.push("/merchant/dashboard?settings=true");
+    router.push("/dashboard?merchantSettings=true");
   };
 
   const handleLogin = async () => {
@@ -139,7 +139,7 @@ const Register = (req) => {
       name: userName,
     });
     const isCollectionOwner = await CheckForCollectionByOwner(
-      publicKey.toString()
+      userPubKey
     );
     console.log("isCollectionOwner", isCollectionOwner);
     await checkForNfts();
@@ -272,7 +272,10 @@ const Register = (req) => {
   }, [publicKey]);
 
   useEffect(() => {
-    handleLogin();
+    console.log('userPubKey', userPubKey)
+    if(userPubKey != null){
+      handleLogin();
+    }
   }, [userPubKey]);
 
   useEffect(() => {
@@ -326,7 +329,7 @@ const Register = (req) => {
                     storeName={storeName}
                     email={email}
                   />
-                  <p>Email wallet using Magic:</p>
+                  <p>Email wallet using Magic</p>
                 </div>
 
                 <div>
@@ -337,7 +340,7 @@ const Register = (req) => {
                       justifyContent: "center",
                     }}
                   />
-                  <p>Browser wallet using Solana:</p>
+                  <p>Browser wallet using Solana</p>
                 </div>
               </div>
             </div>

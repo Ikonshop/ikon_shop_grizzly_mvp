@@ -588,10 +588,8 @@ function UserDashboard() {
           if (products.products[i].type === "product") {
             ownerProducts.push(products.products[i]);
           }
-          if (i === products.products.length - 1) {
-            setLoading(false);
-          }
         }
+        setLoading(false);
       };
 
       const getTotals = async () => {
@@ -677,27 +675,40 @@ function UserDashboard() {
   // checkUser();
   // };
 
-  useEffect(() => {
-
-    window.addEventListener("magic-logged-in", () => {
-      // JSON PARSE
-      const user = JSON.parse(localStorage.getItem('userMagicMetadata'));
-      const pubKey = new web3.PublicKey(user.publicAddress);
-
-      setUserPublicKey(pubKey.toString());
-      UpdateWallet(pubKey.toString(), user.email);
-      
-      if(publicKey && connected) {
-        setUserPublicKey(publicKey.toString())
-        UpdateWallet(publicKey.toString(), user.email);
+  const checkMagicLogin = async() => {
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: {
+          solana: new SolanaExtension({
+          rpcUrl
+          })
       }
     });
+    async function checkUser() {
+      const loggedIn = await magic.user.isLoggedIn();
+      console.log('loggedIn', loggedIn)
+      magic.user.isLoggedIn().then(async (magicIsLoggedIn) => {
+        if (magicIsLoggedIn) {
+          magic.user.getMetadata().then((user) => {
+            localStorage.setItem('userMagicMetadata', JSON.stringify(user));
+            const pubKey = new web3.PublicKey(user.publicAddress);
+            setUserPublicKey(pubKey.toString());
+          });
+        } else {
+          setLoading(false);
+        }
+      });
+    }
+  checkUser();
+  };
+
+  useEffect(() => {
+    if(!publicKey) {
+      checkMagicLogin();
+    }
+    window.addEventListener("magic-logged-in", () => {
+      checkMagicLogin();
+    });
     window.addEventListener("magic-logged-out", () => {
-      setActiveMenu("home");
-      setShowUserDash(false);
-      setShowUserOrders(false);
-      setShowCreateLink(false);
-      setShowLinkOrders(false);
       setUserEmail(null);
       setUserPublicKey(null);
       setCurrentWallet(null);
@@ -706,8 +717,19 @@ function UserDashboard() {
 
   }, []);
 
-  
 
+  useEffect(() => {
+
+    console.log('window.location.pathname', window.location.search)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(
+        urlParams.get('userSettings') === 'true'
+    ) {
+      setShowUserProfile(true);
+    }
+
+  }, [])
 
   useEffect(() => {
     //if the url ends in ?payhub=true, show the payhub
@@ -715,7 +737,7 @@ function UserDashboard() {
       setShowCreateLink(true), setActiveMenu("payreq");
     }
     if(window.location.href.includes("?settings=true")) {
-      setShowUserProfile(true), setsActiveMenu("profile");
+      setShowUserProfile(true), setActiveMenu("profile");
     }
   }, []); 
 

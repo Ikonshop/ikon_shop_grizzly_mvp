@@ -13,7 +13,25 @@ const DashboardPage = () => {
             setActiveDash("user");
         });
     }, []);
-    
+
+    useEffect(() => {
+        console.log('window.location.pathname', window.location.search)
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        if(
+            urlParams.get('userSettings') === 'true'
+        ) {
+            console.log('userSettings=true')
+            setActiveDash("user");
+        }
+        if(
+            urlParams.get('merchantSettings') === 'true'
+        ) {
+            console.log('merchantSettings=true')
+            setActiveDash("merchant");
+        }
+    }, []);
+
     return (
         <div>
             {activeDash === "user" ? (
