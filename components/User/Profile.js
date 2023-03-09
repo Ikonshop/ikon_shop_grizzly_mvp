@@ -159,7 +159,7 @@ const Profile = (userPubKey) => {
                 />
               </div>
               <div className={styles.profile_body_right_bottom_right}>
-                <p>Email <span>Verified: {verified ? <IoCheckmarkDoneSharp /> : '✗'}</span></p>
+                <p>Email <span>{verified ? 'Verified' : 'Unverified'}</span></p>
                 <input
                   type="text"
                   className={styles.profile_body_right_input}
@@ -218,7 +218,7 @@ const Profile = (userPubKey) => {
             <div className={styles.profile_body_right_bottom}>
               <div className={styles.profile_body_update}>
                 <button
-                  className={styles.profile_body_update_button}
+                  className="btn btn-primary"
                   onClick={() => {
                     console.log("req", req);
                     UpdateWalletSettings(req);
@@ -357,8 +357,8 @@ const Profile = (userPubKey) => {
       {/* when selected, that option becomes the current menu on right */}
       {/* active Dash will have <IoArrowForwardOutline /> next to it */}
 
-      <div className={styles.profile_header_dash}>
-        <div className={styles.profile_header_dash_item}>
+      {/* <div className={styles.profile_header_dash}> */}
+        {/* <div className={styles.profile_header_dash_item}>
           <IoPencilSharp className={styles.profile_header_dash_item_icon} />
           <p
             onClick={() => (
@@ -372,7 +372,7 @@ const Profile = (userPubKey) => {
               className={styles.profile_header_dash_item_icon}
             />
           )}
-        </div>
+        </div> */}
         {/* <div className={styles.profile_header_dash_item}>
           <IoLinkOutline className={styles.profile_header_dash_item_icon} />
           <p
@@ -388,7 +388,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div> */}
-        <div className={styles.profile_header_dash_item}>
+        {/* <div className={styles.profile_header_dash_item}>
           <IoNotificationsSharp
             className={styles.profile_header_dash_item_icon}
           />
@@ -404,7 +404,7 @@ const Profile = (userPubKey) => {
               className={styles.profile_header_dash_item_icon}
             />
           )}
-        </div>
+        </div> */}
         {/* <div className={styles.profile_header_dash_item}>
           <IoShieldCheckmarkSharp
             className={styles.profile_header_dash_item_icon}
@@ -423,7 +423,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div> */}
-      </div>
+      {/* </div> */}
 
       <div className={styles.profile_body}>
         {!loading && renderCurrentMenu()}
