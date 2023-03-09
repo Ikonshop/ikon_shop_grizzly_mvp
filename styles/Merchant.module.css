@@ -355,8 +355,7 @@
 
 .paylink_blob {
   background: #fff;
-  padding: 20px 30px;
-  width: fit-content;
+  width: 80%;
   border-radius: 20px;
 }
 
@@ -370,6 +369,7 @@
   gap:5vw;
   width: 100%;
   overflow: scroll;
+  margin-right: 5px;
 }
 
 .dash_header{
@@ -631,7 +631,7 @@
   border-radius: 10px;
   height: 60px;
   padding: 10px 20px;
-  width: fit-content;
+  width: 350px;
   gap: 20px;
 }
 

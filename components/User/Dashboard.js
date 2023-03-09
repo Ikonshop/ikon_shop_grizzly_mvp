@@ -318,6 +318,7 @@ function UserDashboard() {
                     color: "#fff",
                     fontSize: "20px",
                     marginTop: "2px",
+                    marginRight: "5px",
                   }}
                   className="link_icon_tip"
                   onClick={() => router.push(`/product/${product.id}`)}
