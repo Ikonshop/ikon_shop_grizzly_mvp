@@ -2233,6 +2233,52 @@ button:disabled {
   position: relative;
 }
 
+.button_drop_tip {
+  font-size: 16px;
+  width: 250px;
+  height: 50px;
+  background: #ff7fa5;
+  padding: 10px 0 0 30px;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  color: #130b46;
+  overflow: hidden !important;
+}
+
+.button_drop_tip p {
+  font-size: 17px;
+  color: #fff;
+}
+
+.arrow_bg_tip {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+  background: #ff508a;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow_drop {
+  color: #130b46;
+}
+
+.arrow_drop_tip {
+  color: white;
+}
+
+.arrow_drop.open {
+  transform: rotate(180deg);
+}
+
 .pay_btn .button_drop {
   font-size: 16px;
   width: 250px;
@@ -4011,8 +4057,6 @@ button:disabled {
   }
 }
 
-
-
 .coffee-container {
   width: 300px;
   height: 280px;
@@ -4140,7 +4184,7 @@ button:disabled {
   position: absolute;
   bottom: 0;
   left: calc(50% - 40px);
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 0 0 70px 70px / 0 0 110px 110px;
 }
 .coffee-medium__cup::after {
@@ -4150,20 +4194,20 @@ button:disabled {
   position: absolute;
   top: 6px;
   right: -13px;
-  border: 5px solid #FFF;
+  border: 5px solid #fff;
   border-radius: 50%;
 }
 @keyframes liquid {
   0% {
-    height: 0px;  
+    height: 0px;
     opacity: 1;
   }
   5% {
-    height: 0px;  
+    height: 0px;
     opacity: 1;
   }
   20% {
-    height: 62px;  
+    height: 62px;
     opacity: 1;
   }
   95% {
@@ -4188,7 +4232,7 @@ button:disabled {
 .coffee-medium__smoke {
   width: 8px;
   height: 20px;
-  position: absolute;  
+  position: absolute;
   border-radius: 5px;
   background-color: #b3aeae;
 }
@@ -4199,11 +4243,11 @@ button:disabled {
   }
   40% {
     bottom: 50px;
-    opacity: .5;
+    opacity: 0.5;
   }
   80% {
     bottom: 80px;
-    opacity: .3;
+    opacity: 0.3;
   }
   100% {
     bottom: 80px;
@@ -4217,11 +4261,11 @@ button:disabled {
   }
   40% {
     bottom: 70px;
-    opacity: .5;
+    opacity: 0.5;
   }
   80% {
     bottom: 80px;
-    opacity: .3;
+    opacity: 0.3;
   }
   100% {
     bottom: 80px;
@@ -4270,4 +4314,3 @@ button:disabled {
   left: -8px;
   background-color: #000;
 }
-
