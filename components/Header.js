@@ -10,6 +10,7 @@ import {
   CheckForCollectionByOwner,
   UpdateWallet,
 } from "../lib/api";
+import { isMerchant, isUser } from "../hooks/checkAllowance";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -37,6 +38,7 @@ import {
   IoLinkOutline,
   IoDocumentOutline,
   IoFingerPrintSharp,
+  IoFlashOutline
 } from "react-icons/io5";
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
@@ -56,6 +58,9 @@ export default function HeaderComponent() {
   const [showStoreSymbol, setShowStoreSymbol] = useState(false);
   const [showLoginOptions, setShowLoginOptions] = useState(false);
   const [userPublicKey, setUserPublicKey] = useState("");
+  const [merchant, setMerchant] = useState(false);
+  const [user, setUser] = useState(false);
+  const [loading , setLoading] = useState(false);
   // BROWSER WALLET
   const WalletMultiButton = dynamic(
     async () =>
@@ -199,7 +204,21 @@ export default function HeaderComponent() {
         <div className={styles.menu}>
           {/* if currentpath is /dashboard then renderDashToggle */}
           {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
-          {userPublicKey && (
+          {userPublicKey && user && !merchant &&(
+            <div className={styles.menuItem}>
+              <Link href="/dashboard">
+                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+              </Link>
+            </div>
+          )}
+          {userPublicKey && !user && merchant &&(
+            <div className={styles.menuItem}>
+              <Link href="/dashboard">
+                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+              </Link>
+            </div>
+          )}
+          {userPublicKey && user && merchant &&(
             <div className={styles.menuItem}>
               <Link href="/dashboard">
                 <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
@@ -207,18 +226,23 @@ export default function HeaderComponent() {
             </div>
           )}
           
-          {currentPath === '/dashboard' && !showStoreSymbol && (
+          {/* {currentPath === '/dashboard' && !showStoreSymbol && (
             renderUserDashboardOptions()
           )}
           {currentPath === '/dashboard' && showStoreSymbol && (
             renderMerchantDashboardOptions()
-          )}
+          )} */}
           {/* LOGIN LINK */}
           {!userPublicKey &&
             <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))}  className={styles.menuItem}>
               <IoLogInOutline className={styles.icon} /> <span>Login</span>
             </div>
           }
+          {!user && (
+            <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))} className={styles.menuItem}>
+            <IoFlashOutline className={styles.icon} /> <span>Register</span>
+          </div>
+          )}
           {/* LOGGED IN  */}
           {userPublicKey != '' && 
             <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))} className={styles.menuItem}>
@@ -271,31 +295,35 @@ export default function HeaderComponent() {
 
   const renderDashToggle = () => {
     return (
-      <div className={styles.toggleItem}>
-        <div 
-          id="container"
-          onClick={() => (
-            showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
-          )}
-        >
-          {!showStoreSymbol ? (
-            <div
-              id="target"
-              class="moon"
+      <>
+        {!loading && merchant && (
+          <div className={styles.toggleItem}>
+            <div 
+              id="container"
+              onClick={() => (
+                showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
+              )}
             >
-              <IoAccessibilityOutline className="moon_tog" />
+              {!showStoreSymbol ? (
+                <div
+                  id="target"
+                  class="moon"
+                >
+                  <IoAccessibilityOutline className="moon_tog" />
+                </div>
+              ) : (
+                <div
+                  id="target"
+                  class="sun"
+                >
+                  <IoStorefrontOutline className="sunny_tog" />
+                </div>
+              )}
             </div>
-          ) : (
-            <div
-              id="target"
-              class="sun"
-            >
-              <IoStorefrontOutline className="sunny_tog" />
-            </div>
-          )}
-        </div>
-        <span>{showStoreSymbol ? 'Merchant' : 'User'}</span>
-      </div>
+            <span>{showStoreSymbol ? 'Merchant' : 'User'}</span>
+          </div>
+        )}
+      </>
     )
   }
 
@@ -493,6 +521,34 @@ export default function HeaderComponent() {
     });
     
   }, []);
+
+  useEffect(() => {
+    async function checkAllowance(){
+      await isUser(userPublicKey).then((data) => {
+        if(data === true){
+          setUser(true);
+          setLoading(false);
+        }else{
+          console.log('not a user');
+          setUser(false);
+          setLoading(false);
+        }
+      })
+      await isMerchant(userPublicKey).then((data) => {
+        if(data === true){
+          setMerchant(true);
+          setLoading(false);
+        }else{
+          console.log('not a merchant');
+          setMerchant(false);
+          setLoading(false);
+        }
+      })
+    }
+    if(userPublicKey){
+      checkAllowance();
+    }
+  }, [userPublicKey]);
 
 
   return (

@@ -44,7 +44,7 @@ function MerchantDashboard() {
   const { publicKey } = useWallet();
 
   // MERCHANT DASHBOARD CONSTANTS
-  const [showMerchantDash, setShowMerchantDash] = useState(false);
+  const [showMerchantDash, setShowMerchantDash] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
@@ -74,14 +74,6 @@ function MerchantDashboard() {
     return (
       <>
         <div className={styles.merchant_dashboard}>
-          <img
-            className={styles.ik_logo}
-            src="/iklogo.png"
-            style={{
-              maxWidth: "30px",
-              margin: "20px auto 30px auto",
-            }}
-          />
           <button
             id="overview"
             disabled={!userPublicKey}
@@ -162,10 +154,10 @@ function MerchantDashboard() {
             <IoSettingsOutline className={styles.side_icon} />
             <span id={styles.full_screen}>Settings</span>
           </button>
-          <button className="dash-button" onClick={() => router.push("/")}>
+          {/* <button className="dash-button" onClick={() => router.push("/")}>
             <IoArrowBackOutline className={styles.side_icon} />
             <span id={styles.full_screen}>Back to Home</span>
-          </button>
+          </button> */}
           <div className={styles.ikonshop_users}>
             <ul>
               <li></li>

@@ -172,7 +172,7 @@ const App = (props) => {
               </h1>
               <p className="info_body">
                 For everyday users, degens etc IkonShop serves as a useful and
-                insightful tool to manage you web3 financea
+                insightful tool to manage you web3 finance
               </p>
 
               <br />

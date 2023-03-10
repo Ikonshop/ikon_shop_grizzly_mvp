@@ -69,7 +69,7 @@ function UserDashboard() {
   const [userPublicKey, setUserPublicKey] = useState();
   const [userEmail, setUserEmail] = useState();
   // USER DASHBOARD CONSTANTS
-  const [showUserDash, setShowUserDash] = useState(false);
+  const [showUserDash, setShowUserDash] = useState(true);
   const [showUserOrders, setShowUserOrders] = useState(false);
   const [showCreateLink, setShowCreateLink] = useState(false);
   const [showLinkOrders, setShowLinkOrders] = useState(false);
@@ -191,10 +191,6 @@ function UserDashboard() {
           >
             <IoFingerPrintSharp />
             <span id={styles.full_screen}>Profile</span>
-          </button>
-          <button className="dash-button" onClick={() => router.push("/")}>
-            <IoArrowBackOutline />
-            <span id={styles.full_screen}>Back to Stores</span>
           </button>
         </div>
       </>
@@ -334,13 +330,13 @@ function UserDashboard() {
           <IoFingerPrintSharp className={styles.dash_icon} />
           <span id={styles.full_screen}>Profile</span>
         </button>
-        <button
+        {/* <button
           className="dash-button back_to"
           onClick={() => router.push("/")}
         >
           <IoLogOutOutline />
           <span id={styles.full_screen}>Logout</span>
-        </button>
+        </button> */}
       </div>
       <div className={styles.dash_container}>
         {/* <div className={styles.dash_header}>
@@ -759,6 +755,7 @@ function UserDashboard() {
     // <div className={styles.parent_container}>
     //   <div className={styles.main_container}>
     <div>
+      {showUserDash ? renderUserDashboard() : null}
       {!userPublicKey && !publicKey && !loading ? renderConnectWallet() : null}
       {allowance && (
         <>
