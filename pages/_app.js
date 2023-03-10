@@ -62,7 +62,7 @@ const App = ({ Component, pageProps }) => {
         <WalletModalProvider>
           <Header />
           <Component {...pageProps} />
-          <Footer />
+          {/* <Footer /> */}
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
