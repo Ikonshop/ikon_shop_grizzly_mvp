@@ -220,8 +220,8 @@ export default function HeaderComponent() {
           )}
           {/* SOCIALS */}
           <div className={styles.socialItem}>
-            <a><IoLogoDiscord className={styles.icon} /></a>
-            <a><IoLogoTwitter className={styles.icon} /></a>
+            <a href="https://discord.com/invite/ikons"><IoLogoDiscord className={styles.icon} /></a>
+            <a href="https://twitter.com/ikonshopapp"> <IoLogoTwitter className={styles.icon} /></a>
           </div>
         </div>
       </div>

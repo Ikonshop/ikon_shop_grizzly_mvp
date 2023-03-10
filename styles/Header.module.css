@@ -69,8 +69,6 @@
   background-color: #ffffff;
 }
 
-
-
 .menuItem {
   display: flex;
   align-items: center;
@@ -133,14 +131,15 @@
   position: absolute;
   /* middle of screen */
   top: 50%;
-  left: 50%;
+  left: 70%;
   width: fit-content;
   height: fit-content;
   padding: 20px;
   background-color: rgb(255, 255, 255);
   border-radius: 15px;
   transform: translate(-50%, -50%);
-  z-index: 20;
+  z-index: 2001;
+  border: 1px solid black;
 }
 
 .loginOption{
@@ -180,7 +179,7 @@
   display: flex;
   position: fixed;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   padding-top: 15vh;
   gap: 10vh;
   align-items: left;
@@ -215,7 +214,7 @@
 
 .socialItem{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   cursor: pointer;
