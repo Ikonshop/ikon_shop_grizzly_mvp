@@ -197,7 +197,8 @@ export default function HeaderComponent() {
       <div className={styles.menuContainer}>
         <div onClick={()=> (setShowMenu(false), setShowLoginOptions(false))} className={styles.menuOverlay}></div>
         <div className={styles.menu}>
-          {/* DASHBOARD TOGGLE */}
+          {/* if currentpath is /dashboard then renderDashToggle */}
+          {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
           {userPublicKey && (
             <div className={styles.menuItem}>
               <Link href="/dashboard">
@@ -205,6 +206,7 @@ export default function HeaderComponent() {
               </Link>
             </div>
           )}
+          
           {currentPath === '/dashboard' && !showStoreSymbol && (
             renderUserDashboardOptions()
           )}
@@ -226,14 +228,14 @@ export default function HeaderComponent() {
           
           {/* MAGIC QUICK ACTION LINK */}
           {magicUser && (
-            <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false))} className={styles.menuItem}>
+            <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false), setShowMenu(false))} className={styles.menuItem}>
               <IoWalletOutline className={styles.icon} /> <span>Wallet</span>
             </div>
           )}
           {/* SOCIALS */}
           <div className={styles.socialItem}>
-            <a href="https://discord.com/invite/ikons"><IoLogoDiscord className={styles.icon} /></a>
-            <a href="https://twitter.com/ikonshopapp"> <IoLogoTwitter className={styles.icon} /></a>
+            <a href="https://discord.com/invite/ikons"><IoLogoDiscord className={styles.socialIcon} /></a>
+            <a href="https://twitter.com/ikonshopapp"> <IoLogoTwitter className={styles.socialIcon} /></a>
           </div>
         </div>
       </div>
@@ -269,8 +271,7 @@ export default function HeaderComponent() {
 
   const renderDashToggle = () => {
     return (
-      <div className={styles.dashItem}>
-        Toggle Dash
+      <div className={styles.toggleItem}>
         <div 
           id="container"
           onClick={() => (
@@ -292,7 +293,8 @@ export default function HeaderComponent() {
               <IoStorefrontOutline className="sunny_tog" />
             </div>
           )}
-              </div>
+        </div>
+        <span>{showStoreSymbol ? 'Merchant' : 'User'}</span>
       </div>
     )
   }
@@ -499,8 +501,6 @@ export default function HeaderComponent() {
         <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
         {/* <img className={styles.smallLogo} src="/newlogo.png" alt="logo" /> */}
       </div>
-      {/* if currentpath is /dashboard then renderDashToggle */}
-      {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
       <div 
         className={styles.hamburger}
         onClick={()=> setShowMenu(!showMenu)}

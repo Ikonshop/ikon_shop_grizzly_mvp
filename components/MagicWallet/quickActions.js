@@ -49,9 +49,10 @@ const QuickActions = (req) => {
       <div className={styles.depositContainer}>
         <div id="qr-code"></div>
         <div className={styles.transferInputTokenRow}>
-          <p>Token: </p>
+          <p>Token: {tokenType}</p>
           <div className={styles.tokenSelect}>
             <select onChange={(e) => setTokenType(e.target.value)}>
+              <option value="">Select</option>
               <option value="SOL">SOL</option>
               <option value="USDC">USDC</option>
             </select>
@@ -75,30 +76,18 @@ const QuickActions = (req) => {
   const renderDepositQRUsdc = () => {
     const element = document.getElementById("qr-code");
     depositQR.append(element);
-    //will need to create a modal that displays the qr code
     return (
       <div className={styles.depositContainer}>
         <div id="qr-code"></div>
         <div className={styles.transferInputTokenRow}>
-          <p>Token: </p>
+          <p>Token: {tokenType}</p>
           <div className={styles.tokenSelect}>
-            <select onChange={(e) => setTokenType(e.target.value)}>
-              <option value="USDC">USDC</option>
-              <option value="SOL">SOL</option>
-            </select>
+          <select onChange={(e) => setTokenType(e.target.value)}>
+                      <option value="SOL">Select</option>
+                      <option value="SOL">SOL</option>
+                      <option value="USDC">USDC</option>
+                    </select>
           </div>
-        </div>
-        <div className={styles.transferInputRow}>
-          <h4>Address: </h4>
-          <span>Address: </span>
-          {publicKey.slice(0, 4)}...{publicKey.slice(-4)}
-          {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
-          {!copied && (
-            <IoCopyOutline
-              className={styles.copyIcon}
-              onClick={() => handleCopy(publicKey)}
-            />
-          )}
         </div>
       </div>
     );
@@ -123,8 +112,7 @@ const QuickActions = (req) => {
           refreshBalance();
         }}  
       >
-        <IoTimeOutline className={styles.balanceRefreshIcon} />
-        <p>Refresh Balance</p>
+        <p><IoTimeOutline className={styles.balanceRefreshIcon} />Refresh Balance</p>
       </div>
     );
   };
@@ -293,6 +281,7 @@ const QuickActions = (req) => {
                   </div>
                   <div className={styles.tokenSelect}>
                     <select onChange={(e) => setTokenType(e.target.value)}>
+                      <option value="">Select</option>
                       <option value="SOL">SOL</option>
                       <option value="USDC">USDC</option>
                     </select>

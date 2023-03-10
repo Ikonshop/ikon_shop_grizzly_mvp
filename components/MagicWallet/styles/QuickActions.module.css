@@ -25,11 +25,11 @@
 .quickActions {
   position: absolute;
   top: 50%;
-  left: 60%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 800px;
-  max-height: fit-content;
-  min-height: 400px;
+  min-height: 60vh;
+  gap: 10px;
   padding: 20px 40px;
   background-color: #fff;
   border-radius: 10px;
@@ -37,6 +37,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  z-index: 2009;
 }
 
 .leftContainer {
@@ -186,6 +187,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 90%;
 }
 
 .depositContainer > p {
@@ -212,6 +214,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-top: 20px;
 }
 
 .transferContainer > p {
@@ -244,7 +247,7 @@
 
 .transferInputTokenRow {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -255,7 +258,10 @@
 }
 
 .transferInputTokenRow p {
-  margin-top: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;  
+  flex-direction: row;
 }
 
 .transferInput {
@@ -375,11 +381,15 @@
   width: 100%;
   margin-top: 5px;
   cursor: pointer;
+  /* no text wrap, display in straight line */
+  white-space: nowrap;
+  margin-bottom: 5px;
 }
 
 .balanceRefresh > p {
   font-size: 12px;
   font-weight: 600;
+  width: 120px;
   color: #000;
   margin-bottom: 0;
   margin-right: 2px;
@@ -412,11 +422,9 @@
   .quickActions {
     position: absolute;
     top: 50%;
-    left: 60%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 70vw;
-    min-height: 400px;
-    max-height: fit-content;
     padding: 20px 40px;
     background-color: #fff;
     border-radius: 10px;
@@ -424,7 +432,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 4000;
   }
 
   .leftContainer {

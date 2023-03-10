@@ -58,21 +58,23 @@
   display: flex;
   position: fixed;
   flex-direction: column;
-  justify-content: center;
-  gap: 40px;
-  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  /* left-align text */
+  align-items: left;
   position: absolute;
   top: 0;
   height: 100vh;
   width: 14vw;
   z-index: 2000;
   background-color: #ffffff;
+  padding-top: 80px;
+  padding-left: 15px;
 }
 
 .menuItem {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  
   cursor: pointer;
 }
 
@@ -84,11 +86,34 @@
   gap: 5px;
 }
 
-.socialItem{
+.toggleItem{
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.toggleItem > span {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: black;
+  cursor: pointer;
+}
+
+.socialItem{
+  /* display at bottom of screen*/
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 5px;
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  
 }
 
 .menuItem a {
@@ -100,7 +125,7 @@
 .menuItem a span{
   color: black;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .menuItem a:hover {
@@ -110,6 +135,12 @@
 
 .icon {
   font-size: 20px;
+  color: black;
+  cursor: pointer;
+}
+
+.socialIcon {
+  font-size: 40px;
   color: black;
   cursor: pointer;
 }
@@ -138,7 +169,7 @@
   background-color: rgb(255, 255, 255);
   border-radius: 15px;
   transform: translate(-50%, -50%);
-  z-index: 001;
+  z-index: 100;
   border: 1px solid black;
 }
 
@@ -181,8 +212,6 @@
   position: fixed;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 15vh;
-  gap: 10vh;
   align-items: left;
   position: absolute;
   top: 0;
@@ -213,13 +242,6 @@
   cursor: pointer;
 }
 
-.socialItem{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
 
 .loginOptions{
   width: 60vw;
