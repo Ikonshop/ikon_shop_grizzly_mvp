@@ -70,6 +70,7 @@
   width: 80vw;
 }
 
+
 .merchant_dashboard {
   width: 300px;
   height: 100vh;
@@ -365,6 +366,7 @@
   display: flex;
   gap: 30px;
   align-items: center;
+  width: calc(100% + 30px);
 }
 
 .sol_balance {
@@ -403,8 +405,6 @@
 
 .btn_container_wrap {
   width: 100%;
-  display: grid;
-  place-items: center;
   margin-top: 30px;
 }
 
@@ -748,6 +748,7 @@
 
 .atadian_report {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 30px;
 }
@@ -1135,4 +1136,15 @@
   height: 10px;
   border-radius: 50%;
   background-color: #00ff00;
+}
+
+
+@media screen and (max-width: 768px) {
+  .atadian_report {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  
 }

@@ -8,7 +8,7 @@ import {
   faDotCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IoCashOutline } from "react-icons/io5";
+import { IoArrowForward } from "react-icons/io5";
 import * as web3 from "@solana/web3.js";
 import Loading from "../Loading";
 import { CreateCollectionFromMagic, CheckForCollectionByOwner  } from "../../lib/api";
@@ -376,6 +376,26 @@ const Overview = (req) => {
                       icon={faPlayCircle}
                     />
                   </button>
+
+                  <div className={styles.merchant_quick_actions}>
+                    <div className={styles.merchant_quick_action_header}>
+                      <h4>Quick Actions</h4>
+                    </div>
+                    <div className={styles.merchant_quick_action_button_container}>
+                      <button
+                        className={styles.learn_more_button}
+                        onClick={() => window.dispatchEvent(new Event("merchant_show_create"))}
+                      >
+                        Create a Product
+                      </button>
+                      <button
+                        className={styles.learn_more_button}
+                        onClick={() => window.dispatchEvent(new Event("merchant_show_settings"))}
+                      >
+                        Store Settings <IoArrowForward />
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <img

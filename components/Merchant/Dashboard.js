@@ -56,33 +56,9 @@ function MerchantDashboard() {
 
   const renderLoading = () => <Loading />;
 
-  const renderQuickActions = () => (
-    //render 2 buttons one for setShowCreate(true) and one for setStoreSettings(true)
-    <div className={styles.merchant_quick_actions}>
-      <div className={styles.merchant_quick_action_header}>
-        <h4>Quick Actions</h4>
-      </div>
-      <div className={styles.merchant_quick_action_button_container}>
-        <button
-          className={styles.merchant_quick_action_button1}
-          onClick={() => setShowCreate(true)}
-        >
-          Create a Product
-        </button>
-        <button
-          className={styles.merchant_quick_action_button}
-          onClick={() => setShowSettings(true)}
-        >
-          Store Settings <IoArrowForward />
-        </button>
-      </div>
-    </div>
-  );
-
   const renderDisplay = () => (
     <div className={styles.merchant_container}>
       <Overview publicKey={userPublicKey} />
-      {renderQuickActions()}
     </div>
   );
 
@@ -392,14 +368,13 @@ function MerchantDashboard() {
       setShowSubHub(false),
       setShowPayRequests(false)
     });
-    // window.addEventListener("merchant_show_invoices", () => {
-    //   setShowInvoices(true),
-    //   setShowInventory(false),
-    //   setShowOrders(false),
-    //   setShowCreate(false),
-    //   setShowSubHub(false),
-    //   setShowPayRequests(false)
-    // });
+    window.addEventListener("merchant_show_create", () => {
+      setShowInventory(false),
+      setShowOrders(false),
+      setShowCreate(true),
+      setShowSubHub(false),
+      setShowPayRequests(false)
+    });
     window.addEventListener("merchant_show_settings", () => {
       setShowSettings(true),
       setShowInventory(false),

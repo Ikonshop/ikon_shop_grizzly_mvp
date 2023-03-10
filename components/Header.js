@@ -111,31 +111,36 @@ export default function HeaderComponent() {
         <div className={styles.userDashboardOption}>
             <a onClick={()=>(
               window.dispatchEvent(new Event("user_show_overview")),
-              setShowMenu(false)
+              setShowMenu(false),
+              setShowLoginOptions(false)
             )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
         </div>
         <div className={styles.userDashboardOption}>
             <a onClick={()=>(
               window.dispatchEvent(new Event("user_show_txn_history")),
-              setShowMenu(false)
+              setShowMenu(false),
+              setShowLoginOptions(false)
             )}><IoFileTrayFullOutline className={styles.icon}/> <span>Txn History</span></a>
         </div>
         <div className={styles.userDashboardOption}>
             <a onClick={()=>(
               window.dispatchEvent(new Event("user_show_pay_hub")),
-              setShowMenu(false)
+              setShowMenu(false),
+              setShowLoginOptions(false)
             )}><IoLinkOutline className={styles.icon}/> <span>Pay Hub</span></a>
         </div>
         <div className={styles.userDashboardOption}>
             <a onClick={()=>(
               window.dispatchEvent(new Event("user_show_orders")),
-              setShowMenu(false)
+              setShowMenu(false),
+              setShowLoginOptions(false)
             )}><IoDocumentOutline className={styles.icon}/> <span>My Orders</span></a>
         </div>
         <div className={styles.userDashboardOption}>
             <a onClick={()=>(
               window.dispatchEvent(new Event("user_show_profile")),
-              setShowMenu(false)
+              setShowMenu(false),
+              setShowLoginOptions(false)
             )}><IoFingerPrintSharp className={styles.icon}/> <span>Profile</span></a>
         </div>
       </div>
@@ -148,25 +153,30 @@ export default function HeaderComponent() {
         <div className={styles.userDashboardOption}>
           <a onClick={()=>(
             window.dispatchEvent(new Event("merchant_show_overview")),
-            setShowMenu(false)
+            setShowMenu(false),
+            setShowLoginOptions(false)
           )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
         </div>
         <div className={styles.userDashboardOption}>
           <a onClick={()=>(
             window.dispatchEvent(new Event("merchant_show_inventory")),
-            setShowMenu(false)
+            setShowMenu(false),
+            setShowLoginOptions(false)
           )}><IoLayersOutline  className={styles.icon}/> <span>Products</span></a>
         </div>
         <div className={styles.userDashboardOption}>
           <a onClick={()=>(
             window.dispatchEvent(new Event("merchant_show_orders")),
-            setShowMenu(false)
+            setShowMenu(false),
+            setShowLoginOptions(false)
           )}><IoFileTrayFullOutline className={styles.icon}/> <span>Orders</span></a>
         </div>
         <div className={styles.userDashboardOption}>
           <a onClick={()=>(
             window.dispatchEvent(new Event("merchant_show_settings")),
-            setShowMenu(false))}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
+            setShowMenu(false),
+            setShowLoginOptions(false)
+          )}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
         </div>
       </div>
     );
@@ -206,12 +216,6 @@ export default function HeaderComponent() {
             </div>
           }
           
-          {/* REGISTER LINK */}
-          {/* <div className={styles.menuItem}>
-            <Link href="/register" >
-              <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon}/> <span>Register</span></a>
-            </Link>
-          </div> */}
           {/* MAGIC QUICK ACTION LINK */}
           {magicUser && (
             <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false))} className={styles.menuItem}>
@@ -483,7 +487,7 @@ export default function HeaderComponent() {
     <div className={styles.navbar}>
       <div onClick={()=>router.push('/')} className={styles.logo}>
         <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
-        <img className={styles.smallLogo} src="/iklogo.png" alt="logo" />
+        {/* <img className={styles.smallLogo} src="/newlogo.png" alt="logo" /> */}
       </div>
       {/* if currentpath is /dashboard then renderDashToggle */}
       {currentPath === "/dashboard" && renderDashToggle()}

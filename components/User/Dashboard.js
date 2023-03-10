@@ -242,7 +242,7 @@ function UserDashboard() {
 
   const renderDisplay = () => (
     <div className={styles.dash_container}>
-      {/* <div className={styles.dash_header}>
+      <div className={styles.dash_header}>
         <div className={styles.banner_hero}>
           <div className={styles.dash_hero_text}>
             <h1>
@@ -254,7 +254,7 @@ function UserDashboard() {
             </h1>
 
             <button
-              onClick={() => setShowCreateLink(true)}
+              onClick={() => window.dispatchEvent(new Event("user_show_pay_hub"))}
               id={styles.full_screen}
               className="hero-button"
             >
@@ -263,7 +263,7 @@ function UserDashboard() {
           </div>
           <div className={styles.hero_overlay}></div>
         </div>
-      </div> */}
+      </div>
 
       <div className={styles.wallet_container}>
         <div className={styles.atadian_credit}>
@@ -311,46 +311,6 @@ function UserDashboard() {
               />
             </div>
           </div>
-          <div className={styles.btn_container_wrap}>
-            <div className="btn_container pay_btn">
-              {!showDropdown && (
-                <div className="button_drop">
-                  <p
-                    onClick={() => (
-                      setCreateLinkType("link"), setShowCreateLink(true)
-                    )}
-                  >
-                    Create a Paylink
-                  </p>
-                  <div
-                    className="arrow_bg"
-                    onClick={() => setShowDropdown(true)}
-                  >
-                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
-                    <IoChevronDown className="arrow_drop" />
-                  </div>
-                </div>
-              )}
-              {showDropdown && (
-                <div className="button_drop_tip">
-                  <p
-                    onClick={() => (
-                      setCreateLinkType("tipjar"), setShowCreateLink(true)
-                    )}
-                  >
-                    Create a Tipjar
-                  </p>
-                  <div
-                    className="arrow_bg_tip"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
-                    <IoChevronUp className="arrow_drop_tip" />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -381,9 +341,9 @@ function UserDashboard() {
               <div>
                 <span>
                   {(
-                    totalLinkCount /
-                    (totalLinkCount + totalTipJarCount)
-                  ).toFixed(2) * 100}
+                    (totalLinkCount /
+                    (totalLinkCount + totalTipJarCount)) * 100
+                  ).toFixed(2) }
                   %
                 </span>
               </div>
@@ -392,9 +352,9 @@ function UserDashboard() {
               <div>
                 <span>
                   {(
-                    totalTipJarCount /
-                    (totalLinkCount + totalTipJarCount)
-                  ).toFixed(2) * 100}
+                    (totalTipJarCount /
+                    (totalLinkCount + totalTipJarCount)) *100 
+                  ).toFixed(2)}
                   %
                 </span>
               </div>

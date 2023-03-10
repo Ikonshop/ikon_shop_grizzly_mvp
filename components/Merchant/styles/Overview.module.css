@@ -1,17 +1,20 @@
 .overview_container {
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
   flex-direction: column;
   width: 80vw;
   /* height: fit-content; */
   background-color: #f6f8fa;
   padding: 40px 30px;
   min-height: 100vh;
+  overflow: scroll;
 }
 
 .sales_container {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 2px;
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -118,6 +121,38 @@ td .product_name {
   cursor: pointer;
 }
 
+.merchant_quick_actions{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+
+.merchant_quick_action_header h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: "Manrope" !important;
+  margin-bottom: 10px;
+  color: #130b46;
+  margin-top: 10px;
+}
+
+.merchant_quick_action_button_container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  gap: 10px;
+}
 /* .learn_more_button {
   display: inline-block;
   -webkit-box-sizing: border-box;
