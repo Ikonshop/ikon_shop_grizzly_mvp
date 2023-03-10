@@ -23,6 +23,14 @@
   min-height: 100vh;
 }
 
+.over_dash_container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+}
+
 .link_button {
   background: transparent;
   color: #130b46;
@@ -70,7 +78,6 @@
   flex-direction: column;
   width: 80vw;
 }
-
 
 .merchant_dashboard {
   width: 300px;
@@ -1139,13 +1146,56 @@
   background-color: #00ff00;
 }
 
-
 @media screen and (max-width: 768px) {
   .atadian_report {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+}
 
-  
+@media screen and (max-width: 618px) {
+  #full_screen {
+    display: none;
+  }
+  .merchant_dashboard {
+    width: fit-content;
+  }
+}
+@media screen and (max-width: 550px) {
+  .merchant_dashboard {
+    z-index: 10;
+    position: fixed;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    margin-bottom: 0;
+    width: 100% !important;
+    height: 80px;
+    box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+  }
+
+  #full_screen {
+    font-size: 12px !important;
+    display: flex;
+  }
+
+  .dash_icon {
+    font-size: 20px;
+  }
+
+  .dash_container {
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    padding-bottom: 1200px !important;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  #full_screen {
+    font-size: 10px !important;
+  }
 }

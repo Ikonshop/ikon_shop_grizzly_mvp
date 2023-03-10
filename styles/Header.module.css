@@ -1,4 +1,3 @@
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -16,13 +15,13 @@
   cursor: pointer;
 }
 
-.bigLogo{
+.bigLogo {
   height: auto;
   width: 10vw;
   margin-left: 2vw;
 }
 
-.smallLogo{
+.smallLogo {
   display: none;
 }
 
@@ -36,7 +35,7 @@
   z-index: 3;
 }
 
-.menuContainer{
+.menuContainer {
   position: absolute;
   top: 0;
   left: 0;
@@ -44,14 +43,14 @@
   height: 100%;
 }
 
-.menuOverlay{
+.menuOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(116, 116, 116, 0.5);
-  z-index: 1;
+  z-index: 11;
 }
 
 .menu {
@@ -76,7 +75,7 @@
   cursor: pointer;
 }
 
-.dashItem{
+.dashItem {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +83,7 @@
   gap: 5px;
 }
 
-.socialItem{
+.socialItem {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +96,7 @@
   font-size: 1.2rem;
 }
 
-.menuItem a span{
+.menuItem a span {
   color: black;
   text-decoration: none;
   font-size: 14px;
@@ -114,8 +113,8 @@
   cursor: pointer;
 }
 
-.userDashboardOption{
-  font-family: 'Manrope', sans-serif;
+.userDashboardOption {
+  font-family: "Manrope", sans-serif;
   font-size: 12px;
   font-weight: 100;
   color: black;
@@ -142,7 +141,7 @@
   border: 1px solid black;
 }
 
-.loginOption{
+.loginOption {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -151,12 +150,13 @@
   cursor: pointer;
 }
 
-.loginOption > a, .loginOption > span {
+.loginOption > a,
+.loginOption > span {
   text-decoration: none;
   color: blue;
 }
 
-.closeButton{
+.closeButton {
   position: absolute;
   top: 0;
   right: 0;
@@ -166,68 +166,64 @@
   border: none;
 }
 
-
 /* media screen for mobile */
 @media screen and (max-width: 768px) {
+  .bigLogo {
+    width: 20vw;
+    margin-left: 20px;
+  }
 
+  .menu {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 15vh;
+    gap: 10vh;
+    align-items: left;
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 40vw;
+    z-index: 1000;
+    background-color: #ffffff;
+  }
 
-.bigLogo{
-  width: 20vw;
-  margin-left: 20px;
-}
+  .smallLogo {
+    display: flex;
+    height: auto;
+    width: 5vw;
+    margin-left: 7vw;
+  }
 
-.menu {
-  display: flex;
-  position: fixed;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding-top: 15vh;
-  gap: 10vh;
-  align-items: left;
-  position: absolute;
-  top: 0;
-  height: 100vh;
-  width: 40vw;
-  z-index: 1000;
-  background-color: #ffffff;
-}
+  .menuItem span {
+    font-family: "Manrope", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: black;
+  }
 
-.smallLogo{
-  display: flex;
-  height: auto;
-  width: 5vw;
-  margin-left: 7vw;
-}
+  .icon {
+    font-size: 30px;
+    color: black;
+    cursor: pointer;
+  }
 
-.menuItem span {
-  font-family: 'Manrope', sans-serif;
-  font-size: .8rem;
-  font-weight: 700;
-  color: black;
-}
+  .socialItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
 
+  .loginOptions {
+    width: 60vw;
+    height: fit-content;
+    padding: 20px;
+  }
 
-.icon {
-  font-size: 30px;
-  color: black;
-  cursor: pointer;
-}
-
-.socialItem{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.loginOptions{
-  width: 60vw;
-  height: fit-content;
-  padding: 20px;
-}
-
-.walletItem {
-  display: none;
-}
+  .walletItem {
+    display: none;
+  }
 }
