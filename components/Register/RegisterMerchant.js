@@ -318,21 +318,20 @@ const Register = (req) => {
 
             <div className={styles.wallet_select}>
               <h3>
-                Select a wallet you'll use to connect to your Dashboard and
-                receive payments
+                Select a wallet to connect to your Dashboard
               </h3>
 
               <div className={styles.register_wallet_buttons}>
-                <div>
+         
                   <LoginForm
                     userName={userName}
                     storeName={storeName}
                     email={email}
                   />
                   <p>Email wallet using Magic</p>
-                </div>
+       
 
-                <div>
+
                   <WalletMultiButton
                     className="signup_button2"
                     style={{
@@ -341,7 +340,7 @@ const Register = (req) => {
                     }}
                   />
                   <p>Browser wallet using Solana</p>
-                </div>
+  
               </div>
             </div>
           </div>

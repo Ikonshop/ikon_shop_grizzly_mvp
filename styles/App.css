@@ -1329,6 +1329,13 @@ p {
   gap: 10px;
 }
 
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
 .signup_row1 {
   display: flex;
   flex-direction: column;
@@ -2700,12 +2707,13 @@ button:disabled {
 .container_main3 {
   position: relative;
   width: 50%;
-  min-height: 100vh;
+  min-height: fit-content;
   background: #fff;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 160px 0 0 80px;
+  padding: 60px 0 0 80px;
+  margin-bottom: 40px
   /* z-index: 1; */
 }
 

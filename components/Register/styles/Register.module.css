@@ -45,28 +45,35 @@
 }
 
 .wallet_select {
-  margin-top: 80px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .wallet_select h3 {
+  display: flex;
+  flex-wrap: wrap;
   font-weight: bold;
   color: #130b46;
   line-height: 40px;
-  max-width: 600;
+  max-width: 300px;
+  font-size: 24px;
 }
 
 .register_wallet_buttons {
   display: flex;
-  gap: 50px;
-  margin-top: 40px;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
 }
 
 .register_wallet_buttons p {
+  display: flex;
   font-size: 16px;
-  margin-top: 10px;
   text-align: center;
   font-weight: bold;
   color: #6c6c6c;
+  margin-left: 15px;
 }
 
 .register_container_left {

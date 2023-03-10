@@ -29,7 +29,14 @@ import {
   IoLogOutOutline,
   IoAccessibilityOutline,
   IoStorefrontOutline,
-  IoWalletOutline
+  IoWalletOutline,
+  IoBarChartOutline,
+  IoLayersOutline,
+  IoSettingsOutline,
+  IoFileTrayFullOutline,
+  IoLinkOutline,
+  IoDocumentOutline,
+  IoFingerPrintSharp,
 } from "react-icons/io5";
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
@@ -98,6 +105,72 @@ export default function HeaderComponent() {
     );
   };
 
+  const renderUserDashboardOptions = () => {
+    return (
+      <div className={styles.userDashboardOptions}>
+        <div className={styles.userDashboardOption}>
+            <a onClick={()=>(
+              window.dispatchEvent(new Event("user_show_overview")),
+              setShowMenu(false)
+            )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+            <a onClick={()=>(
+              window.dispatchEvent(new Event("user_show_txn_history")),
+              setShowMenu(false)
+            )}><IoFileTrayFullOutline className={styles.icon}/> <span>Txn History</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+            <a onClick={()=>(
+              window.dispatchEvent(new Event("user_show_pay_hub")),
+              setShowMenu(false)
+            )}><IoLinkOutline className={styles.icon}/> <span>Pay Hub</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+            <a onClick={()=>(
+              window.dispatchEvent(new Event("user_show_orders")),
+              setShowMenu(false)
+            )}><IoDocumentOutline className={styles.icon}/> <span>My Orders</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+            <a onClick={()=>(
+              window.dispatchEvent(new Event("user_show_profile")),
+              setShowMenu(false)
+            )}><IoFingerPrintSharp className={styles.icon}/> <span>Profile</span></a>
+        </div>
+      </div>
+    );
+  };
+
+  const renderMerchantDashboardOptions = () => {
+    return (
+      <div className={styles.userDashboardOptions}>
+        <div className={styles.userDashboardOption}>
+          <a onClick={()=>(
+            window.dispatchEvent(new Event("merchant_show_overview")),
+            setShowMenu(false)
+          )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+          <a onClick={()=>(
+            window.dispatchEvent(new Event("merchant_show_inventory")),
+            setShowMenu(false)
+          )}><IoLayersOutline  className={styles.icon}/> <span>Products</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+          <a onClick={()=>(
+            window.dispatchEvent(new Event("merchant_show_orders")),
+            setShowMenu(false)
+          )}><IoFileTrayFullOutline className={styles.icon}/> <span>Orders</span></a>
+        </div>
+        <div className={styles.userDashboardOption}>
+          <a onClick={()=>(
+            window.dispatchEvent(new Event("merchant_show_settings")),
+            setShowMenu(false))}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
+        </div>
+      </div>
+    );
+  };
 
   //how can i make it to where if the user clicks outside of the menu it closes?
   
@@ -113,6 +186,12 @@ export default function HeaderComponent() {
                 <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
               </Link>
             </div>
+          )}
+          {currentPath === '/dashboard' && !showStoreSymbol && (
+            renderUserDashboardOptions()
+          )}
+          {currentPath === '/dashboard' && showStoreSymbol && (
+            renderMerchantDashboardOptions()
           )}
           {/* LOGIN LINK */}
           {!userPublicKey &&

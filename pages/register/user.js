@@ -38,7 +38,7 @@ const App = () => {
           <h1 className="signup_header_h1">
             Create paylinks, tipjars, manage your dashboard.
           </h1>
-          <form onSubmit={() => setShowRegister(true)}>
+          <form className="signupForm" onSubmit={() => setShowRegister(true)}>
             {/* EMAIL */}
             <input
               type="email"
@@ -100,7 +100,7 @@ const App = () => {
             <div className="signup_container">
               <div className="signup_row1">
                 <div
-                  className="signup_input_container"
+                  className="signupForm"
                   style={{
                     display: "flex",
                     flexDirection: "column",

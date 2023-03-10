@@ -68,7 +68,7 @@ function UserDashboard() {
   const [userPublicKey, setUserPublicKey] = useState();
   const [userEmail, setUserEmail] = useState();
   // USER DASHBOARD CONSTANTS
-  const [showUserDash, setShowUserDash] = useState(true);
+  const [showUserDash, setShowUserDash] = useState(false);
   const [showUserOrders, setShowUserOrders] = useState(false);
   const [showCreateLink, setShowCreateLink] = useState(false);
   const [showLinkOrders, setShowLinkOrders] = useState(false);
@@ -667,9 +667,42 @@ function UserDashboard() {
     }
   }, [userPublicKey]);
 
+  useEffect(() => {
+    window.addEventListener("user_show_overview", () => {
+      setShowUserOrders(false),
+      setShowCreateLink(false),
+      setShowLinkOrders(false),
+      setShowUserProfile(false)
+    });
+    window.addEventListener("user_show_pay_hub", () => {
+      setShowUserOrders(false),
+      setShowLinkOrders(false),
+      setShowCreateLink(true),
+      setShowUserProfile(false)
+    });
+    window.addEventListener("user_show_txn_history", () => {
+      setShowCreateLink(false),
+      setShowLinkOrders(false),
+      setShowUserOrders(true),
+      setShowUserProfile(false)
+    });
+    window.addEventListener("user_show_orders", () => {
+      setShowUserOrders(false),
+      setShowCreateLink(false),
+      setShowLinkOrders(true),
+      setShowUserProfile(false)
+    });
+    window.addEventListener("user_show_profile", () => {
+      setShowUserProfile(true),
+      setShowUserOrders(false),
+      setShowCreateLink(false),
+      setShowLinkOrders(false),
+      setShowUserProfile(true)
+    });
+  }, []);
+
   return (
     <div className={styles.parent_container}>
-      {renderUserDashboard()}
       <div className={styles.main_container}>
         {!userPublicKey && !publicKey && !loading
           ? renderConnectWallet()

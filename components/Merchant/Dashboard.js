@@ -44,7 +44,7 @@ function MerchantDashboard() {
   const { publicKey } = useWallet();
 
   // MERCHANT DASHBOARD CONSTANTS
-  const [showMerchantDash, setShowMerchantDash] = useState(true);
+  const [showMerchantDash, setShowMerchantDash] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
@@ -366,6 +366,50 @@ function MerchantDashboard() {
       checkAllowance();
     }
   }, [userPublicKey]);
+
+  // use effect to add window event listeners
+  useEffect(() => {
+    window.addEventListener("merchant_show_overview", () => {
+      setShowInventory(false),
+      setShowOrders(false),
+      setShowCreate(false),
+      setShowSettings(false),
+      setShowPayRequests(false)
+    });
+    window.addEventListener("merchant_show_orders", () => {
+      setShowOrders(true);
+      setShowInventory(false),
+      setShowCreate(false),
+      setShowSettings(false),
+      setShowSubHub(false),
+      setShowPayRequests(false)
+    });
+    window.addEventListener("merchant_show_inventory", () => {
+      setShowInventory(true);
+      setShowOrders(false),
+      setShowCreate(false),
+      setShowSettings(false),
+      setShowSubHub(false),
+      setShowPayRequests(false)
+    });
+    // window.addEventListener("merchant_show_invoices", () => {
+    //   setShowInvoices(true),
+    //   setShowInventory(false),
+    //   setShowOrders(false),
+    //   setShowCreate(false),
+    //   setShowSubHub(false),
+    //   setShowPayRequests(false)
+    // });
+    window.addEventListener("merchant_show_settings", () => {
+      setShowSettings(true),
+      setShowInventory(false),
+      setShowOrders(false),
+      setShowCreate(false),
+      setShowSubHub(false),
+      setShowPayRequests(false)
+    });
+  
+  }, []);
 
   return (
     <div className={styles.parent_container}>
