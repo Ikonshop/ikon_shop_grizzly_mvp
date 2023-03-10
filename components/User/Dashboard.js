@@ -317,18 +317,6 @@ function UserDashboard() {
       <div className={styles.atadian_credit}>
         <div className={styles.paylink_head}>
           <h4 className={styles.paylink_header}>Total Recieved</h4>
-          {/* <label className={styles.dropdown}>
-            <div className={styles.dd_button}>By Quarter </div>
-
-            <input type="checkbox" className={styles.dd_input} id="test" />
-
-            <ul className={styles.dd_menu}>
-              <li>Q1 2022</li>
-              <li>Q2 2022</li>
-              <li>Q3 2022</li>
-              <li>Q4 2022</li>
-            </ul>
-          </label> */}
         </div>
         <div className={styles.royalties_paid}>
           <div>
@@ -405,7 +393,7 @@ function UserDashboard() {
                   router.push(`/product/${product.id}`);
                 }}
               >
-                ikonshop.io/product/{product.id}
+                {product.name}
               </button>
               <div className="pay_icons">
                 <IoTrashBin
@@ -449,7 +437,7 @@ function UserDashboard() {
                 className={styles.link_button}
                 onClick={() => router.push(`/product/${product.id}`)}
               >
-                ikonshop.io/product/{product.id}
+                {product.name}
               </button>
               <div className="pay_icons">
                 <IoTrashBin
@@ -600,20 +588,10 @@ function UserDashboard() {
       setShowUserProfile(true), setActiveMenu("profile");
     }
     //EVENT LISTENERS
-    window.addEventListener("magic-logged-in", () => {
-      const user = JSON.parse(data);
-      const pubKey = new web3.PublicKey(user.publicAddress);
-      setUserPublicKey(pubKey.toString());
-    });
-
-    window.addEventListener("magic-logged-out", () => {
-      setUserEmail(null);
-      setUserPublicKey(null);
-      setCurrentWallet(null);
-      localStorage.removeItem("userMagicMetadata");
-    });
+    
   }, []);
 
+  // USER PUB KEY CHECK
   useEffect(() => {
     async function checkAllowance() {
       isUser(userPublicKey).then((isUser) => {
@@ -627,7 +605,21 @@ function UserDashboard() {
     }
   }, [userPublicKey]);
 
+  // EVENT LISTENERS
   useEffect(() => {
+    window.addEventListener("magic-logged-in", () => {
+      const data = localStorage.getItem("userMagicMetadata");
+      const user = JSON.parse(data);
+      const pubKey = new web3.PublicKey(user.publicAddress);
+      setUserPublicKey(pubKey.toString());
+    });
+
+    window.addEventListener("magic-logged-out", () => {
+      setUserEmail(null);
+      setUserPublicKey(null);
+      setCurrentWallet(null);
+      localStorage.removeItem("userMagicMetadata");
+    });
     window.addEventListener("user_show_overview", () => {
       setShowUserOrders(false),
       setShowCreateLink(false),

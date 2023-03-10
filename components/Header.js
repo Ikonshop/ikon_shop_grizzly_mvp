@@ -108,41 +108,45 @@ export default function HeaderComponent() {
   const renderUserDashboardOptions = () => {
     return (
       <div className={styles.userDashboardOptions}>
-        <div className={styles.userDashboardOption}>
-            <a onClick={()=>(
-              window.dispatchEvent(new Event("user_show_overview")),
-              setShowMenu(false),
-              setShowLoginOptions(false)
-            )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-            <a onClick={()=>(
-              window.dispatchEvent(new Event("user_show_txn_history")),
-              setShowMenu(false),
-              setShowLoginOptions(false)
-            )}><IoFileTrayFullOutline className={styles.icon}/> <span>Txn History</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-            <a onClick={()=>(
-              window.dispatchEvent(new Event("user_show_pay_hub")),
-              setShowMenu(false),
-              setShowLoginOptions(false)
-            )}><IoLinkOutline className={styles.icon}/> <span>Pay Hub</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-            <a onClick={()=>(
-              window.dispatchEvent(new Event("user_show_orders")),
-              setShowMenu(false),
-              setShowLoginOptions(false)
-            )}><IoDocumentOutline className={styles.icon}/> <span>My Orders</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-            <a onClick={()=>(
-              window.dispatchEvent(new Event("user_show_profile")),
-              setShowMenu(false),
-              setShowLoginOptions(false)
-            )}><IoFingerPrintSharp className={styles.icon}/> <span>Profile</span></a>
-        </div>
+        {userPublicKey && (
+          <>
+            <div className={styles.userDashboardOption}>
+                <a onClick={()=>(
+                  window.dispatchEvent(new Event("user_show_overview")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+                <a onClick={()=>(
+                  window.dispatchEvent(new Event("user_show_txn_history")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}><IoFileTrayFullOutline className={styles.icon}/> <span>Txn History</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+                <a onClick={()=>(
+                  window.dispatchEvent(new Event("user_show_pay_hub")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}><IoLinkOutline className={styles.icon}/> <span>Pay Hub</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+                <a onClick={()=>(
+                  window.dispatchEvent(new Event("user_show_orders")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}><IoDocumentOutline className={styles.icon}/> <span>My Orders</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+                <a onClick={()=>(
+                  window.dispatchEvent(new Event("user_show_profile")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}><IoFingerPrintSharp className={styles.icon}/> <span>Profile</span></a>
+            </div>
+          </>
+        )}
       </div>
     );
   };
@@ -150,34 +154,38 @@ export default function HeaderComponent() {
   const renderMerchantDashboardOptions = () => {
     return (
       <div className={styles.userDashboardOptions}>
-        <div className={styles.userDashboardOption}>
-          <a onClick={()=>(
-            window.dispatchEvent(new Event("merchant_show_overview")),
-            setShowMenu(false),
-            setShowLoginOptions(false)
-          )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-          <a onClick={()=>(
-            window.dispatchEvent(new Event("merchant_show_inventory")),
-            setShowMenu(false),
-            setShowLoginOptions(false)
-          )}><IoLayersOutline  className={styles.icon}/> <span>Products</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-          <a onClick={()=>(
-            window.dispatchEvent(new Event("merchant_show_orders")),
-            setShowMenu(false),
-            setShowLoginOptions(false)
-          )}><IoFileTrayFullOutline className={styles.icon}/> <span>Orders</span></a>
-        </div>
-        <div className={styles.userDashboardOption}>
-          <a onClick={()=>(
-            window.dispatchEvent(new Event("merchant_show_settings")),
-            setShowMenu(false),
-            setShowLoginOptions(false)
-          )}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
-        </div>
+        {userPublicKey && (
+          <>
+            <div className={styles.userDashboardOption}>
+              <a onClick={()=>(
+                window.dispatchEvent(new Event("merchant_show_overview")),
+                setShowMenu(false),
+                setShowLoginOptions(false)
+              )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+              <a onClick={()=>(
+                window.dispatchEvent(new Event("merchant_show_inventory")),
+                setShowMenu(false),
+                setShowLoginOptions(false)
+              )}><IoLayersOutline  className={styles.icon}/> <span>Products</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+              <a onClick={()=>(
+                window.dispatchEvent(new Event("merchant_show_orders")),
+                setShowMenu(false),
+                setShowLoginOptions(false)
+              )}><IoFileTrayFullOutline className={styles.icon}/> <span>Orders</span></a>
+            </div>
+            <div className={styles.userDashboardOption}>
+              <a onClick={()=>(
+                window.dispatchEvent(new Event("merchant_show_settings")),
+                setShowMenu(false),
+                setShowLoginOptions(false)
+              )}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
+            </div>
+          </>
+        )}
       </div>
     );
   };
@@ -353,7 +361,7 @@ export default function HeaderComponent() {
               "welcome to ikonshop, if you have any issues please reach out to us on discord"
             );
           }
-        } if(walletData.wallet.email === parsedData.email ) {
+        } if(walletData.email === parsedData.email ) {
           // update the wallet with the email from magic
           const updateWallet = await UpdateWallet(publicKey.toString(), parsedData.email);
           if (updateWallet) {
@@ -426,12 +434,14 @@ export default function HeaderComponent() {
     }
     if(!publicKey && magicUser) {
       setUserPublicKey(magicMetadata.publicAddress)
+      setShowLoginOptions(false)
     }
     if(!publicKey && !magicUser) {
       setUserPublicKey('')
     }
     if(publicKey){
-      setUserPublicKey(publicKey.toString())
+      setUserPublicKey(publicKey.toString()),
+      setShowLoginOptions(false)
     }
   }, [publicKey])
 
@@ -490,7 +500,7 @@ export default function HeaderComponent() {
         {/* <img className={styles.smallLogo} src="/newlogo.png" alt="logo" /> */}
       </div>
       {/* if currentpath is /dashboard then renderDashToggle */}
-      {currentPath === "/dashboard" && renderDashToggle()}
+      {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
       <div 
         className={styles.hamburger}
         onClick={()=> setShowMenu(!showMenu)}

@@ -1708,7 +1708,7 @@ button:disabled {
 
 .link_tip {
   background: #19f5b0;
-  width: 30px;
+  width: 60px;
   height: 30px;
   border-radius: 50%;
   position: relative;
@@ -1716,7 +1716,7 @@ button:disabled {
 
 .link_gift {
   background: #ff7fa5;
-  width: 30px;
+  width: 60px;
   height: 30px;
   border-radius: 50%;
   position: relative;

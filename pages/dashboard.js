@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import MerchantDashboard from "../components/Merchant/Dashboard";
 import UserDashboard from "../components/User/Dashboard";
+import { checkMagicLogin } from "../hooks/checkMagicLogin";
 
 const DashboardPage = () => {
     const [activeDash, setActiveDash] = useState("user");
 
     useEffect(() => {
+        async function checkLogin() {
+            checkMagicLogin()
+        }
+        checkLogin()
         window.addEventListener("toggle-merchant", () => {
             setActiveDash("merchant");
         });
