@@ -1156,9 +1156,9 @@
 }
 
 @media screen and (max-width: 618px) {
-  #full_screen {
+  /* #full_screen {
     display: none;
-  }
+  } */
   .merchant_dashboard {
     width: fit-content;
   }
@@ -1179,7 +1179,7 @@
     -moz-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
   }
 
-  .ikonshop_users{
+  .ikonshop_users {
     display: none;
   }
 

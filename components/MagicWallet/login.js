@@ -5,10 +5,7 @@ import * as web3 from "@solana/web3.js";
 import { CreateCollectionFromMagic, GetCollectionByEmail } from "../../lib/api";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import Loading from "../Loading";
-import { 
-  IoPersonCircle,
-  IoLogIn
-} from "react-icons/io5";
+import { IoPersonCircle, IoLogIn } from "react-icons/io5";
 
 const rpcUrl =
   "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
@@ -173,20 +170,20 @@ const LoginMagic = (req) => {
             border: "1px solid #000000",
             borderRadius: "10px",
             backgroundColor: "transparent",
-            
+
             cursor: "pointer",
-            border: "none"
+            border: "none",
           }}
         />
-          <IoLogIn 
-            onClick={login}
-            style={{
-              fontSize: "30px",
-              color: "#130b46",
-              cursor: "pointer",
-              border: "none",
-            }}
-          />  
+        <IoLogIn
+          onClick={login}
+          style={{
+            fontSize: "30px",
+            color: "#130b46",
+            cursor: "pointer",
+            border: "none",
+          }}
+        />
       </div>
     );
   };
@@ -219,14 +216,15 @@ const LoginMagic = (req) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          backgroundColor: "#130b46",
-          color: "#ffffff",
+          backgroundColor: "#8affcb",
+          color: "#130b46",
           border: "none",
           borderRadius: "10px",
-          height: "45px"
+          height: "45px",
+          padding: "30px 50px",
         }}
         onClick={() => {
-          setShowForm(true)
+          setShowForm(true);
         }}
       >
         Login with Email
@@ -271,7 +269,7 @@ const LoginMagic = (req) => {
   }, []);
 
   useEffect(() => {
-    console.log('req', req)
+    console.log("req", req);
     if (req) {
       setEmail(req.req);
     }

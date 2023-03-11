@@ -44,10 +44,9 @@ import {
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
 // import QuickActions from "./MagicWallet/quickActions";
-import {getBalance, getUsdcBalance} from "../hooks/getBalance";
+import { getBalance, getUsdcBalance } from "../hooks/getBalance";
 import * as web3 from "@solana/web3.js";
 import styles from "../styles/Header.module.css";
-
 
 // import Head from "next/head";
 
@@ -62,7 +61,7 @@ export default function HeaderComponent() {
   const [userPublicKey, setUserPublicKey] = useState("");
   const [merchant, setMerchant] = useState(false);
   const [user, setUser] = useState(false);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   // BROWSER WALLET
   const WalletMultiButton = dynamic(
     async () =>
@@ -84,7 +83,8 @@ export default function HeaderComponent() {
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
     "confirmed"
   );
-  const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+  const rpcUrl =
+    "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
   const magicLogout = async () => {
     const magic = new Magic("pk_live_CD0FA396D4966FE0", {
@@ -118,39 +118,63 @@ export default function HeaderComponent() {
         {userPublicKey && (
           <>
             <div className={styles.userDashboardOption}>
-                <a onClick={()=>(
+              <a
+                onClick={() => (
                   window.dispatchEvent(new Event("user_show_overview")),
                   setShowMenu(false),
                   setShowLoginOptions(false)
-                )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+                )}
+              >
+                <IoBarChartOutline className={styles.icon} />{" "}
+                <span>Overview</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-                <a onClick={()=>(
+              <a
+                onClick={() => (
                   window.dispatchEvent(new Event("user_show_txn_history")),
                   setShowMenu(false),
                   setShowLoginOptions(false)
-                )}><IoFileTrayFullOutline className={styles.icon}/> <span>Txn History</span></a>
+                )}
+              >
+                <IoFileTrayFullOutline className={styles.icon} />{" "}
+                <span>Txn History</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-                <a onClick={()=>(
+              <a
+                onClick={() => (
                   window.dispatchEvent(new Event("user_show_pay_hub")),
                   setShowMenu(false),
                   setShowLoginOptions(false)
-                )}><IoLinkOutline className={styles.icon}/> <span>Pay Hub</span></a>
+                )}
+              >
+                <IoLinkOutline className={styles.icon} /> <span>Pay Hub</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-                <a onClick={()=>(
+              <a
+                onClick={() => (
                   window.dispatchEvent(new Event("user_show_orders")),
                   setShowMenu(false),
                   setShowLoginOptions(false)
-                )}><IoDocumentOutline className={styles.icon}/> <span>My Orders</span></a>
+                )}
+              >
+                <IoDocumentOutline className={styles.icon} />{" "}
+                <span>My Orders</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-                <a onClick={()=>(
+              <a
+                onClick={() => (
                   window.dispatchEvent(new Event("user_show_profile")),
                   setShowMenu(false),
                   setShowLoginOptions(false)
-                )}><IoFingerPrintSharp className={styles.icon}/> <span>Profile</span></a>
+                )}
+              >
+                <IoFingerPrintSharp className={styles.icon} />{" "}
+                <span>Profile</span>
+              </a>
             </div>
           </>
         )}
@@ -164,32 +188,52 @@ export default function HeaderComponent() {
         {userPublicKey && (
           <>
             <div className={styles.userDashboardOption}>
-              <a onClick={()=>(
-                window.dispatchEvent(new Event("merchant_show_overview")),
-                setShowMenu(false),
-                setShowLoginOptions(false)
-              )}><IoBarChartOutline className={styles.icon}/> <span>Overview</span></a>
+              <a
+                onClick={() => (
+                  window.dispatchEvent(new Event("merchant_show_overview")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}
+              >
+                <IoBarChartOutline className={styles.icon} />{" "}
+                <span>Overview</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-              <a onClick={()=>(
-                window.dispatchEvent(new Event("merchant_show_inventory")),
-                setShowMenu(false),
-                setShowLoginOptions(false)
-              )}><IoLayersOutline  className={styles.icon}/> <span>Products</span></a>
+              <a
+                onClick={() => (
+                  window.dispatchEvent(new Event("merchant_show_inventory")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}
+              >
+                <IoLayersOutline className={styles.icon} />{" "}
+                <span>Products</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-              <a onClick={()=>(
-                window.dispatchEvent(new Event("merchant_show_orders")),
-                setShowMenu(false),
-                setShowLoginOptions(false)
-              )}><IoFileTrayFullOutline className={styles.icon}/> <span>Orders</span></a>
+              <a
+                onClick={() => (
+                  window.dispatchEvent(new Event("merchant_show_orders")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}
+              >
+                <IoFileTrayFullOutline className={styles.icon} />{" "}
+                <span>Orders</span>
+              </a>
             </div>
             <div className={styles.userDashboardOption}>
-              <a onClick={()=>(
-                window.dispatchEvent(new Event("merchant_show_settings")),
-                setShowMenu(false),
-                setShowLoginOptions(false)
-              )}><IoSettingsOutline className={styles.icon}/> <span>Settings</span></a>
+              <a
+                onClick={() => (
+                  window.dispatchEvent(new Event("merchant_show_settings")),
+                  setShowMenu(false),
+                  setShowLoginOptions(false)
+                )}
+              >
+                <IoSettingsOutline className={styles.icon} />{" "}
+                <span>Settings</span>
+              </a>
             </div>
           </>
         )}
@@ -198,9 +242,9 @@ export default function HeaderComponent() {
   };
 
   //how can i make it to where if the user clicks outside of the menu it closes?
-  
+
   const renderHeaderMenu = () => {
-    return  (
+    return (
       <div className={styles.menuContainer}>
         <div onClick={()=> (setShowMenu(false), setShowLoginOptions(false), setLoginOptionSelected(''))} className={styles.menuOverlay}></div>
         <div className={styles.menu}>
@@ -209,18 +253,36 @@ export default function HeaderComponent() {
           {userPublicKey && !merchant &&(
             <div className={styles.menuItem}>
               <Link href="/dashboard">
-                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+                <a
+                  onClick={() => (
+                    setShowMenu(false),
+                    setShowLoginOptions(false),
+                    setShowQuickActions(false)
+                  )}
+                >
+                  <IoSpeedometerOutline className={styles.icon} />{" "}
+                  <span>Dashboard</span>
+                </a>
               </Link>
             </div>
           )}
           {userPublicKey && merchant &&(
             <div className={styles.menuItem}>
               <Link href="/dashboard">
-                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
+                <a
+                  onClick={() => (
+                    setShowMenu(false),
+                    setShowLoginOptions(false),
+                    setShowQuickActions(false)
+                  )}
+                >
+                  <IoSpeedometerOutline className={styles.icon} />{" "}
+                  <span>Dashboard</span>
+                </a>
               </Link>
             </div>
           )}
-          
+
           {/* {currentPath === '/dashboard' && !showStoreSymbol && (
             renderUserDashboardOptions()
           )}
@@ -243,20 +305,31 @@ export default function HeaderComponent() {
             </div>
           )}
           {/* LOGGED IN  */}
-          {userPublicKey != '' && 
-            <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))} className={styles.menuItem}>
+          {userPublicKey != "" && (
+            <div
+              onClick={() => (
+                setShowLoginOptions(true), setShowQuickActions(false)
+              )}
+              className={styles.menuItem}
+            >
               <IoLogOutOutline className={styles.icon} /> <span>Logout</span>
             </div>
+          )
           }
           {/* SOCIALS */}
           <div className={styles.socialItem}>
-            <a href="https://discord.com/invite/ikons"><IoLogoDiscord className={styles.socialIcon} /></a>
-            <a href="https://twitter.com/ikonshopapp"> <IoLogoTwitter className={styles.socialIcon} /></a>
+            <a href="https://discord.com/invite/ikons">
+              <IoLogoDiscord className={styles.socialIcon} />
+            </a>
+            <a href="https://twitter.com/ikonshopapp">
+              {" "}
+              <IoLogoTwitter className={styles.socialIcon} />
+            </a>
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderEmailLogin = () => {
     return (
@@ -319,34 +392,30 @@ export default function HeaderComponent() {
       <>
         {!loading && merchant && (
           <div className={styles.toggleItem}>
-            <div 
+            <div
               id="container"
-              onClick={() => (
-                showStoreSymbol ? window.dispatchEvent(new Event("toggle-user")) : window.dispatchEvent(new Event("toggle-merchant"))
-              )}
+              onClick={() =>
+                showStoreSymbol
+                  ? window.dispatchEvent(new Event("toggle-user"))
+                  : window.dispatchEvent(new Event("toggle-merchant"))
+              }
             >
               {!showStoreSymbol ? (
-                <div
-                  id="target"
-                  class="moon"
-                >
+                <div id="target" class="moon">
                   <IoAccessibilityOutline className="moon_tog" />
                 </div>
               ) : (
-                <div
-                  id="target"
-                  class="sun"
-                >
+                <div id="target" class="sun">
                   <IoStorefrontOutline className="sunny_tog" />
                 </div>
               )}
             </div>
-            <span>{showStoreSymbol ? 'Merchant' : 'User'}</span>
+            <span>{showStoreSymbol ? "Merchant" : "User"}</span>
           </div>
         )}
       </>
-    )
-  }
+    );
+  };
 
   // async function getBalance(pubKey) {
   //   const balance = await connection.getBalance(pubKey);
@@ -384,62 +453,70 @@ export default function HeaderComponent() {
     // console.log("event listener fired");
     const data = localStorage.getItem("userMagicMetadata");
     if (data && !publicKey) {
-      try{
-      const parsedData = JSON.parse(data);
-      console.log("parsedData: ", parsedData);
-      const publicKey = new web3.PublicKey(parsedData.publicAddress);
-      await getBalance(publicKey).then(() => {
-        console.log("magic balance: ", magicBalance);
-        setMagicBalance(magicBalance);
-      });
-      await getUsdcBalance(publicKey).then(() => {
-        console.log("magic usdc balance: ", magicUsdcBalance);
-        setMagicUsdcBalance(magicUsdcBalance);
-      });
-      console.log("publicKey: ", publicKey.toString());
-      setMagicMetadata(parsedData);
-      setEmail(parsedData.email);
-      setUserPublicKey(publicKey.toString());
-      setMagicUser(true);
-      const getData = async () => {
-        const walletData = await CheckForWallet(publicKey.toString());
-        console.log('header walletData: ', walletData)
-        if (walletData.wallet === null) {
-          // create a wallet for the user using their public key and email from magic
-          const newWallet = await CreateWallet(publicKey.toString(), parsedData.email);
-          if (newWallet) {
+      try {
+        const parsedData = JSON.parse(data);
+        console.log("parsedData: ", parsedData);
+        const publicKey = new web3.PublicKey(parsedData.publicAddress);
+        await getBalance(publicKey).then(() => {
+          console.log("magic balance: ", magicBalance);
+          setMagicBalance(magicBalance);
+        });
+        await getUsdcBalance(publicKey).then(() => {
+          console.log("magic usdc balance: ", magicUsdcBalance);
+          setMagicUsdcBalance(magicUsdcBalance);
+        });
+        console.log("publicKey: ", publicKey.toString());
+        setMagicMetadata(parsedData);
+        setEmail(parsedData.email);
+        setUserPublicKey(publicKey.toString());
+        setMagicUser(true);
+        const getData = async () => {
+          const walletData = await CheckForWallet(publicKey.toString());
+          console.log("header walletData: ", walletData);
+          if (walletData.wallet === null) {
+            // create a wallet for the user using their public key and email from magic
+            const newWallet = await CreateWallet(
+              publicKey.toString(),
+              parsedData.email
+            );
+            if (newWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }
+          }
+          if (walletData.email === parsedData.email) {
+            // update the wallet with the email from magic
+            const updateWallet = await UpdateWallet(
+              publicKey.toString(),
+              parsedData.email
+            );
+            if (updateWallet) {
+              console.log(
+                "welcome to ikonshop, if you have any issues please reach out to us on discord"
+              );
+            }
+          } else {
             console.log(
               "welcome to ikonshop, if you have any issues please reach out to us on discord"
             );
           }
-        } if(walletData.email === parsedData.email ) {
-          // update the wallet with the email from magic
-          const updateWallet = await UpdateWallet(publicKey.toString(), parsedData.email);
-          if (updateWallet) {
-            console.log(
-              "welcome to ikonshop, if you have any issues please reach out to us on discord"
-            );
-          }          
-        }else {
-          console.log(
-            "welcome to ikonshop, if you have any issues please reach out to us on discord"
-          );
-        }
-        // const data = await CheckForCollectionByOwner(publicKey.toString());
-        // console.log("data", data);
-        // if (data) {
-        //   setMerchant(true);
-        // }
-      };
+          // const data = await CheckForCollectionByOwner(publicKey.toString());
+          // console.log("data", data);
+          // if (data) {
+          //   setMerchant(true);
+          // }
+        };
         getData();
-      }catch(e){
-        console.log('error: ', e)
+      } catch (e) {
+        console.log("error: ", e);
       }
-    } if(data && publicKey){
-      try{
+    }
+    if (data && publicKey) {
+      try {
         const parsedData = JSON.parse(data);
         console.log("parsedData: ", parsedData);
-        console.log('publicKey: ', publicKey.toString())
+        console.log("publicKey: ", publicKey.toString());
         const publicKey = publicKey;
         getBalance(publicKey);
         getUsdcBalance(publicKey);
@@ -450,13 +527,16 @@ export default function HeaderComponent() {
         setMagicUser(true);
         const getData = async () => {
           const walletData = await CheckForWallet(publicKey.toString());
-          console.log('header walletData: ', walletData)
+          console.log("header walletData: ", walletData);
           if (walletData.wallet === null) {
             // create a wallet for the user using their public key and email from magic
-            const newWallet = await CreateWallet(publicKey.toString(), parsedData.email);
-            
-          } if(walletData.wallet.email === parsedData.email && connected) {
-            console.log('updating wallet with browser wallet')
+            const newWallet = await CreateWallet(
+              publicKey.toString(),
+              parsedData.email
+            );
+          }
+          if (walletData.wallet.email === parsedData.email && connected) {
+            console.log("updating wallet with browser wallet");
             // update the wallet with the email from magic
             await UpdateWallet(useWallet().publicKey.toString(), parsedData.email);
             
@@ -472,29 +552,30 @@ export default function HeaderComponent() {
         };
 
         getData();
-      }catch(error){
-        console.log('error: ', error)
+      } catch (error) {
+        console.log("error: ", error);
       }
     }
   }
 
   useEffect(() => {
-    if(publicKey && magicUser) {
-      alert('Browser Wallet and Email Wallet detected, we will use the browser wallet for transactions and log you out of the email wallet. If you would like to use the email wallet please log out of the browser wallet first.')
-      magicLogout()
+    if (publicKey && magicUser) {
+      alert(
+        "Browser Wallet and Email Wallet detected, we will use the browser wallet for transactions and log you out of the email wallet. If you would like to use the email wallet please log out of the browser wallet first."
+      );
+      magicLogout();
     }
-    if(!publicKey && magicUser) {
-      setUserPublicKey(magicMetadata.publicAddress)
-      setShowLoginOptions(false)
+    if (!publicKey && magicUser) {
+      setUserPublicKey(magicMetadata.publicAddress);
+      setShowLoginOptions(false);
     }
-    if(!publicKey && !magicUser) {
-      setUserPublicKey('')
+    if (!publicKey && !magicUser) {
+      setUserPublicKey("");
     }
-    if(publicKey){
-      setUserPublicKey(publicKey.toString()),
-      setShowLoginOptions(false)
+    if (publicKey) {
+      setUserPublicKey(publicKey.toString()), setShowLoginOptions(false);
     }
-  }, [publicKey])
+  }, [publicKey]);
 
   useEffect(() => {
     // toggle for 'showStoreSymbol' in navbar
@@ -507,90 +588,76 @@ export default function HeaderComponent() {
   }, []);
 
   useEffect(() => {
-    console.log('window.location.pathname', window.location.search)
+    console.log("window.location.pathname", window.location.search);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    if(
-        urlParams.get('userSettings') === 'true'
-    ) {
-        setShowStoreSymbol(false);
+    if (urlParams.get("userSettings") === "true") {
+      setShowStoreSymbol(false);
     }
-    if(
-        urlParams.get('merchantSettings') === 'true'
-    ) {
-        setShowStoreSymbol(true);
+    if (urlParams.get("merchantSettings") === "true") {
+      setShowStoreSymbol(true);
     }
-}, []);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
       gatherMagicData();
-        setMagicUser(true);
-      
+      setMagicUser(true);
     });
     window.addEventListener("magic-logged-out", () => {
       setMagicMetadata("");
       setMagicPublicKey("");
       setUserPublicKey("");
       setMagicUser(false);
-      if(publicKey) {
-        setUserPublicKey(publicKey.toString())
+      if (publicKey) {
+        setUserPublicKey(publicKey.toString());
       }
     });
     window.addEventListener("closeQuickActions", () => {
       setShowQuickActions(false);
     });
-    
   }, []);
 
   useEffect(() => {
-    async function checkAllowance(){
+    async function checkAllowance() {
       await isUser(userPublicKey).then((data) => {
-        if(data === true){
+        if (data === true) {
           setUser(true);
           setLoading(false);
-        }else{
-          console.log('not a user');
+        } else {
+          console.log("not a user");
           setUser(false);
           setLoading(false);
         }
-      })
+      });
       await isMerchant(userPublicKey).then((data) => {
-        if(data === true){
+        if (data === true) {
           setMerchant(true);
           setLoading(false);
-        }else{
-          console.log('not a merchant');
+        } else {
+          console.log("not a merchant");
           setMerchant(false);
           setLoading(false);
         }
-      })
+      });
     }
-    if(userPublicKey){
+    if (userPublicKey) {
       checkAllowance();
     }
   }, [userPublicKey]);
 
-
   return (
     <div className={styles.navbar}>
-      <div onClick={()=>router.push('/')} className={styles.logo}>
+      <div onClick={() => router.push("/")} className={styles.logo}>
         <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
         {/* <img className={styles.smallLogo} src="/newlogo.png" alt="logo" /> */}
       </div>
-      <div 
-        className={styles.hamburger}
-        onClick={()=> setShowMenu(!showMenu)}
-      >
-        <IoMenuOutline
-          size={30}
-        />
+      <div className={styles.hamburger} onClick={() => setShowMenu(!showMenu)}>
+        <IoMenuOutline size={30} />
       </div>
       {showMenu && renderHeaderMenu()}
       {showLoginOptions && renderLoginOptions()}
       {showQuickActions && renderQuickActions()}
     </div>
-    
-   
   );
 }
