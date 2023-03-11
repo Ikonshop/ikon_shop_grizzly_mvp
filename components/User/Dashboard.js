@@ -707,10 +707,14 @@ function UserDashboard() {
   // EVENT LISTENERS
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
-      const data = localStorage.getItem("userMagicMetadata");
-      const user = JSON.parse(data);
-      const pubKey = new web3.PublicKey(user.publicAddress);
-      setUserPublicKey(pubKey.toString());
+      try{
+        const data = localStorage.getItem("userMagicMetadata");
+        const user = JSON.parse(data);
+        const pubKey = new web3.PublicKey(user.publicAddress);
+        setUserPublicKey(pubKey.toString());
+      }catch(e){
+        console.log("error", e)
+      }
     });
 
     window.addEventListener("magic-logged-out", () => {

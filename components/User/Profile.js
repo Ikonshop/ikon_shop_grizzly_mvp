@@ -273,19 +273,24 @@ const Profile = (userPubKey) => {
   useEffect(() => {
     setWalletAddress(userPubKey.userPubKey);
     const getWalletSettings = async () => {
-      setLoading(true);
-      const response = await GetWalletSettings(userPubKey);
-      console.log("get wallet settings resp", response);
-      setEmail(response.email != null ? response.email : "");
-      setUserName(response.name != null ? response.name : "");
-      setProfileImage(
-        response.profileImage != null ? response.profileImage.url : ""
-      );
-      setDescription(response.description != null ? response.description : "");
-      setSocialLinks(response.socialLinks != null ? response.socialLinks : []);
-      setCryptoLinks(response.cryptoLinks != null ? response.cryptoLinks : []);
-      setVerified(response.verified);
-      setLoading(false);
+      try{
+        setLoading(true);
+        const response = await GetWalletSettings(userPubKey);
+        console.log("get wallet settings resp", response);
+        setEmail(response.email != null ? response.email : "");
+        setUserName(response.name != null ? response.name : "");
+        setProfileImage(
+          response.profileImage != null ? response.profileImage.url : ""
+        );
+        setDescription(response.description != null ? response.description : "");
+        setSocialLinks(response.socialLinks != null ? response.socialLinks : []);
+        setCryptoLinks(response.cryptoLinks != null ? response.cryptoLinks : []);
+        setVerified(response.verified);
+        setLoading(false);
+      } catch (error) {
+        console.log(error)
+        setLoading(false);
+      }
     };
     getWalletSettings();
   }, []);

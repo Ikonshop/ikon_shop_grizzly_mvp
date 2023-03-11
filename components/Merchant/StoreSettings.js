@@ -116,15 +116,14 @@ const StoreSettings = () => {
               </div>
               <div className={styles.info_item}>
                 <h6>Email<span>
-                  Verified: {verified ? 
-                  <IoCheckmarkDoneSharp /> : '✗'} 
-                  {!verified && (
+                  {verified ? 
+                  'Verified' : (
                     <>
-                      {" "}| Verify with:
+                      {" "}Verify with:
                       <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithDiscord()}> <IoLogoDiscord /></span>
                       <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithGoogle()}> <IoLogoGoogle /></span>
                     </>
-                  )}
+                  )} 
                   </span></h6>
                 <input
                   className={styles.short_input}

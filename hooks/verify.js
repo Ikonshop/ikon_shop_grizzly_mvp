@@ -9,7 +9,7 @@ export const verifyWithDiscord = async () => {
     });
     await magic.oauth.loginWithRedirect({
         provider: 'discord',
-        redirectURI: `http://localhost:3000/dashboard/?userSettings=true&discordVerify=true`,
+        redirectURI: `https://ikon-shop-grizzly-mvp.vercel.app/dashboard/?userSettings=true&discordVerify=true`,
     });
 };
 
@@ -19,7 +19,7 @@ export const verifyWithGoogle = async (req) => {
     });
     await magic.oauth.loginWithRedirect({
         provider: 'google',
-        redirectURI: `http://localhost:3000/dashboard/?userSettings=true&googleVerify=true`,
+        redirectURI: `https://ikon-shop-grizzly-mvp.vercel.app/dashboard/?userSettings=true&googleVerify=true`,
     });
 };
 
@@ -29,7 +29,7 @@ export const verifyMerchantWithDiscord = async () => {
     });
     await magic.oauth.loginWithRedirect({
         provider: 'discord',
-        redirectURI: `http://localhost:3000/dashboard/?merchantSettings=true&discordVerify=true`,
+        redirectURI: `https://ikon-shop-grizzly-mvp.vercel.app/dashboard/?merchantSettings=true&discordVerify=true`,
     });
 }
 
@@ -39,6 +39,6 @@ export const verifyMerchantWithGoogle = async () => {
     });
     await magic.oauth.loginWithRedirect({
         provider: 'google',
-        redirectURI: `http://localhost:3000/dashboard/?merchantSettings=true&googleVerify=true`,
+        redirectURI: `https://ikon-shop-grizzly-mvp.vercel.app/dashboard/?merchantSettings=true&googleVerify=true`,
     });
 }

@@ -303,11 +303,15 @@ function MerchantDashboard() {
 
     // EVENT LISTENERS
     window.addEventListener("magic-logged-in", () => {
-      localStorage.getItem("userMagicMetadata").then((data) => {
-        const user = JSON.parse(data);
-        const pubKey = new web3.PublicKey(user.publicAddress);
-        setUserPublicKey(pubKey.toString());
-      });
+      try{
+        localStorage.getItem("userMagicMetadata").then((data) => {
+          const user = JSON.parse(data);
+          const pubKey = new web3.PublicKey(user.publicAddress);
+          setUserPublicKey(pubKey.toString());
+        });
+      }catch(e){
+        console.log(e);
+      }
     });
     window.addEventListener("magic-logged-out", () => {
       setUserEmail(null);

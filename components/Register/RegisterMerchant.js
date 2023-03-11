@@ -167,7 +167,7 @@ const Register = (req) => {
               <span>
                 <IoStorefrontOutline />
               </span>{" "}
-              <p>{storeName != null ? storeName : null} -</p>
+              <p>{storeName != null ? storeName : null} </p>
             </div>
           </div>
 
@@ -219,43 +219,36 @@ const Register = (req) => {
                 <p>
                   Total Ikons: <strong>{ikonNfts.length}</strong>
                 </p>
-                <a
-                  href="https://hyperspace.xyz/collection/ikons"
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  className="signup_button"
+                  onClick={() => handleMerchantRegister()}
                 >
-                  <button
-                    className="signup_button"
+                  Register as Merchant
+                </button>
+                  <div
                     style={{
-                      marginTop: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginTop: "30px",
                     }}
                   >
-                    Buy Ikon NFT
-                  </button>
-                </a>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginTop: "30px",
-                  }}
-                >
-                  <IoWarningOutline
-                    style={{
-                      fontSize: "24px",
-                      color: "#fcb901",
-                    }}
-                  />
-                  <p
-                    style={{
-                      marginTop: "15px",
-                    }}
-                  >
-                    You must own at least one <strong>Ikon NFT</strong> to
-                    register as a merchant.
-                  </p>
-                </div>
+                    <IoWarningOutline
+                      style={{
+                        fontSize: "24px",
+                        color: "#fcb901",
+                      }}
+                    />
+                    <p
+                      style={{
+                        marginTop: "15px",
+                      }}
+                    >
+                      You must own at least one <strong>Ikon NFT</strong> to
+                      register as a merchant... <br />
+                      but since it's <strong>Grizzly Szn</strong> we've made an exception.
+                    </p>
+                  </div>
               </div>
             )}
           </div>
@@ -312,7 +305,7 @@ const Register = (req) => {
                 <span>
                   <IoStorefrontOutline />
                 </span>{" "}
-                <p>{storeName != null ? storeName : null} -</p>
+                <p>{storeName != null ? storeName : null} </p>
               </div>
             </div>
 
