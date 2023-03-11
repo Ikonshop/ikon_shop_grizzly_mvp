@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { GetTotalUsers } from "../../lib/api";
+import { checkMagicLogin } from "../../hooks/checkMagicLogin";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../Loading";
 // MERCHANT COMPONENTS
@@ -30,12 +31,14 @@ import {
 import {Magic} from "magic-sdk";
 import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
+import CheckingForWallet from "../LoadingWalletCheck";
 
 config.autoAddCss = false;
 const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 function MerchantDashboard() {
   const [loading, setLoading] = useState(true);
+  const [checkingForWallet, setCheckingForWallet] = useState(true);
   const [userPublicKey, setUserPublicKey] = useState();
   
   const [activeMenu, setActiveMenu] = useState();
@@ -304,11 +307,11 @@ function MerchantDashboard() {
     // EVENT LISTENERS
     window.addEventListener("magic-logged-in", () => {
       try{
-        localStorage.getItem("userMagicMetadata").then((data) => {
-          const user = JSON.parse(data);
-          const pubKey = new web3.PublicKey(user.publicAddress);
-          setUserPublicKey(pubKey.toString());
-        });
+        const data = localStorage.getItem("userMagicMetadata");
+        const user = JSON.parse(data);
+        const pubKey = new web3.PublicKey(user.publicAddress);
+        console.log('pubkey', pubKey.toString());
+        setUserPublicKey(pubKey.toString());
       }catch(e){
         console.log(e);
       }
@@ -379,19 +382,33 @@ function MerchantDashboard() {
       setShowSubHub(false),
       setShowPayRequests(false)
     });
-  
+    if(!userPublicKey){
+      console.log('checking for wallet');
+      checkMagicLogin();
+    }
   }, []);
+
+  useEffect(() => {
+    // in 2 seconds set checkingForWallet to false
+    const timer = setTimeout(() => {
+      setCheckingForWallet(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [checkingForWallet]);
 
   return (
     <div className={styles.parent_container}>
       {/* <DashboardHeader /> */}
-      {showMerchantDash ? renderMerchantDashboard() : null}
+      {userPublicKey && !checkingForWallet && loading ? renderLoading() : null}
+      {checkingForWallet && <CheckingForWallet />}
+      {showMerchantDash && !checkingForWallet ? renderMerchantDashboard() : null}
       <div className={styles.main_container}>
-        {!publicKey && !userPublicKey ? renderNotConnected() : null}
-        {userPublicKey && loading ? renderLoading() : null}
+        {!userPublicKey && !checkingForWallet ? renderNotConnected() : null}
+        {userPublicKey&& !checkingForWallet && loading ? renderLoading() : null}
 
         {userPublicKey &&
         merchant &&
+        !checkingForWallet &&
         !loading &&
         !showCreate &&
         !showOrders &&

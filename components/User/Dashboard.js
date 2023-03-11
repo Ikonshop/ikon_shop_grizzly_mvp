@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { isUser } from "../../hooks/checkAllowance";
+import { checkMagicLogin } from "../../hooks/checkMagicLogin";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../Loading";
+import CheckingForWallet from "../LoadingWalletCheck";
 
 // USER COMPONENTS
 import Orders from "./Link-Orders";
@@ -61,6 +63,7 @@ const rpcUrl =
 function UserDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(null);
+  const [checkingForWallet, setCheckingForWallet] = useState(true);
   const [allowance, setAllowance] = useState(false);
   const [currentWallet, setCurrentWallet] = useState([]);
   const [ownerProducts, setOwnerProducts] = useState([]);
@@ -754,19 +757,33 @@ function UserDashboard() {
         setShowLinkOrders(false),
         setShowUserProfile(true);
     });
+    if(!userPublicKey){
+      console.log('checking for wallet');
+      checkMagicLogin();
+    }
   }, []);
+
+  useEffect(() => {
+    // in 2 seconds set checkingForWallet to false
+    const timer = setTimeout(() => {
+      setCheckingForWallet(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [checkingForWallet]);
 
   return (
     // <div className={styles.parent_container}>
     //   <div className={styles.main_container}>
     <>
       {/* {showUserDash ? renderUserDashboard() : null} */}
-      {!userPublicKey && !publicKey && !loading ? renderConnectWallet() : null}
+      {checkingForWallet && <CheckingForWallet />}
+      {!userPublicKey && !checkingForWallet && !publicKey && !loading ? renderConnectWallet() : null}
 
         <>
-          {userPublicKey && loading ? renderLoading() : null}
+          {userPublicKey && !checkingForWallet && loading ? renderLoading() : null}
 
-          {!loading &&
+          {!loading && 
+          !checkingForWallet &&
           userPublicKey &&
           !showUserOrders &&
           !showCreateLink &&

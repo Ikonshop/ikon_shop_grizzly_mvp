@@ -4,6 +4,7 @@ import styles from "../../styles/ProductDetails.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Buy from "../../components/Buy";
+import Send from "../../components/MagicWallet/send";
 import { useWallet } from "@solana/wallet-adapter-react";
 // import Head from "next/head";
 import Loading from "../../components/Loading";
@@ -19,7 +20,7 @@ export default function SingleProductViewer({}) {
   const [userPublicKey, setUserPublicKey] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   const [userMetadata, setUserMetadata] = useState(null);
-  const [userMagic, setUserMagic] = useState(false);
+  const [magicUser, setMagicUser] = useState(false);
   const router = useRouter();
   const [product, setProduct] = useState({
     type: "",
@@ -31,7 +32,7 @@ export default function SingleProductViewer({}) {
   });
   const [currentImage, setCurrentImage] = useState(0);
   const [productImages, setProductImages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
   const connection = new web3.Connection(rpcUrl);
@@ -152,7 +153,7 @@ export default function SingleProductViewer({}) {
           <div className={styles.product_details_desc}>
             {product.description}
           </div>
-          {userPublicKey ? (
+          {publicKey && !loading && (
             <Buy
               id={product.id}
               price={product.price}
@@ -161,7 +162,15 @@ export default function SingleProductViewer({}) {
               product={product}
               collection={product.collections ? product.collections[0].symbol : null}
             />
-          ) : null}
+          )}
+          {userPublicKey && magicUser && !loading && (
+            <Send
+              buyer={userPublicKey}
+              recipient={product.owner}
+              price={product.price}
+              token={product.token}
+            />
+          )}
         </div>
       </div>
     </div>
@@ -175,12 +184,6 @@ export default function SingleProductViewer({}) {
 
 
   useEffect(() => {
-    // console.log(product)
-    renderSingleProduct(product);
-  }, [!loading]);
-
-  useEffect(() => {
-    setLoading(true);
     // create async function called showProductDetails
     async function showProductDetails() {
       const url = window.location.href;
@@ -217,16 +220,17 @@ export default function SingleProductViewer({}) {
         const loggedIn = await magic.user.isLoggedIn();
         console.log('loggedIn', loggedIn)
         if(loggedIn) {
-
-                magic.user.getMetadata().then((user) => {
-                  const pubKey = new web3.PublicKey(user.publicAddress);
-                  setUserPublicKey(pubKey);
-                  setUserEmail(user.email);
-                });
+           setMagicUser(true)
+          magic.user.getMetadata().then((user) => {
+            const pubKey = new web3.PublicKey(user.publicAddress);
+            setUserPublicKey(pubKey);
+            setUserEmail(user.email);
+          });
         }
+        setLoading(false);
     }
     checkUser();
-    setLoading(false);
+    
 }, []);
 
   return (

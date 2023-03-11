@@ -295,9 +295,11 @@ export default function HeaderComponent() {
               <IoLogInOutline className={styles.icon} /> <span>Connect to App</span>
             </div>
           }
-          <div onClick={()=> (router.push('/register'), setShowLoginOptions(false), setShowQuickActions(false))} className={styles.menuItem}>
-            <IoFlashOutline className={styles.icon} /> <span>Register as Merchant</span>
-          </div>
+          {!merchant && userPublicKey &&(
+            <div onClick={()=> (router.push('/register'), setShowLoginOptions(false), setShowQuickActions(false))} className={styles.menuItem}>
+              <IoFlashOutline className={styles.icon} /> <span>Register as Merchant</span>
+            </div>
+          )}
           {/* MAGIC QUICK ACTION LINK */}
           {magicUser && (
             <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false), setShowMenu(false))} className={styles.menuItem}>
@@ -450,110 +452,49 @@ export default function HeaderComponent() {
 
   async function gatherMagicData() {
     // console.log("event listener fired");
-    const data = localStorage.getItem("userMagicMetadata");
-    if (data && !publicKey) {
-      try {
-        const parsedData = JSON.parse(data);
-        console.log("parsedData: ", parsedData);
-        const publicKey = new web3.PublicKey(parsedData.publicAddress);
-        await getBalance(publicKey).then(() => {
-          console.log("magic balance: ", magicBalance);
-          setMagicBalance(magicBalance);
-        });
-        await getUsdcBalance(publicKey).then(() => {
-          console.log("magic usdc balance: ", magicUsdcBalance);
-          setMagicUsdcBalance(magicUsdcBalance);
-        });
-        console.log("publicKey: ", publicKey.toString());
-        setMagicMetadata(parsedData);
-        setEmail(parsedData.email);
-        setUserPublicKey(publicKey.toString());
-        setMagicUser(true);
-        const getData = async () => {
-          const walletData = await CheckForWallet(publicKey.toString());
-          console.log("header walletData: ", walletData);
-          if (walletData.wallet === null) {
-            // create a wallet for the user using their public key and email from magic
-            const newWallet = await CreateWallet(
-              publicKey.toString(),
-              parsedData.email
-            );
-            if (newWallet) {
-              console.log(
-                "welcome to ikonshop, if you have any issues please reach out to us on discord"
-              );
-            }
-          }
-          if (walletData.email === parsedData.email) {
-            // update the wallet with the email from magic
-            const updateWallet = await UpdateWallet(
-              publicKey.toString(),
-              parsedData.email
-            );
-            if (updateWallet) {
-              console.log(
-                "welcome to ikonshop, if you have any issues please reach out to us on discord"
-              );
-            }
-          } else {
-            console.log(
-              "welcome to ikonshop, if you have any issues please reach out to us on discord"
-            );
-          }
-          // const data = await CheckForCollectionByOwner(publicKey.toString());
-          // console.log("data", data);
-          // if (data) {
-          //   setMerchant(true);
-          // }
-        };
-        getData();
-      } catch (e) {
-        console.log("error: ", e);
-      }
-    }
-    if (data && publicKey) {
-      try {
-        const parsedData = JSON.parse(data);
-        console.log("parsedData: ", parsedData);
-        console.log("publicKey: ", publicKey.toString());
-        const publicKey = publicKey;
-        getBalance(publicKey);
-        getUsdcBalance(publicKey);
-        console.log("publicKey: ", publicKey.toString());
-        setMagicMetadata(parsedData);
-        setEmail(parsedData.email);
-        setUserPublicKey(publicKey.toString());
-        setMagicUser(true);
-        const getData = async () => {
-          const walletData = await CheckForWallet(publicKey.toString());
-          console.log("header walletData: ", walletData);
-          if (walletData.wallet === null) {
-            // create a wallet for the user using their public key and email from magic
-            const newWallet = await CreateWallet(
-              publicKey.toString(),
-              parsedData.email
-            );
-          }
-          if (walletData.wallet.email === parsedData.email && connected) {
-            console.log("updating wallet with browser wallet");
-            // update the wallet with the email from magic
-            await UpdateWallet(useWallet().publicKey.toString(), parsedData.email);
-            
-          }if(walletData.wallet.email === parsedData.email && !connected){
-            console.log('updating wallet with magic wallet')
-            await UpdateWallet(publicKey.toString(), parsedData.email);
-            
-          }
-          const data = await CheckForCollectionByOwner(publicKey.toString());
-          if (data) {
-            setMerchant(true);
-          }
-        };
+    try {
+      const data = localStorage.getItem("userMagicMetadata");
+      const parsedData = await JSON.parse(data);
+      console.log("parsedData: ", parsedData);
 
-        getData();
-      } catch (error) {
-        console.log("error: ", error);
-      }
+      const magicKey = new web3.PublicKey(parsedData.publicAddress);
+      await getBalance(magicKey).then(() => {
+        console.log("magic balance: ", magicBalance);
+        setMagicBalance(magicBalance);
+      });
+      await getUsdcBalance(magicKey).then(() => {
+        console.log("magic usdc balance: ", magicUsdcBalance);
+        setMagicUsdcBalance(magicUsdcBalance);
+      });
+      console.log("publicKey: ", magicKey.toString());
+      setMagicMetadata(parsedData);
+      setUserPublicKey(magicKey.toString());
+      setMagicUser(true);
+      const getData = async () => {
+        await CheckForWallet(magicKey.toString()).then((walletData) => {
+          console.log("header walletData: ", walletData);
+          if (walletData === null) {
+            // create a wallet for the user using their public key and email from magic
+            const newWallet = CreateWallet(
+              magicKey.toString(),
+              parsedData.email
+            );
+            console.log("newWallet: ", newWallet);
+          } else {
+            console.log("wallet already exists");
+          }
+        });
+        await CheckForCollectionByOwner(magicKey.toString()).then(
+          (collectionData) => {
+            if(collectionData){
+              setMerchant(true);
+            }
+          }
+        );
+      };
+      getData();
+    } catch (e) {
+      console.log("error: ", e);
     }
   }
 
@@ -600,8 +541,10 @@ export default function HeaderComponent() {
 
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
-      gatherMagicData();
-      setMagicUser(true);
+      if(!userPublicKey){
+        gatherMagicData();
+        setMagicUser(true);
+      }
     });
     window.addEventListener("magic-logged-out", () => {
       setMagicMetadata("");

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Paylink.module.css";
 import Buy from "../components/Buy";
+import Send from "../components/MagicWallet/send";
 import { useWallet } from "@solana/wallet-adapter-react";
 // import SendElusiv from "./Elusiv/send";
 // import ElusivSetup from "./Elusiv/userSetUp";
+import { Magic } from "magic-sdk";
+import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 
 
@@ -17,12 +20,18 @@ export default function PaylinkComponent(product) {
     token,
     type,
   } = product.product;
+  const [loading, setLoading] = useState(true);
   const [tipAmount, setTipAmount] = useState("");
   const [tokenType, setTokenType] = useState("");
   const [userPublicKey, setUserPublicKey] = useState("");
+  const [magicUser, setMagicUser] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   // const [showElusiv, setShowElusiv] = useState(false);
   // const [elusivBalance, setElusivBalance] = useState(0);
   const { publicKey } = useWallet();
+  const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
+
+  
 
   const renderTokenTypeInput = () => {
     return (
@@ -61,6 +70,32 @@ export default function PaylinkComponent(product) {
   //     setElusivBalance(elusivBalance);
   //   }
   // }, []);
+
+  useEffect(() => {
+    
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+        extensions: {
+            solana: new SolanaExtension({
+            rpcUrl
+            })
+        }
+    });
+    async function checkUser() {
+        const loggedIn = await magic.user.isLoggedIn();
+        console.log('loggedIn', loggedIn)
+        if(loggedIn) {
+           setMagicUser(true)
+          magic.user.getMetadata().then((user) => {
+            const pubKey = new web3.PublicKey(user.publicAddress);
+            setUserPublicKey(pubKey);
+            setUserEmail(user.email);
+          });
+        }
+        setLoading(false);
+    }
+    checkUser();
+    
+  }, []);
 
   useEffect(() => {
     if(publicKey) {
@@ -185,7 +220,7 @@ export default function PaylinkComponent(product) {
                       elusiv={true}
                     />
                   )} */}
-                  {userPublicKey && tipAmount && (
+                  {publicKey && tipAmount && (
                     <Buy
                       className={styles.pay_btn}
                       id={id}
@@ -196,7 +231,7 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   )}
-                  {userPublicKey && type != "tipjar" ? (
+                  {publicKey && type != "tipjar" ? (
                     <Buy
                       className={styles.pay_btn}
                       id={id}
@@ -207,6 +242,26 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   ) : null}
+                  {magicUser && userPublicKey && tipAmount && (
+                    <Send
+                      buyer={userPublicKey}
+                      recipient={owner}
+                      price={tipAmount}
+                      token={tokenType}
+                      elusiv={false}
+                      product={product.product}
+                    />
+                  )}
+                  {magicUser && type != "tipjar" && (
+                    <Send
+                      buyer={userPublicKey}
+                      recipient={owner}
+                      price={price}
+                      token={token}
+                      elusiv={false}
+                      product={product.product}
+                    />
+                  )}
                   {/* {publicKey && showElusiv && tipAmount && elusivBalance < tipAmount && (
                     <p style={{
                       fontSize: "12px",

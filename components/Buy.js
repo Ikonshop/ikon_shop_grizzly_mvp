@@ -161,7 +161,7 @@ export default function Buy({
   const order = useMemo(
     () => ({
       id: id,
-      buyer: publicKey.toString(),
+      buyer: publicKey ? publicKey.toString() : '',
       orderID: orderID.toString(),
       // if product is a tip jar set the price to tip amount and set the token type to the tip jar token type
       product: product,
