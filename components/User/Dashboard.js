@@ -193,6 +193,7 @@ function UserDashboard() {
             <span id={styles.full_screen}>Profile</span>
           </button>
         </div>
+        
       </>
     );
   };
@@ -360,7 +361,7 @@ function UserDashboard() {
           </div>
           <div className={styles.hero_overlay}></div>
         </div>
-      </div> */}
+        </div> */}
 
         <div className={styles.wallet_container}>
           <div className={styles.atadian_credit}>
@@ -754,10 +755,10 @@ function UserDashboard() {
   return (
     // <div className={styles.parent_container}>
     //   <div className={styles.main_container}>
-    <div>
-      {showUserDash ? renderUserDashboard() : null}
+    <>
+      {/* {showUserDash ? renderUserDashboard() : null} */}
       {!userPublicKey && !publicKey && !loading ? renderConnectWallet() : null}
-      {allowance && (
+
         <>
           {userPublicKey && loading ? renderLoading() : null}
 
@@ -774,8 +775,8 @@ function UserDashboard() {
           {userPublicKey && showLinkOrders && renderOrdersComponent()}
           {userPublicKey && showUserProfile && renderUserProfileComponent()}
         </>
-      )}
-    </div>
+
+    </>
     // </div>
     // </div>
   );

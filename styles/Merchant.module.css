@@ -61,7 +61,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 30px;
-  max-width: 60vw;
+  width: 70vw;
 }
 
 .parent_container {
@@ -1152,6 +1152,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 70vw;
   }
 }
 

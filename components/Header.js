@@ -314,8 +314,7 @@ export default function HeaderComponent() {
             >
               <IoLogOutOutline className={styles.icon} /> <span>Logout</span>
             </div>
-          )
-          }
+          )}
           {/* SOCIALS */}
           <div className={styles.socialItem}>
             <a href="https://discord.com/invite/ikons">
