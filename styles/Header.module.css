@@ -162,7 +162,7 @@
   /* middle of screen */
   top: 50%;
   left: 70%;
-  width: fit-content;
+  min-width: 400px;
   height: fit-content;
   padding: 20px;
   background-color: rgb(255, 255, 255);
@@ -179,6 +179,18 @@
   justify-content: center;
   border-radius: 10px;
   cursor: pointer;
+  background: transparent;
+}
+
+.loginOption > span{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  font-weight: 600;
 }
 
 .loginOption > a,
@@ -495,9 +507,12 @@
 
 
 .loginOptions{
-  width: 60vw;
+  width: 30vw;
   height: fit-content;
   padding: 20px;
+  z-index: 3001;
+  left: 50%;
+
 }
 
 .walletItem {

@@ -100,6 +100,11 @@ const App = () => {
     }
   }, []);
 
+  // REDIRECT TO MERCHANT REGISTER
+  useEffect(() => {
+    router.push("/register/merchant");
+  }, []);
+
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);

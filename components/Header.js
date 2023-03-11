@@ -10,7 +10,7 @@ import {
   CheckForCollectionByOwner,
   UpdateWallet,
 } from "../lib/api";
-import { isMerchant, isUser } from "../hooks/checkAllowance";
+import { isMerchant, isUser, addUser } from "../hooks/checkAllowance";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -38,7 +38,8 @@ import {
   IoLinkOutline,
   IoDocumentOutline,
   IoFingerPrintSharp,
-  IoFlashOutline
+  IoFlashOutline,
+  IoArrowBack
 } from "react-icons/io5";
 // import LoginMagic from "./MagicWallet/login";
 // import LogoutMagic from "./MagicWallet/logout";
@@ -57,6 +58,7 @@ export default function HeaderComponent() {
   const [showMenu, setShowMenu] = useState(false);
   const [showStoreSymbol, setShowStoreSymbol] = useState(false);
   const [showLoginOptions, setShowLoginOptions] = useState(false);
+  const [loginOptionSelected, setLoginOptionSelected] = useState('');
   const [userPublicKey, setUserPublicKey] = useState("");
   const [merchant, setMerchant] = useState(false);
   const [user, setUser] = useState(false);
@@ -200,25 +202,18 @@ export default function HeaderComponent() {
   const renderHeaderMenu = () => {
     return  (
       <div className={styles.menuContainer}>
-        <div onClick={()=> (setShowMenu(false), setShowLoginOptions(false))} className={styles.menuOverlay}></div>
+        <div onClick={()=> (setShowMenu(false), setShowLoginOptions(false), setLoginOptionSelected(''))} className={styles.menuOverlay}></div>
         <div className={styles.menu}>
           {/* if currentpath is /dashboard then renderDashToggle */}
           {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
-          {userPublicKey && user && !merchant &&(
+          {userPublicKey && !merchant &&(
             <div className={styles.menuItem}>
               <Link href="/dashboard">
                 <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
               </Link>
             </div>
           )}
-          {userPublicKey && !user && merchant &&(
-            <div className={styles.menuItem}>
-              <Link href="/dashboard">
-                <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
-              </Link>
-            </div>
-          )}
-          {userPublicKey && user && merchant &&(
+          {userPublicKey && merchant &&(
             <div className={styles.menuItem}>
               <Link href="/dashboard">
                 <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false), setShowQuickActions(false))}><IoSpeedometerOutline className={styles.icon}/> <span>Dashboard</span></a>
@@ -235,13 +230,17 @@ export default function HeaderComponent() {
           {/* LOGIN LINK */}
           {!userPublicKey &&
             <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))}  className={styles.menuItem}>
-              <IoLogInOutline className={styles.icon} /> <span>Login</span>
+              <IoLogInOutline className={styles.icon} /> <span>Connect to App</span>
             </div>
           }
-          {!user && (
-            <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))} className={styles.menuItem}>
-            <IoFlashOutline className={styles.icon} /> <span>Register</span>
+          <div onClick={()=> (router.push('/register'), setShowLoginOptions(false), setShowQuickActions(false))} className={styles.menuItem}>
+            <IoFlashOutline className={styles.icon} /> <span>Register as Merchant</span>
           </div>
+          {/* MAGIC QUICK ACTION LINK */}
+          {magicUser && (
+            <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false), setShowMenu(false))} className={styles.menuItem}>
+              <IoWalletOutline className={styles.icon} /> <span>Wallet</span>
+            </div>
           )}
           {/* LOGGED IN  */}
           {userPublicKey != '' && 
@@ -249,13 +248,6 @@ export default function HeaderComponent() {
               <IoLogOutOutline className={styles.icon} /> <span>Logout</span>
             </div>
           }
-          
-          {/* MAGIC QUICK ACTION LINK */}
-          {magicUser && (
-            <div onClick={()=> (setShowQuickActions(!showQuickActions), setShowLoginOptions(false), setShowMenu(false))} className={styles.menuItem}>
-              <IoWalletOutline className={styles.icon} /> <span>Wallet</span>
-            </div>
-          )}
           {/* SOCIALS */}
           <div className={styles.socialItem}>
             <a href="https://discord.com/invite/ikons"><IoLogoDiscord className={styles.socialIcon} /></a>
@@ -266,26 +258,55 @@ export default function HeaderComponent() {
     )
   }
 
-  const renderLoginOptions = () => {
+  const renderEmailLogin = () => {
     return (
-      <div className={styles.loginOptions}>
+
         <div className={styles.loginOption}>
           Email:
           <LoginMagic />
+
+          <span onClick={()=> setLoginOptionSelected('')}><IoArrowBack />back</span>
         </div>
+ 
+    )
+  };
+
+  const renderWalletLogin = () => {
+    return (
+      
         <div className={styles.loginOption}>
           Browser Wallet:
           <WalletMultiButton />
+
+          <span onClick={()=> setLoginOptionSelected('')}><IoArrowBack />back</span>
+        </div>
+    
+    )
+  };
+
+  const renderLoginOptionsSelect = () => {
+    return (
+      <div>
+        <h3>Connect with:</h3>
+        <div className={styles.loginOption}>
+          <span onClick={() => setLoginOptionSelected('email')}>Email</span>
         </div>
         <div className={styles.loginOption}>
-          Not Registered? 
-          <Link href="/register" >
-            <a onClick={()=>(setShowMenu(false), setShowLoginOptions(false))}><IoRocketOutline className={styles.icon} style={{color: 'blue'}}/> <span>Click here.</span></a>
-          </Link>
+          <span onClick={() => setLoginOptionSelected('wallet')}>Browser Wallet</span>
         </div>
+      </div>
+    )
+  };
+
+  const renderLoginOptions = () => {
+    return (
+      <div className={styles.loginOptions}>
+        {loginOptionSelected === 'email' && renderEmailLogin()}
+        {loginOptionSelected === 'wallet' && renderWalletLogin()}
+        {loginOptionSelected === '' && renderLoginOptionsSelect()}
         <button
           className={styles.closeButton}
-          onClick={() => setShowLoginOptions(false)}
+          onClick={() => (setShowLoginOptions(false), setLoginOptionSelected(''))}
         >
           X
         </button>
@@ -437,11 +458,11 @@ export default function HeaderComponent() {
           } if(walletData.wallet.email === parsedData.email && connected) {
             console.log('updating wallet with browser wallet')
             // update the wallet with the email from magic
-            const updateWallet = await UpdateWallet(useWallet().publicKey.toString(), parsedData.email);
+            await UpdateWallet(useWallet().publicKey.toString(), parsedData.email);
             
           }if(walletData.wallet.email === parsedData.email && !connected){
             console.log('updating wallet with magic wallet')
-            const updateWallet = await UpdateWallet(publicKey.toString(), parsedData.email);
+            await UpdateWallet(publicKey.toString(), parsedData.email);
             
           }
           const data = await CheckForCollectionByOwner(publicKey.toString());
