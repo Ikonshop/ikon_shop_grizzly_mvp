@@ -267,26 +267,3 @@ export async function getStaticPaths() {
     fallback: true,
   };
 }
-
-
-export async function getStaticProps({ params }) {
-  const data = await getSingleProductBySku(params.slug);
-  return {
-    props: {
-      product: data,
-    },
-  };
-}
-
-export async function getStaticPaths() {
-  const data = await fetchProducts("ABC");
-  const paths = data.map((product) => ({
-    params: {
-      slug: product.id,
-    },
-  }));
-  return {
-    paths,
-    fallback: true,
-  };
-}
