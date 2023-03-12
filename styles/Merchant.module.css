@@ -61,7 +61,16 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 30px;
-  width: 70vw;
+}
+
+.no_orders img {
+  width: 120px;
+}
+
+.no_orders p {
+  color: #525f69;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .parent_container {
@@ -414,7 +423,8 @@
 
 .btn_container_wrap {
   width: 100%;
-  margin-top: 30px;
+  display: grid;
+  place-items: center;
 }
 
 /* .hello_user,
@@ -735,8 +745,8 @@
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 20px;
-  height: fit-content;
-  width: fit-content;
+  height: 400px;
+  width: 400px;
 }
 
 .paylink_head {
@@ -1147,21 +1157,18 @@
   background-color: #00ff00;
 }
 
-@media screen and (max-width: 768px) {
-  .atadian_report {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 70vw;
-  }
-}
-
 @media screen and (max-width: 618px) {
   /* #full_screen {
     display: none;
   } */
   .merchant_dashboard {
     width: fit-content;
+  }
+}
+
+@media screen and (max-width: 1102px) {
+  .atadian_credit {
+    height: fit-content;
   }
 }
 @media screen and (max-width: 768px) {
@@ -1178,6 +1185,14 @@
     box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
     -webkit-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+  }
+
+  .atadian_report {
+    align-items: center;
+  }
+
+  .atadian_credit {
+    width: 100%;
   }
 
   .ikonshop_users {
@@ -1200,8 +1215,52 @@
   }
 }
 
+@media screen and (max-width: 430px) {
+  .total_wrapper {
+    width: 150px;
+    height: 150px;
+    background: #8affcb;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    transform: rotate(108deg);
+    margin-top: 30px;
+  }
+  .total_wrapper .d1 {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    transform: rotate(0deg);
+  }
+  .total_wrapper .d1 div {
+    width: 400px;
+    height: 400px;
+  }
+
+  .total_wrapper .d2 {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    transform: rotate(147.6deg);
+  }
+  .total_wrapper .d2 div {
+    width: 400px;
+    height: 400px;
+  }
+}
+
 @media screen and (max-width: 410px) {
   #full_screen {
     font-size: 10px !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .atadian_report {
+    flex-direction: column;
   }
 }

@@ -70,6 +70,8 @@ function UserDashboard() {
   const [activeMenu, setActiveMenu] = useState();
   const { publicKey, connected } = useWallet();
   const [userPublicKey, setUserPublicKey] = useState();
+  const [noLinks, setNoLinks] = useState(true);
+
   const [userEmail, setUserEmail] = useState();
   // USER DASHBOARD CONSTANTS
   const [showUserDash, setShowUserDash] = useState(true);
@@ -77,12 +79,14 @@ function UserDashboard() {
   const [showCreateLink, setShowCreateLink] = useState(false);
   const [showLinkOrders, setShowLinkOrders] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
+
   const [userLinks, setUserLinks] = useState([]);
   const [totalLinkSales, setTotalLinkSales] = useState(0);
   const [totalLinkCount, setTotalLinkCount] = useState(0);
   const [userTipJar, setUserTipJar] = useState([]);
   const [totalTipJarSales, setTotalTipJarSales] = useState(0);
   const [totalTipJarCount, setTotalTipJarCount] = useState(0);
+  const [createLinkType, setCreateLinkType] = useState("");
 
   // ATADIA CONSTANTS
   const [atadiaLoading, setAtadiaLoading] = useState(false);
@@ -196,7 +200,6 @@ function UserDashboard() {
             <span id={styles.full_screen}>Profile</span>
           </button>
         </div>
-        
       </>
     );
   };
@@ -225,7 +228,7 @@ function UserDashboard() {
     return (
       <>
         <div className="create-component">
-          <CreateLink />
+          <CreateLink type={createLinkType} />
         </div>
       </>
     );
@@ -242,108 +245,8 @@ function UserDashboard() {
   };
 
   const renderDisplay = () => (
-    <div className={styles.over_dash_container}>
-      <div className={styles.merchant_dashboard}>
-        <button
-          id="overview"
-          disabled={!userPublicKey}
-          className={
-            activeMenu == "overview" ? "active_dash dash-button" : "dash-button"
-          }
-          onClick={() => (
-            setShowCreateLink(false),
-            setShowUserOrders(false),
-            setShowLinkOrders(false),
-            setShowUserProfile(false),
-            setActiveMenu("overview")
-          )}
-        >
-          <IoBarChartOutline className={styles.dash_icon} />
-
-          <span id={styles.full_screen}>Overview</span>
-        </button>
-        <button
-          id="order"
-          disabled={!userPublicKey}
-          className={
-            activeMenu == "order" ? "active_dash dash-button" : "dash-button"
-          }
-          onClick={() => (
-            setShowCreateLink(false),
-            setShowLinkOrders(false),
-            setShowUserOrders(true),
-            setShowUserProfile(false),
-            setActiveMenu("order")
-          )}
-        >
-          <IoFileTrayFullOutline className={styles.dash_icon} />
-          <span id={styles.full_screen}>Txn History</span>
-        </button>
-        <button
-          id="payreq"
-          disabled={!userPublicKey}
-          className={
-            activeMenu == "payreq" ? "active_dash dash-button" : "dash-button"
-          }
-          onClick={() => (
-            setShowUserOrders(false),
-            setShowLinkOrders(false),
-            setShowCreateLink(true),
-            setShowUserProfile(false),
-            setActiveMenu("payreq")
-          )}
-        >
-          <IoLinkOutline
-            className={styles.dash_icon}
-            style={{ transform: "rotate(-45deg)" }}
-          />
-
-          <span id={styles.full_screen}>Pay Hub</span>
-        </button>
-        <button
-          id="link"
-          disabled={!userPublicKey}
-          className={
-            activeMenu == "link" ? "active_dash dash-button" : "dash-button"
-          }
-          onClick={() => (
-            setShowUserOrders(false),
-            setShowCreateLink(false),
-            setShowLinkOrders(true),
-            setShowUserProfile(false),
-            setActiveMenu("link")
-          )}
-        >
-          <IoDocumentOutline className={styles.dash_icon} />
-          <span id={styles.full_screen}>My Orders</span>
-        </button>
-        <button
-          id="profile"
-          disabled={!userPublicKey}
-          className={
-            activeMenu == "profile" ? "active_dash dash-button" : "dash-button"
-          }
-          onClick={() => (
-            setShowUserOrders(false),
-            setShowCreateLink(false),
-            setShowLinkOrders(false),
-            setShowUserProfile(true),
-            setActiveMenu("profile")
-          )}
-        >
-          <IoFingerPrintSharp className={styles.dash_icon} />
-          <span id={styles.full_screen}>Profile</span>
-        </button>
-        {/* <button
-          className="dash-button back_to"
-          onClick={() => router.push("/")}
-        >
-          <IoLogOutOutline />
-          <span id={styles.full_screen}>Logout</span>
-        </button> */}
-      </div>
-      <div className={styles.dash_container}>
-        {/* <div className={styles.dash_header}>
+    <div className={styles.dash_container}>
+      {/* <div className={styles.dash_header}>
         <div className={styles.banner_hero}>
           <div className={styles.dash_hero_text}>
             <h1>
@@ -366,106 +269,105 @@ function UserDashboard() {
         </div>
         </div> */}
 
-        <div className={styles.wallet_container}>
-          <div className={styles.atadian_credit}>
-            <h4 className={styles.paylink_header}>Wallet Balance</h4>
+      {/* <div className={styles.wallet_container}> */}
+      <div className={styles.atadian_credit}>
+        <h4 className={styles.paylink_header}>Wallet Balance</h4>
 
-            <div className={styles.balance_and_hide}>
-              <div className={styles.balance_container}>
-                <div className={styles.sol_balance}>
-                  <div
-                    className={styles.sol_balance_fig}
-                    // if balanceHide is true, then set display to none, if false display flex
-                    style={{ display: balanceHide ? "none" : "flex" }}
-                  >
-                    <img src="/sol.png" />
-                    <h3>{magicBalance.toFixed(2)}</h3>
-                  </div>
-                  <div
-                    className={styles.sol_balance_fig}
-                    // if balanceHide is true, then set display to none, if false display flex
-                    style={{ display: balanceHide ? "flex" : "none" }}
-                  >
-                    <img src="/sol.png" />
-                    <h3>****</h3>
-                  </div>
-                </div>
-
-                <p
-                  className={styles.usdc_balance}
-                  style={{ display: balanceHide ? "none" : "flex" }}
-                >
-                  ${magicBalanceUSD.toFixed(2)}
-                </p>
-                <p
-                  className={styles.usdc_balance}
-                  style={{ display: balanceHide ? "flex" : "none" }}
-                >
-                  ****
-                </p>
+        <div className={styles.balance_and_hide}>
+          <div className={styles.balance_container}>
+            <div className={styles.sol_balance}>
+              <div
+                className={styles.sol_balance_fig}
+                // if balanceHide is true, then set display to none, if false display flex
+                style={{ display: balanceHide ? "none" : "flex" }}
+              >
+                <img src="/sol.png" />
+                <h3>{magicBalance.toFixed(2)}</h3>
               </div>
-              <div className={styles.paylink_head}>
-                {/*  */}
-                <IoEyeOff
-                  className={styles.hide}
-                  onClick={() => setBalanceHide(!balanceHide)}
-                />
+              <div
+                className={styles.sol_balance_fig}
+                // if balanceHide is true, then set display to none, if false display flex
+                style={{ display: balanceHide ? "flex" : "none" }}
+              >
+                <img src="/sol.png" />
+                <h3>****</h3>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className={styles.atadian_credit}>
+            <p
+              className={styles.usdc_balance}
+              style={{ display: balanceHide ? "none" : "flex" }}
+            >
+              ${magicBalanceUSD.toFixed(2)}
+            </p>
+            <p
+              className={styles.usdc_balance}
+              style={{ display: balanceHide ? "flex" : "none" }}
+            >
+              ****
+            </p>
+          </div>
           <div className={styles.paylink_head}>
-            <h4 className={styles.paylink_header}>Total Recieved</h4>
+            {/*  */}
+            <IoEyeOff
+              className={styles.hide}
+              onClick={() => setBalanceHide(!balanceHide)}
+            />
           </div>
-          <div className={styles.royalties_paid}>
-            <div>
-              <h3>${(totalLinkSales + totalTipJarSales).toFixed(2)}</h3>
-            </div>
-          </div>
-          <div className={styles.atadian_report}>
-            <div className={styles.total_wrapper}>
-              <div className={styles.d1}>
-                <div>
-                  <span>
-                    {(
-                      (totalLinkCount / (totalLinkCount + totalTipJarCount)) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </span>
-                </div>
-              </div>
-              <div className={styles.d2}>
-                <div>
-                  <span>
-                    {(
-                      (totalTipJarCount / (totalLinkCount + totalTipJarCount)) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </span>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+      {/* </div> */}
 
-            <div className={styles.atadian_checks}>
-              <div className={styles.payreq_chart_explainer1}>
-                <span></span>
-                <p>Paylink</p>
+      <div className={styles.atadian_credit}>
+        <div className={styles.paylink_head}>
+          <h4 className={styles.paylink_header}>Total Recieved</h4>
+        </div>
+        <div className={styles.royalties_paid}>
+          <div>
+            <h3>${(totalLinkSales + totalTipJarSales).toFixed(2)}</h3>
+          </div>
+        </div>
+        <div className={styles.atadian_report}>
+          <div className={styles.total_wrapper}>
+            <div className={styles.d1}>
+              <div>
+                <span>
+                  {(
+                    (totalLinkCount / (totalLinkCount + totalTipJarCount)) *
+                    100
+                  ).toFixed(2)}
+                  %
+                </span>
               </div>
-              <div className={styles.payreq_chart_explainer2}>
-                <span></span>
-                <p>TipJar</p>
+            </div>
+            <div className={styles.d2}>
+              <div>
+                <span>
+                  {(
+                    (totalTipJarCount / (totalLinkCount + totalTipJarCount)) *
+                    100
+                  ).toFixed(2)}
+                  %
+                </span>
               </div>
+            </div>
+          </div>
+
+          <div className={styles.atadian_checks}>
+            <div className={styles.payreq_chart_explainer1}>
+              <span></span>
+              <p>Paylink</p>
+            </div>
+            <div className={styles.payreq_chart_explainer2}>
+              <span></span>
+              <p>TipJar</p>
             </div>
           </div>
         </div>
-
-        {/* LINKS AND TIP JAR RENDER */}
-        {renderProductLinks()}
       </div>
+
+      {/* LINKS AND TIP JAR RENDER */}
+      {renderProductLinks()}
     </div>
   );
 
@@ -475,6 +377,7 @@ function UserDashboard() {
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
+          {!loading && noLinks ? renderNoLinks() : null}
           {userLinks.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_tip">
@@ -567,15 +470,45 @@ function UserDashboard() {
               </div>
             </div>
           ))}
-          <div className="btn_container pay_btn">
-            <div
-              onClick={() => setShowCreateLink(true)}
-              className="button_drop"
-            >
-              <p>Create a Paylink</p>
-              <div className="arrow_bg">
-                <IoChevronDown className="arrow_drop" />
-              </div>
+
+          <div className={styles.btn_container_wrap}>
+            <div className="btn_container pay_btn">
+              {!showDropdown && (
+                <div className="button_drop">
+                  <p
+                    onClick={() => (
+                      setCreateLinkType("link"), setShowCreateLink(true)
+                    )}
+                  >
+                    Create a Paylink
+                  </p>
+                  <div
+                    className="arrow_bg"
+                    onClick={() => setShowDropdown(true)}
+                  >
+                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
+                    <IoChevronDown className="arrow_drop" />
+                  </div>
+                </div>
+              )}
+              {showDropdown && (
+                <div className="button_drop_tip">
+                  <p
+                    onClick={() => (
+                      setCreateLinkType("tipjar"), setShowCreateLink(true)
+                    )}
+                  >
+                    Create a Tipjar
+                  </p>
+                  <div
+                    className="arrow_bg_tip"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    {/* when dropdown  clicked, show dropdown option to Create a Tipjar*/}
+                    <IoChevronUp className="arrow_drop_tip" />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -599,6 +532,13 @@ function UserDashboard() {
     );
   };
 
+  const renderNoLinks = () => (
+    <div className={styles.no_orders}>
+      <img src="/nolinks.png" />
+      <p>You have no links</p>
+    </div>
+  );
+
   useEffect(() => {
     if (publicKey) {
       // checkOwnership();
@@ -621,6 +561,10 @@ function UserDashboard() {
         }
         setLoading(false);
       };
+
+      if (userLinks.length > 0 && userTipJar.length > 0) {
+        setNoLinks(false);
+      }
 
       const getTotals = async () => {
         const tjTotatls = await GetUserDashTipjarTotals(publicKey.toString());
@@ -710,13 +654,13 @@ function UserDashboard() {
   // EVENT LISTENERS
   useEffect(() => {
     window.addEventListener("magic-logged-in", () => {
-      try{
+      try {
         const data = localStorage.getItem("userMagicMetadata");
         const user = JSON.parse(data);
         const pubKey = new web3.PublicKey(user.publicAddress);
         setUserPublicKey(pubKey.toString());
-      }catch(e){
-        console.log("error", e)
+      } catch (e) {
+        console.log("error", e);
       }
     });
 
@@ -757,8 +701,8 @@ function UserDashboard() {
         setShowLinkOrders(false),
         setShowUserProfile(true);
     });
-    if(!userPublicKey){
-      console.log('checking for wallet');
+    if (!userPublicKey) {
+      console.log("checking for wallet");
       checkMagicLogin();
     }
   }, []);
@@ -774,30 +718,34 @@ function UserDashboard() {
   return (
     // <div className={styles.parent_container}>
     //   <div className={styles.main_container}>
-    <>
-      {/* {showUserDash ? renderUserDashboard() : null} */}
+    <div className="over_dash_container">
+      {showUserDash ? renderUserDashboard() : null}
       {checkingForWallet && <CheckingForWallet />}
-      {!userPublicKey && !checkingForWallet && !publicKey && !loading ? renderConnectWallet() : null}
+      {!userPublicKey && !checkingForWallet && !publicKey && !loading
+        ? renderConnectWallet()
+        : null}
 
-        <>
-          {userPublicKey && !checkingForWallet && loading ? renderLoading() : null}
+      <>
+        {userPublicKey && !checkingForWallet && loading
+          ? renderLoading()
+          : null}
 
-          {!loading && 
-          !checkingForWallet &&
-          userPublicKey &&
-          !showUserOrders &&
-          !showCreateLink &&
-          !showLinkOrders &&
-          !showUserProfile
-            ? renderDisplay()
-            : null}
-          {userPublicKey && showUserOrders && renderUserOrdersComponent()}
-          {userPublicKey && showCreateLink && renderCreateLinkComponent()}
-          {userPublicKey && showLinkOrders && renderOrdersComponent()}
-          {userPublicKey && showUserProfile && renderUserProfileComponent()}
-        </>
+        {!loading &&
+        !checkingForWallet &&
+        userPublicKey &&
+        !showUserOrders &&
+        !showCreateLink &&
+        !showLinkOrders &&
+        !showUserProfile
+          ? renderDisplay()
+          : null}
+        {userPublicKey && showUserOrders && renderUserOrdersComponent()}
+        {userPublicKey && showCreateLink && renderCreateLinkComponent()}
+        {userPublicKey && showLinkOrders && renderOrdersComponent()}
 
-    </>
+        {userPublicKey && showUserProfile && renderUserProfileComponent()}
+      </>
+    </div>
     // </div>
     // </div>
   );

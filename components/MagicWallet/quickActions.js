@@ -82,11 +82,11 @@ const QuickActions = (req) => {
         <div className={styles.transferInputTokenRow}>
           <p>Token: {tokenType}</p>
           <div className={styles.tokenSelect}>
-          <select onChange={(e) => setTokenType(e.target.value)}>
-                      <option value="SOL">Select</option>
-                      <option value="SOL">SOL</option>
-                      <option value="USDC">USDC</option>
-                    </select>
+            <select onChange={(e) => setTokenType(e.target.value)}>
+              <option value="SOL">Select</option>
+              <option value="SOL">SOL</option>
+              <option value="USDC">USDC</option>
+            </select>
           </div>
         </div>
       </div>
@@ -106,13 +106,16 @@ const QuickActions = (req) => {
 
   const renderBalanceRefresh = () => {
     return (
-      <div 
+      <div
         className={styles.balanceRefresh}
         onClick={() => {
           refreshBalance();
-        }}  
+        }}
       >
-        <p><IoTimeOutline className={styles.balanceRefreshIcon} />Refresh Balance</p>
+        <p>
+          <IoTimeOutline className={styles.balanceRefreshIcon} />
+          Refresh Balance
+        </p>
       </div>
     );
   };
@@ -227,7 +230,7 @@ const QuickActions = (req) => {
               }}
             >
               {!displayTransfer ? (
-                <button className="signup_button">Transfer</button>
+                <button className="signup_button">Send</button>
               ) : (
                 ""
               )}
@@ -241,13 +244,15 @@ const QuickActions = (req) => {
               }}
             >
               {!displayQR ? (
-                <button 
+                <button
                   className="signup_button"
                   onClick={() => {
                     setDisplayQR(!displayQR);
                     setDisplayTransfer(false);
                   }}
-                >Deposit</button>
+                >
+                  Receive
+                </button>
               ) : (
                 ""
               )}
@@ -259,7 +264,6 @@ const QuickActions = (req) => {
             <div className={styles.transferContainer}>
               {displayTransfer && (
                 <>
-
                   <div className={styles.transferInputRow}>
                     <input
                       type="text"
@@ -270,7 +274,7 @@ const QuickActions = (req) => {
                   </div>
                   <div className={styles.transferInputRow}>
                     <input
-                    // type is only postive numbers to the 2nd decimal
+                      // type is only postive numbers to the 2nd decimal
                       type="number"
                       step="0.01"
                       min="0"
@@ -295,7 +299,9 @@ const QuickActions = (req) => {
                   <div className={styles.transferDetails}>
                     <h4>Recipient:</h4>
                     <div className={styles.detailRowAddress}>
-                      <span>Recipient:</span> {transferToAddress.slice(0, 4)}{transferToAddress ? '...' : null}{transferToAddress.slice(-4)}
+                      <span>Recipient:</span> {transferToAddress.slice(0, 4)}
+                      {transferToAddress ? "..." : null}
+                      {transferToAddress.slice(-4)}
                     </div>
                     <div className={styles.detailRow}>
                       <span>Gas:</span> 0.0001 SOL

@@ -83,11 +83,14 @@ function Orders() {
                     ))}
                   </td>
                   <td data-th="Txn">
-                    <a href={
-                        new Date(order.createdAt)> new Date('2023-02-22T00:00:00.000Z')
+                    <a
+                      href={
+                        new Date(order.createdAt) >
+                        new Date("2023-02-22T00:00:00.000Z")
                           ? `https://solana.fm/tx/${order.orderID}`
                           : `https://solana.fm/address/${order.orderID}`
-                      }>
+                      }
+                    >
                       Solana FM
                     </a>
                   </td>
@@ -116,7 +119,7 @@ function Orders() {
 
   const renderNoOrders = () => (
     <div className={styles.no_orders}>
-      {/* <img src={require("/public/lotties/empty-order-state.gif")} /> */}
+      <img src="/nolinks.png" />
       <p>You have no orders</p>
     </div>
   );
@@ -153,13 +156,15 @@ function Orders() {
   }, [publicKey]);
 
   useEffect(() => {
-    if(!publicKey){
-      const checkMagicLogin = async() => {
+    if (!publicKey) {
+      const checkMagicLogin = async () => {
         if (localStorage.getItem("userMagicMetadata")) {
           const userMagicMetadata = JSON.parse(
             localStorage.getItem("userMagicMetadata")
           );
-          const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
+          const magicPubKey = new web3.PublicKey(
+            userMagicMetadata.publicAddress
+          );
           setUserPublicKey(magicPubKey.toString());
           const owner = magicPubKey.toString();
           setCurrentWallet(owner);
@@ -203,8 +208,6 @@ function Orders() {
       localStorage.removeItem("userMagicMetadata");
     });
   }, []);
-
- 
 
   return (
     <>

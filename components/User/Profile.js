@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import styles from "./styles/Profile.module.css";
-import { 
+import {
   GetWalletSettings,
   UpdateWalletSettings,
   UpsertWallet,
@@ -20,9 +20,8 @@ import {
 } from "react-icons/io5";
 import LoginMagic from "../MagicWallet/login";
 import { verifyWithDiscord, verifyWithGoogle } from "../../hooks/verify";
-import { Magic } from 'magic-sdk';
-import { OAuthExtension } from '@magic-ext/oauth';
-
+import { Magic } from "magic-sdk";
+import { OAuthExtension } from "@magic-ext/oauth";
 
 const Profile = (userPubKey) => {
   // DASH STATES
@@ -33,16 +32,15 @@ const Profile = (userPubKey) => {
 
   const [activeDash, setActiveDash] = useState("Edit Profile");
 
-
   const handleVerifyWithDiscord = async () => {
     const response = await verifyWithDiscord();
-    console.log('response from social login', response)
-  }
+    console.log("response from social login", response);
+  };
 
   const handleVerifyWithGoogle = async () => {
     const response = await verifyWithGoogle();
-    console.log('response from social login', response)
-  }
+    console.log("response from social login", response);
+  };
 
   // PROFILE IMAGE UPLOAD
 
@@ -61,7 +59,7 @@ const Profile = (userPubKey) => {
   //     variables: {
   //       file: null,
   //     },
-  //   }));  
+  //   }));
 
   //   form.append('map', JSON.stringify({
   //     0: ['variables.file'],
@@ -145,7 +143,11 @@ const Profile = (userPubKey) => {
                     }}
                   />
                 </div> */}
-                <img src={profileImage != null ? profileImage : "/user_phantom.png"} />
+                <img
+                  src={
+                    profileImage != null ? profileImage : "/user_phantom.png"
+                  }
+                />
               </div>
             </div>
             <div className={styles.profile_body_right_bottom}>
@@ -159,7 +161,9 @@ const Profile = (userPubKey) => {
                 />
               </div>
               <div className={styles.profile_body_right_bottom_right}>
-                <p>Email <span>{verified ? 'Verified' : 'Unverified'}</span></p>
+                <p>
+                  Email <span>{verified ? "Verified" : "Unverified"}</span>
+                </p>
                 <input
                   type="text"
                   className={styles.profile_body_right_input}
@@ -168,9 +172,22 @@ const Profile = (userPubKey) => {
                 />
                 {!verified && (
                   <>
-                    <p>Verify with: 
-                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyWithDiscord()}> <IoLogoDiscord /></span>
-                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyWithGoogle()}> <IoLogoGoogle /></span>
+                    <p>
+                      Verify with:
+                      <span
+                        style={{ color: "#14D19E", cursor: "pointer" }}
+                        onClick={() => handleVerifyWithDiscord()}
+                      >
+                        {" "}
+                        <IoLogoDiscord />
+                      </span>
+                      <span
+                        style={{ color: "#14D19E", cursor: "pointer" }}
+                        onClick={() => handleVerifyWithGoogle()}
+                      >
+                        {" "}
+                        <IoLogoGoogle />
+                      </span>
                     </p>
                   </>
                 )}
@@ -273,7 +290,7 @@ const Profile = (userPubKey) => {
   useEffect(() => {
     setWalletAddress(userPubKey.userPubKey);
     const getWalletSettings = async () => {
-      try{
+      try {
         setLoading(true);
         const response = await GetWalletSettings(userPubKey);
         console.log("get wallet settings resp", response);
@@ -282,55 +299,58 @@ const Profile = (userPubKey) => {
         setProfileImage(
           response.profileImage != null ? response.profileImage.url : ""
         );
-        setDescription(response.description != null ? response.description : "");
-        setSocialLinks(response.socialLinks != null ? response.socialLinks : []);
-        setCryptoLinks(response.cryptoLinks != null ? response.cryptoLinks : []);
+        setDescription(
+          response.description != null ? response.description : ""
+        );
+        setSocialLinks(
+          response.socialLinks != null ? response.socialLinks : []
+        );
+        setCryptoLinks(
+          response.cryptoLinks != null ? response.cryptoLinks : []
+        );
         setVerified(response.verified);
         setLoading(false);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setLoading(false);
       }
     };
     getWalletSettings();
   }, []);
 
-
   useEffect(() => {
-    console.log('window.location.pathname', userPubKey)
+    console.log("window.location.pathname", userPubKey);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const magic = new Magic('pk_live_CD0FA396D4966FE0', {
-        extensions: [new OAuthExtension()],
+    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+      extensions: [new OAuthExtension()],
     });
-    if(
-        urlParams.get('discordVerify') === 'true'
-    ) {
-        console.log('userSettings=true')
-        async function handleVerifyWithSocial() {
-          const result = await magic.oauth.getRedirectResult();
-          const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
-          console.log("profile", profile);
-          const email = result.oauth.userInfo.email;
-          const isVerified = result.oauth.userInfo.emailVerified;
-          setVerified(isVerified);
-          const name = result.oauth.userInfo.sources[`https://discord.com/api/users/@me`].username;
-          setUserName(name);
-          const data = JSON.stringify({
-            email: email,
-            name: name,
-            owner: userPubKey.userPubKey,
-            verified: isVerified,
-          });
-      
-          UpsertWallet(data);
-        }
+    if (urlParams.get("discordVerify") === "true") {
+      console.log("userSettings=true");
+      async function handleVerifyWithSocial() {
+        const result = await magic.oauth.getRedirectResult();
+        const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+        console.log("profile", profile);
+        const email = result.oauth.userInfo.email;
+        const isVerified = result.oauth.userInfo.emailVerified;
+        setVerified(isVerified);
+        const name =
+          result.oauth.userInfo.sources[`https://discord.com/api/users/@me`]
+            .username;
+        setUserName(name);
+        const data = JSON.stringify({
+          email: email,
+          name: name,
+          owner: userPubKey.userPubKey,
+          verified: isVerified,
+        });
+
+        UpsertWallet(data);
+      }
       handleVerifyWithSocial();
     }
-    if(
-      urlParams.get('googleVerify') === 'true'
-  ) {
-      console.log('userSettings=true')
+    if (urlParams.get("googleVerify") === "true") {
+      console.log("userSettings=true");
       async function handleVerifyWithSocial() {
         const result = await magic.oauth.getRedirectResult();
         const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
@@ -346,14 +366,12 @@ const Profile = (userPubKey) => {
           owner: userPubKey.userPubKey,
           verified: isVerified,
         });
-    
+
         UpsertWallet(data);
       }
-    handleVerifyWithSocial();
-  }
-}, []);
-      
-
+      handleVerifyWithSocial();
+    }
+  }, []);
 
   return (
     <div className={styles.profile_container}>
@@ -363,7 +381,7 @@ const Profile = (userPubKey) => {
       {/* active Dash will have <IoArrowForwardOutline /> next to it */}
 
       {/* <div className={styles.profile_header_dash}> */}
-        {/* <div className={styles.profile_header_dash_item}>
+      {/* <div className={styles.profile_header_dash_item}>
           <IoPencilSharp className={styles.profile_header_dash_item_icon} />
           <p
             onClick={() => (
@@ -378,7 +396,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div> */}
-        {/* <div className={styles.profile_header_dash_item}>
+      {/* <div className={styles.profile_header_dash_item}>
           <IoLinkOutline className={styles.profile_header_dash_item_icon} />
           <p
             onClick={() => (
@@ -393,7 +411,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div> */}
-        {/* <div className={styles.profile_header_dash_item}>
+      {/* <div className={styles.profile_header_dash_item}>
           <IoNotificationsSharp
             className={styles.profile_header_dash_item_icon}
           />
@@ -410,7 +428,7 @@ const Profile = (userPubKey) => {
             />
           )}
         </div> */}
-        {/* <div className={styles.profile_header_dash_item}>
+      {/* <div className={styles.profile_header_dash_item}>
           <IoShieldCheckmarkSharp
             className={styles.profile_header_dash_item_icon}
           />

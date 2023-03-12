@@ -32,6 +32,38 @@ p {
   font-size: 18px;
 }
 
+.over_dash_container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+}
+
+.merchant_dashboard {
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  /* border-left: 1px solid #e6e6e6; */
+  border-right: 1px #eaeaea solid;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 50px;
+  /* -webkit-overflow-scrolling: touch; */
+}
+
+.merchant_dashboard #mobile_screen {
+  display: none;
+}
+
+.over_dash_container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+}
 .mint_hero {
   width: 100%;
   min-height: 90vh;
@@ -3535,7 +3567,21 @@ button:disabled {
   position: absolute;
   bottom: 30px;
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
+  .merchant_dashboard {
+    z-index: 10;
+    position: fixed;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    margin-bottom: 0;
+    width: 100% !important;
+    height: 80px;
+    box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: -1px -11px 121px -30px rgba(0, 0, 0, 0.25);
+  }
   .containers {
     flex-direction: column;
     min-height: 100%;
@@ -3672,15 +3718,18 @@ button:disabled {
     padding: 50px;
   }
 }
-/* @media screen and (max-width: 618px) {
-  .dash-button {
+@media screen and (max-width: 618px) {
+  /* .dash-button {
     justify-content: center;
     width: fit-content;
     padding: 30px;
     border-radius: 10px;
     margin: 10px;
+  } */
+  .merchant_dashboard {
+    width: fit-content;
   }
-} */
+}
 @media screen and (max-width: 600px) {
   .signup_row2 img {
     max-width: 500px;
