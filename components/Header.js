@@ -86,19 +86,6 @@ export default function HeaderComponent() {
   const rpcUrl =
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
-  const magicLogout = async () => {
-    const magic = new Magic("pk_live_CD0FA396D4966FE0", {
-      extensions: {
-        solana: new SolanaExtension({
-          rpcUrl,
-        }),
-      },
-    });
-    await magic.user.logout();
-    localStorage.removeItem("userMagicMetadata");
-    window.dispatchEvent(new Event("magic-logged-out"));
-  };
-
   const renderQuickActions = () => {
     return (
       <div className={styles.quickActions}>
@@ -111,137 +98,6 @@ export default function HeaderComponent() {
       </div>
     );
   };
-
-  const renderUserDashboardOptions = () => {
-    return (
-      <div className={styles.userDashboardOptions}>
-        {userPublicKey && (
-          <>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("user_show_overview")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoBarChartOutline className={styles.icon} />{" "}
-                <span>Overview</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("user_show_txn_history")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoFileTrayFullOutline className={styles.icon} />{" "}
-                <span>Txn History</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("user_show_pay_hub")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoLinkOutline className={styles.icon} /> <span>Pay Hub</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("user_show_orders")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoDocumentOutline className={styles.icon} />{" "}
-                <span>My Orders</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("user_show_profile")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoFingerPrintSharp className={styles.icon} />{" "}
-                <span>Profile</span>
-              </a>
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const renderMerchantDashboardOptions = () => {
-    return (
-      <div className={styles.userDashboardOptions}>
-        {userPublicKey && (
-          <>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("merchant_show_overview")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoBarChartOutline className={styles.icon} />{" "}
-                <span>Overview</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("merchant_show_inventory")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoLayersOutline className={styles.icon} />{" "}
-                <span>Products</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("merchant_show_orders")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoFileTrayFullOutline className={styles.icon} />{" "}
-                <span>Orders</span>
-              </a>
-            </div>
-            <div className={styles.userDashboardOption}>
-              <a
-                onClick={() => (
-                  window.dispatchEvent(new Event("merchant_show_settings")),
-                  setShowMenu(false),
-                  setShowLoginOptions(false)
-                )}
-              >
-                <IoSettingsOutline className={styles.icon} />{" "}
-                <span>Settings</span>
-              </a>
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  //how can i make it to where if the user clicks outside of the menu it closes?
 
   const renderHeaderMenu = () => {
     return (
@@ -283,12 +139,6 @@ export default function HeaderComponent() {
             </div>
           )}
 
-          {/* {currentPath === '/dashboard' && !showStoreSymbol && (
-            renderUserDashboardOptions()
-          )}
-          {currentPath === '/dashboard' && showStoreSymbol && (
-            renderMerchantDashboardOptions()
-          )} */}
           {/* LOGIN LINK */}
           {!userPublicKey &&
             <div onClick={()=> (setShowLoginOptions(true), setShowQuickActions(false))}  className={styles.menuItem}>
@@ -418,70 +268,28 @@ export default function HeaderComponent() {
     );
   };
 
-  // async function getBalance(pubKey) {
-  //   const balance = await connection.getBalance(pubKey);
-  //   console.log("balance: ", balance);
-  //   const convertedBalance = balance / 1000000000;
-  //   setMagicBalance(convertedBalance);
-  // }
-
-  // async function getUsdcBalance(pubKey) {
-  //   const usdcAddress = new web3.PublicKey(
-  //     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-  //   );
-  //   // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
-  //   try {
-  //     const associatedTokenAddress = await getAssociatedTokenAddress(
-  //       usdcAddress,
-  //       pubKey
-  //     );
-  //     console.log(
-  //       "associatedTokenAddress: ",
-  //       associatedTokenAddress.toString()
-  //     );
-  //     const usdcBalance = await connection.getTokenAccountBalance(
-  //       associatedTokenAddress
-  //     );
-  //     console.log("usdcBalance: ", usdcBalance.value.uiAmount);
-  //     const convertedUsdcBalance = usdcBalance.value.uiAmount;
-  //     setMagicUsdcBalance(convertedUsdcBalance);
-  //   } catch (error) {
-  //     console.log("error: ", error);
-  //   }
-  // }
-
   async function gatherMagicData() {
-    // console.log("event listener fired");
     try {
       const data = localStorage.getItem("userMagicMetadata");
       const parsedData = await JSON.parse(data);
-      console.log("parsedData: ", parsedData);
 
       const magicKey = new web3.PublicKey(parsedData.publicAddress);
       await getBalance(magicKey).then(() => {
-        console.log("magic balance: ", magicBalance);
         setMagicBalance(magicBalance);
       });
       await getUsdcBalance(magicKey).then(() => {
-        console.log("magic usdc balance: ", magicUsdcBalance);
         setMagicUsdcBalance(magicUsdcBalance);
       });
-      console.log("publicKey: ", magicKey.toString());
       setMagicMetadata(parsedData);
       setUserPublicKey(magicKey.toString());
       setMagicUser(true);
       const getData = async () => {
         await CheckForWallet(magicKey.toString()).then((walletData) => {
-          console.log("header walletData: ", walletData);
           if (walletData === null) {
-            // create a wallet for the user using their public key and email from magic
             const newWallet = CreateWallet(
               magicKey.toString(),
               parsedData.email
             );
-            console.log("newWallet: ", newWallet);
-          } else {
-            console.log("wallet already exists");
           }
         });
         await CheckForCollectionByOwner(magicKey.toString()).then(
@@ -500,10 +308,7 @@ export default function HeaderComponent() {
 
   useEffect(() => {
     if (publicKey && magicUser) {
-      alert(
-        "Browser Wallet and Email Wallet detected, we will use the browser wallet for transactions and log you out of the email wallet. If you would like to use the email wallet please log out of the browser wallet first."
-      );
-      magicLogout();
+      alert("Two wallets detected, please log out of one.")
     }
     if (!publicKey && magicUser) {
       setUserPublicKey(magicMetadata.publicAddress);

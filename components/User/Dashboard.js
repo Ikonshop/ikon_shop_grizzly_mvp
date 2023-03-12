@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { isUser } from "../../hooks/checkAllowance";
+import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { checkMagicLogin } from "../../hooks/checkMagicLogin";
 import styles from "../../styles/Merchant.module.css";
 import Loading from "../Loading";
@@ -57,12 +58,17 @@ import { SolanaExtension } from "@magic-ext/solana";
 import * as web3 from "@solana/web3.js";
 
 config.autoAddCss = false;
+//wallet check
+const connection = new web3.Connection(
+  "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7",
+  "confirmed"
+);
 const rpcUrl =
   "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
 function UserDashboard() {
   const router = useRouter();
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [checkingForWallet, setCheckingForWallet] = useState(true);
   const [allowance, setAllowance] = useState(false);
   const [currentWallet, setCurrentWallet] = useState([]);
@@ -282,7 +288,7 @@ function UserDashboard() {
                 style={{ display: balanceHide ? "none" : "flex" }}
               >
                 <img src="/sol.png" />
-                <h3>{magicBalance.toFixed(2)}</h3>
+                <h3>{magicBalance ? magicBalance.toFixed(2) : 'Nope'}</h3>
               </div>
               <div
                 className={styles.sol_balance_fig}
@@ -298,7 +304,7 @@ function UserDashboard() {
               className={styles.usdc_balance}
               style={{ display: balanceHide ? "none" : "flex" }}
             >
-              ${magicBalanceUSD.toFixed(2)}
+              ${magicBalanceUSD ? magicBalanceUSD.toFixed(2) : 'nope'}
             </p>
             <p
               className={styles.usdc_balance}
@@ -377,7 +383,7 @@ function UserDashboard() {
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
-          {!loading && noLinks ? renderNoLinks() : null}
+          {!loading && userLinks.length < 1 && userTipJar.length < 1 ? renderNoLinks() : null}
           {userLinks.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_tip">
@@ -539,6 +545,38 @@ function UserDashboard() {
     </div>
   );
 
+  async function getBalance(pubKey) {
+    const balance = await connection.getBalance(pubKey);
+    console.log("balance: ", balance);
+    const convertedBalance = balance / 1000000000;
+    setMagicBalance(convertedBalance);
+  }
+
+  async function getUsdcBalance(pubKey) {
+    const usdcAddress = new web3.PublicKey(
+      "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    );
+    // get the associated token account of the incoming public key getAssociatedTokenAddress() with the token mint address then get the balance of that account, if there is no account console log no balance
+    try {
+      const associatedTokenAddress = await getAssociatedTokenAddress(
+        usdcAddress,
+        pubKey
+      );
+      console.log(
+        "associatedTokenAddress: ",
+        associatedTokenAddress.toString()
+      );
+      const usdcBalance = await connection.getTokenAccountBalance(
+        associatedTokenAddress
+      );
+      console.log("usdcBalance: ", usdcBalance.value.uiAmount);
+      const convertedUsdcBalance = usdcBalance.value.uiAmount;
+      setMagicBalanceUSD(convertedUsdcBalance);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  } 
+
   useEffect(() => {
     if (publicKey) {
       // checkOwnership();
@@ -559,7 +597,7 @@ function UserDashboard() {
             ownerProducts.push(products.products[i]);
           }
         }
-        setLoading(false);
+        // setLoading(false);
       };
 
       if (userLinks.length > 0 && userTipJar.length > 0) {
@@ -581,6 +619,7 @@ function UserDashboard() {
       getAllProducts();
       getTotals();
 
+      // ATADIA API CALLS
       async function getAtadiaData() {
         setAtadiaLoading(true);
         const creditScoreData = await GetPublickeyCreditScore(
@@ -640,11 +679,15 @@ function UserDashboard() {
   // USER PUB KEY CHECK
   useEffect(() => {
     async function checkAllowance() {
-      isUser(userPublicKey).then((isUser) => {
+      await isUser(userPublicKey).then((isUser) => {
         if (isUser) {
           setAllowance(true);
         }
       });
+      const pubkey = new web3.PublicKey(userPublicKey);
+      await getBalance(pubkey);
+      await getUsdcBalance(pubkey);
+      setLoading(false);
     }
     if (userPublicKey) {
       checkAllowance();

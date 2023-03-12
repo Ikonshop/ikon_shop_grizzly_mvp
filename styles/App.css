@@ -3606,6 +3606,22 @@ button:disabled {
     width: 100%;
   }
 
+  .link_tip {
+    background: #19f5b0;
+    width: 80px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+  }
+  
+  .link_gift {
+    background: #ff7fa5;
+    width: 80px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+  }
+
   .mint_bg2 img {
     width: 100%;
     height: 100%;
