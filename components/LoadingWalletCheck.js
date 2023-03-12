@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 export default function CheckingForWallet () {
-    const string = "Checking for wallet...";
+    const string = "Verifying credentials...";
     
     return (
       <div className="loader">

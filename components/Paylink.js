@@ -220,6 +220,7 @@ export default function PaylinkComponent(product) {
                       elusiv={true}
                     />
                   )} */}
+                  <div className={styles.product_details_price}>
                   {publicKey && tipAmount && (
                     <Buy
                       className={styles.pay_btn}
@@ -242,7 +243,7 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   ) : null}
-                  {magicUser && userPublicKey && tipAmount && (
+                  {magicUser && userPublicKey && parseFloat(tipAmount) > 0 && (
                     <Send
                       buyer={userPublicKey}
                       recipient={owner}
@@ -252,7 +253,7 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   )}
-                  {magicUser && type != "tipjar" && (
+                  {magicUser && userPublicKey && type != "tipjar" && (
                     <Send
                       buyer={userPublicKey}
                       recipient={owner}
@@ -281,6 +282,7 @@ export default function PaylinkComponent(product) {
                       fontWeight: "bold"
                     }}>Insufficient Elusiv Balance</p>
                   )} */}
+                  </div>
               </div>
             </div>
           </div>

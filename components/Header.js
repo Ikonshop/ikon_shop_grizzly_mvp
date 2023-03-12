@@ -14,6 +14,7 @@ import { isMerchant, isUser, addUser } from "../hooks/checkAllowance";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { checkMagicLogin } from '../hooks/checkMagicLogin'
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LogoDiscord, LogoTwitter } from "react-ionicons";
 import dynamic from "next/dynamic";
@@ -363,6 +364,7 @@ export default function HeaderComponent() {
     window.addEventListener("closeQuickActions", () => {
       setShowQuickActions(false);
     });
+    checkMagicLogin();
   }, []);
 
   useEffect(() => {

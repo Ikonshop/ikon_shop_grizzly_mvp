@@ -2010,11 +2010,12 @@ button:disabled {
 }
 
 .loader {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
   width: 100%;
   height: 100%;
-  margin: auto;
 }
 
 .loader img {

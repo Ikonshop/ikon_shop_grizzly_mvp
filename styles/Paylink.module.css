@@ -72,6 +72,9 @@
 .pay_content {
   margin: 0 20px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .pay_title {
@@ -175,11 +178,12 @@
   margin: 4px;
 }
 
-@media screen and (max-width: 737px) {
+@media screen and (max-width: 768px) {
   .paylink_page {
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    gap: 40px;
+    padding-top: 50px;
   }
 
   .green_bar {

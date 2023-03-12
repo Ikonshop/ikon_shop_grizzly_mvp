@@ -52,7 +52,6 @@ const QuickActions = (req) => {
           <p>Token: {tokenType}</p>
           <div className={styles.tokenSelect}>
             <select onChange={(e) => setTokenType(e.target.value)}>
-              <option value="">Select</option>
               <option value="SOL">SOL</option>
               <option value="USDC">USDC</option>
             </select>
@@ -83,9 +82,8 @@ const QuickActions = (req) => {
           <p>Token: {tokenType}</p>
           <div className={styles.tokenSelect}>
             <select onChange={(e) => setTokenType(e.target.value)}>
-              <option value="SOL">Select</option>
-              <option value="SOL">SOL</option>
               <option value="USDC">USDC</option>
+              <option value="SOL">SOL</option>
             </select>
           </div>
         </div>
@@ -239,6 +237,7 @@ const QuickActions = (req) => {
             <div
               className={styles.displayOptionsText}
               onClick={() => {
+                setTokenType("Select");
                 setDisplayQR(!displayQR);
                 setDisplayTransfer(false);
               }}
@@ -258,6 +257,18 @@ const QuickActions = (req) => {
               )}
             </div>
           </div>
+          {displayQR && tokenType === "Select" && (
+            <div className={styles.transferInputTokenRow}>
+            <p>Token: {tokenType}</p>
+            <div className={styles.tokenSelect}>
+                <select onChange={(e) => setTokenType(e.target.value)}>
+                  <option value="Select">Select</option>
+                  <option value="SOL">SOL</option>
+                  <option value="USDC">USDC</option>
+                </select>
+              </div>
+            </div>
+          )}
           {displayQR && tokenType === "SOL" && renderDepositQR()}
           {displayQR && tokenType === "USDC" && renderDepositQRUsdc()}
           {!displayQR && (
@@ -285,7 +296,7 @@ const QuickActions = (req) => {
                   </div>
                   <div className={styles.tokenSelect}>
                     <select onChange={(e) => setTokenType(e.target.value)}>
-                      <option value="">Select</option>
+                      <option value="Select">Select</option>
                       <option value="SOL">SOL</option>
                       <option value="USDC">USDC</option>
                     </select>

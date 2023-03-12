@@ -1,0 +1,28 @@
+.send_btn {
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 100px;
+    height: 60px;
+    padding: 0 33px;
+  
+    text-decoration: none;
+    color: #130b46;
+    
+    background: #8affcb;
+    outline: none;
+    border-radius: 30px;
+  
+    position: relative;
+    overflow: visible;
+    -webkit-transition: 500ms linear;
+    -moz-transition: 500ms linear;
+    -o-transition: 500ms linear;
+    transition: 500ms linear;
+}
+
+.send_btn:hover {
+    background: #8affcb;
+    color: #130b46;
+}

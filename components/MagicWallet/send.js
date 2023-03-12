@@ -5,7 +5,7 @@ import { createTransferCheckedInstruction, getAssociatedTokenAddress, createAsso
 import BigNumber from "bignumber.js";
 import base58 from 'bs58'
 import Loading from '../Loading';
-import styles from "../../styles/Product.module.css";
+import styles from "./styles/SendButton.module.css";
 import { Magic } from 'magic-sdk';
 import { SolanaExtension } from '@magic-ext/solana';
 import Notification from "../Notification/Notification";
@@ -33,6 +33,9 @@ const Send = (req) => {
     const [userPublicKey, setUserPublicKey] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [txHash, setTxHash] = useState("");
     console.log('reqs are: ', req)
     const createAndSendTransaction = async () => {
         try{
@@ -207,6 +210,7 @@ const Send = (req) => {
             console.log(`https://solana.fm/tx/${signature}`);
             // one second timeout
             await new Promise((resolve) => setTimeout(resolve, 1000));
+            setTxHash(signature);
             setSuccess(true);
             setLoading(false);
           }
@@ -216,10 +220,11 @@ const Send = (req) => {
           // if error message is 'Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1'
           //alert('Transaction failed, due to insufficient funds.')
           if(error.message === 'failed to send transaction: Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1') {
-            alert('Transaction failed, due to insufficient funds.')
-    
+            setErrorMsg('Transaction failed, due to insufficient funds.')
+            setError(true);
           }else{
-            alert('Transaction failed, please try again.')
+            setErrorMsg('Transaction failed, please try again.')
+            setError(true);
           }
           setLoading(false);
         }
@@ -232,13 +237,18 @@ const Send = (req) => {
                 setSuccess(false);
             }, 3000);
         }
-    }, [success]);
+        if (error) {
+            setTimeout(() => {
+                setError(false);
+            }, 3000);
+        }
+    }, [success, error]);
 
     return (
-      <>
-        {!success && (
+      <div style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+        {!success && !error && (
           <button
-              className="btn btn-primary"
+              className={styles.send_btn}
               onClick={()=> createAndSendTransaction()}
               disabled={loading}
           >
@@ -246,12 +256,17 @@ const Send = (req) => {
           </button>
         )}
         {success && (
-          // make the alert smaller
             <div className="alert alert-success" role="alert"> 
-              Transaction successful!
+              Transaction successful!<br />
+              <a className="text-primary pe-auto" href={`https://solana.fm/tx/${txHash}`} target="_blank" rel="noreferrer">View on chain.</a>
             </div>
         )}
-      </>
+        {error && (
+            <div className="alert alert-danger" role="alert">
+              {errorMsg != "" ? errorMsg : 'Transaction failed, please try again.'}
+            </div>
+        )}
+      </div>
     
     );
 }
