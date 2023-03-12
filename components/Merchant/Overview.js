@@ -383,16 +383,16 @@ const Overview = (req) => {
                     </div>
                     <div className={styles.merchant_quick_action_button_container}>
                       <button
-                        className={styles.learn_more_button}
+                        className={styles.quick_action_button}
                         onClick={() => window.dispatchEvent(new Event("merchant_show_create"))}
                       >
                         Create a Product
                       </button>
                       <button
-                        className={styles.learn_more_button}
+                        className={styles.quick_action_button}
                         onClick={() => window.dispatchEvent(new Event("merchant_show_settings"))}
                       >
-                        Store Settings <IoArrowForward />
+                        Store Settings
                       </button>
                     </div>
                   </div>

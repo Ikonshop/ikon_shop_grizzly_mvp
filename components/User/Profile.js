@@ -235,7 +235,7 @@ const Profile = (userPubKey) => {
             <div className={styles.profile_body_right_bottom}>
               <div className={styles.profile_body_update}>
                 <button
-                  className="btn btn-primary"
+                  className={styles.update_button}
                   onClick={() => {
                     console.log("req", req);
                     UpdateWalletSettings(req);

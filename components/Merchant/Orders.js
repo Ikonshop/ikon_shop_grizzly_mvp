@@ -355,7 +355,7 @@ function Orders() {
     <div className={styles.order_container}>
       <div className={styles.searchBarSection}>
         <div className={styles.search_filter}>
-          <div className={styles.inputSection}>
+          {/* <div className={styles.inputSection}>
             <input
               type="text"
               name="Search"
@@ -363,7 +363,7 @@ function Orders() {
               onChange={handleSearch}
             />
             <SearchOutline className={styles.searchIcon} />
-          </div>
+          </div> */}
           <div className={styles.sortContainer}>
             {!showFilterOptions && (
               <p onClick={() => setShowFilterOptions(!showFilterOptions)}>
