@@ -18,3 +18,26 @@ export default async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(product));
 }
+
+export async function getStaticProps({ params }) {
+    const data = await getSingleProductBySku(params.slug);
+    return {
+      props: {
+        product: data,
+      },
+    };
+  }
+  
+  export async function getStaticPaths() {
+    const data = await fetchProducts("ABC");
+    const paths = data.map((product) => ({
+      params: {
+        slug: product.id,
+      },
+    }));
+    return {
+      paths,
+      fallback: true,
+    };
+  }
+  
