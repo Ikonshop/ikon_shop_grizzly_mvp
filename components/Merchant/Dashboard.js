@@ -317,10 +317,15 @@ function MerchantDashboard() {
       }
     });
     window.addEventListener("magic-logged-out", () => {
-      setUserEmail(null);
-      setUserPublicKey(null);
-      setCurrentWallet(null);
-      localStorage.removeItem("userMagicMetadata");
+      try{
+        setMagicUser(false)
+        if(!publicKey){
+          setUserPublicKey(null);
+        }
+        localStorage.removeItem("userMagicMetadata");
+      }catch(e){
+        console.log(e);
+      }
     });
   }, []);
 

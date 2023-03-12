@@ -8,6 +8,7 @@ import {
   getCollectionOwner,
   updateCollectionInfo,
   GetStoreInfo,
+  GenerateAPIKey
 } from "../../lib/api";
 import {
   IoGlobeOutline,
@@ -17,6 +18,9 @@ import {
   IoLogoWebComponent,
   IoCheckmarkDoneSharp,
   IoLogoGoogle,
+  IoEyeOffOutline,
+  IoCopy,
+  IoCopyOutline,
 } from "react-icons/io5";
 import { verifyMerchantWithDiscord, verifyMerchantWithGoogle } from "../../hooks/verify";
 import * as web3 from "@solana/web3.js";
@@ -41,6 +45,8 @@ const StoreSettings = () => {
   const [multiStoreArray, setMultiStoreArray] = useState(null);
   const [previewBanner, setPreviewBanner] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [apiKey, setApiKey] = useState(null);
+  const [hideKey, setHideKey] = useState(true);
   const [newCollectionInfo, setNewCollectionInfo] = useState({
     id: "null",
     projectName: "null",
@@ -62,6 +68,54 @@ const StoreSettings = () => {
   const handleVerifyMerchantWithGoogle = async () => {
     const response = await verifyMerchantWithGoogle();
     console.log('response from social login', response)
+  }
+
+  const handleGenerateAPIKey = async () => {
+    const response = await GenerateAPIKey(userPublicKey);
+    console.log('response from generate api key', response)
+    setApiKey(response);
+  }
+
+  const renderApiKey = () => {
+    return(
+      <>
+        {hideKey ? (
+          <div className={styles.short_input}>
+            <div
+              className={styles.short_input}
+              onClick={() => setHideKey(false)}
+            >
+              <p>******** <IoEyeOffOutline /></p> 
+            </div>
+          </div>
+        ) : (
+          <div className={styles.short_input}>
+            <div className={styles.short_input}>
+              <p>{apiKey.slice(0, 4)}..{apiKey.slice(-4)}  <IoEyeOffOutline onClick={() => setHideKey(true)}/> <IoCopyOutline onClick={()=> window.navigator.clipboard.writeText(apiKey)} /></p>
+            </div>
+          </div>
+        )}
+
+
+      </>
+    )
+  }
+
+  const renderApiKeyDisplay = () => {
+    return(
+      <div className={styles.info_item}>
+        <h6>API Key</h6>
+        {verified ? (
+          <>
+            {apiKey ? renderApiKey() : (
+              <button className={styles.generate_btn} onClick={() => handleGenerateAPIKey()}>Generate API Key</button>
+            )}
+          </>
+        ) : (
+          'Must Verify Account'
+        )}
+      </div>
+    )
   }
 
   const renderStoreSettings = () => {
@@ -137,6 +191,7 @@ const StoreSettings = () => {
                   }
                 />
               </div>
+              {renderApiKeyDisplay()}
               <div className={styles.info_item}>
                 <h6>Description</h6>
                 <textarea
@@ -324,10 +379,12 @@ const StoreSettings = () => {
     if(userPublicKey){
       (async () => {
         const store_info = await getCollectionOwner(userPublicKey);
-        console.log('store info', store_info)
         console.log(store_info);
         setStoreInfo(store_info.collections[0]);
         setNewCollectionInfo(store_info.collections[0]);
+        if(store_info.wallets[0].apiKey != null){
+          setApiKey(store_info.wallets[0].apiKey.key)
+        }
         setIsOwner(true);
         setLoading(false);
       })();
