@@ -1,4 +1,4 @@
-import { getSingleProductBySku, VerifyAPIKey, UpdateAPIKeyCount } from '../../../../../lib/api'
+import { getSingleProductBySku, VerifyAPIKey, UpdateAPIKeyCount } from '../../../../lib/api'
 
 export default async (req, res) => {
     const key = req.query.key;
