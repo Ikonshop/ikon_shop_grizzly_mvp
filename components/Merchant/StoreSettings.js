@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "../Merchant/styles/StoreSettings.module.css";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, GetAccountInfoConfig } from "@solana/web3.js";
-import {Magic} from "magic-sdk";
-import { OAuthExtension } from '@magic-ext/oauth';
+import { Magic } from "magic-sdk";
+import { OAuthExtension } from "@magic-ext/oauth";
 import {
   getCollectionOwner,
   updateCollectionInfo,
   GetStoreInfo,
-  GenerateAPIKey
+  GenerateAPIKey,
 } from "../../lib/api";
 import {
   IoGlobeOutline,
@@ -22,7 +22,10 @@ import {
   IoCopy,
   IoCopyOutline,
 } from "react-icons/io5";
-import { verifyMerchantWithDiscord, verifyMerchantWithGoogle } from "../../hooks/verify";
+import {
+  verifyMerchantWithDiscord,
+  verifyMerchantWithGoogle,
+} from "../../hooks/verify";
 import * as web3 from "@solana/web3.js";
 
 const StoreSettings = () => {
@@ -57,27 +60,27 @@ const StoreSettings = () => {
     instagramHandle: "null",
     discordServer: "null",
     email: "null",
-    verified: false
+    verified: false,
   });
 
   const handleVerifyMerchantWithDiscord = async () => {
     const response = await verifyMerchantWithDiscord();
-    console.log('response from social login', response)
-  }
+    console.log("response from social login", response);
+  };
 
   const handleVerifyMerchantWithGoogle = async () => {
     const response = await verifyMerchantWithGoogle();
-    console.log('response from social login', response)
-  }
+    console.log("response from social login", response);
+  };
 
   const handleGenerateAPIKey = async () => {
     const response = await GenerateAPIKey(userPublicKey);
-    console.log('response from generate api key', response)
+    console.log("response from generate api key", response);
     setApiKey(response);
-  }
+  };
 
   const renderApiKey = () => {
-    return(
+    return (
       <>
         {hideKey ? (
           <div className={styles.short_input}>
@@ -85,38 +88,51 @@ const StoreSettings = () => {
               className={styles.short_input}
               onClick={() => setHideKey(false)}
             >
-              <p>******** <IoEyeOffOutline /></p> 
+              <p>
+                ******** <IoEyeOffOutline />
+              </p>
             </div>
           </div>
         ) : (
           <div className={styles.short_input}>
             <div className={styles.short_input}>
-              <p>{apiKey.slice(0, 4)}..{apiKey.slice(-4)}  <IoEyeOffOutline onClick={() => setHideKey(true)}/> <IoCopyOutline onClick={()=> window.navigator.clipboard.writeText(apiKey)} /></p>
+              <p>
+                {apiKey.slice(0, 4)}..{apiKey.slice(-4)}{" "}
+                <IoEyeOffOutline onClick={() => setHideKey(true)} />{" "}
+                <IoCopyOutline
+                  onClick={() => window.navigator.clipboard.writeText(apiKey)}
+                />
+              </p>
             </div>
           </div>
         )}
-
-
       </>
-    )
-  }
+    );
+  };
 
   const renderApiKeyDisplay = () => {
-    return(
+    return (
       <div className={styles.info_item}>
         <h6>API Key</h6>
         {verified ? (
           <>
-            {apiKey ? renderApiKey() : (
-              <button className={styles.generate_btn} onClick={() => handleGenerateAPIKey()}>Generate API Key</button>
+            {apiKey ? (
+              renderApiKey()
+            ) : (
+              <button
+                className={styles.generate_btn}
+                onClick={() => handleGenerateAPIKey()}
+              >
+                Generate API Key
+              </button>
             )}
           </>
         ) : (
-          'Must Verify Account'
+          "Must Verify Account"
         )}
       </div>
-    )
-  }
+    );
+  };
 
   const renderStoreSettings = () => {
     console.log("storeInfo: ", storeInfo);
@@ -129,12 +145,17 @@ const StoreSettings = () => {
               // if button is hovered over trigger previewBanner state change
               onMouseEnter={() => setPreviewBanner(true)}
               onMouseLeave={() => setPreviewBanner(false)}
-            >Preview</button>
+            >
+              Preview
+            </button>
             <div className={styles.banner_img_overlay}></div>
             <img
-
-              className={!previewBanner ? styles.banner_img_blur : styles.banner_img_no_blur } 
-              src={storeInfo.banner} 
+              className={
+                !previewBanner
+                  ? styles.banner_img_blur
+                  : styles.banner_img_no_blur
+              }
+              src={storeInfo.banner}
             />
           </div>
 
@@ -169,16 +190,35 @@ const StoreSettings = () => {
                 />
               </div>
               <div className={styles.info_item}>
-                <h6>Email<span>
-                  {verified ? 
-                  'Verified' : (
-                    <>
-                      {" "}Verify with:
-                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithDiscord()}> <IoLogoDiscord /></span>
-                      <span style={{color: "#14D19E", cursor: "pointer"}} onClick={() => handleVerifyMerchantWithGoogle()}> <IoLogoGoogle /></span>
-                    </>
-                  )} 
-                  </span></h6>
+                <div className={styles.info_item_verify}>
+                  <h6>Email</h6>
+                  <span className={styles.info_item_span}>
+                    {verified ? (
+                      "Verified"
+                    ) : (
+                      <>
+                        {" "}
+                        <span>Verify with:</span>
+                        <div className={styles.info_item_verify_icons}>
+                          <span
+                            className={styles.info_item_verify_icon}
+                            onClick={() => handleVerifyMerchantWithDiscord()}
+                          >
+                            {" "}
+                            <IoLogoDiscord />
+                          </span>
+                          <span
+                            className={styles.info_item_verify_icon}
+                            onClick={() => handleVerifyMerchantWithGoogle()}
+                          >
+                            {" "}
+                            <IoLogoGoogle />
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </span>
+                </div>
                 <input
                   className={styles.short_input}
                   type="text"
@@ -355,7 +395,7 @@ const StoreSettings = () => {
     );
   };
 
-  const checkMagicLogin = async() => {
+  const checkMagicLogin = async () => {
     if (localStorage.getItem("userMagicMetadata")) {
       const userMagicMetadata = JSON.parse(
         localStorage.getItem("userMagicMetadata")
@@ -364,7 +404,7 @@ const StoreSettings = () => {
       const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
       setCurrentWallet(magicPubKey.toString());
       setUserPublicKey(magicPubKey.toString());
-      
+
       setLoading(false);
     }
   };
@@ -376,14 +416,14 @@ const StoreSettings = () => {
     setActiveStoreSymbol(new_active_store);
     console.log("new active store", new_active_store);
     //get the store info
-    if(userPublicKey){
+    if (userPublicKey) {
       (async () => {
         const store_info = await getCollectionOwner(userPublicKey);
         console.log(store_info);
         setStoreInfo(store_info.collections[0]);
         setNewCollectionInfo(store_info.collections[0]);
-        if(store_info.wallets[0].apiKey != null){
-          setApiKey(store_info.wallets[0].apiKey.key)
+        if (store_info.wallets[0].apiKey != null) {
+          setApiKey(store_info.wallets[0].apiKey.key);
         }
         setIsOwner(true);
         setLoading(false);
@@ -402,7 +442,7 @@ const StoreSettings = () => {
         setIsOwner(true);
         setLoading(false);
       })();
-    }); 
+    });
   }, [userPublicKey]);
 
   //add window event listener for if the user changes active_store in the local storage
@@ -429,14 +469,14 @@ const StoreSettings = () => {
   //     }, []);
 
   useEffect(() => {
-    if(publicKey) {
+    if (publicKey) {
       setUserPublicKey(publicKey);
       setCurrentWallet(publicKey);
     }
   }, [publicKey]);
 
   useEffect(() => {
-    if(!publicKey) {
+    if (!publicKey) {
       checkMagicLogin();
     }
     window.addEventListener("magic-logged-in", () => {
@@ -448,85 +488,79 @@ const StoreSettings = () => {
       setCurrentWallet(null);
       localStorage.removeItem("userMagicMetadata");
     });
-
   }, []);
-  
+
   useEffect(() => {
-    if(userPublicKey) {
-    console.log('window.location.pathname', userPublicKey)
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const magic = new Magic('pk_live_CD0FA396D4966FE0', {
+    if (userPublicKey) {
+      console.log("window.location.pathname", userPublicKey);
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const magic = new Magic("pk_live_CD0FA396D4966FE0", {
         extensions: [new OAuthExtension()],
-    });
-    if(
-        urlParams.get('discordVerify') === 'true'
-    ) {
-        console.log('userSettings=true')
-        
+      });
+      if (urlParams.get("discordVerify") === "true") {
+        console.log("userSettings=true");
+
         async function handleVerifyWithSocial() {
           const store_info = await getCollectionOwner(userPublicKey);
-          console.log('store info', store_info)
+          console.log("store info", store_info);
           const result = await magic.oauth.getRedirectResult();
           const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
           console.log("profile", profile);
           const email = result.oauth.userInfo.email;
           const isVerified = result.oauth.userInfo.emailVerified;
           setVerified(isVerified);
-          const name = result.oauth.userInfo.sources[`https://discord.com/api/users/@me`].username;
+          const name =
+            result.oauth.userInfo.sources[`https://discord.com/api/users/@me`]
+              .username;
           // setUserName(name);
           const data = {
             ...newCollectionInfo,
             id: store_info.collections[0].id,
-            banner : store_info.collections[0].banner,
+            banner: store_info.collections[0].banner,
             description: store_info.collections[0].description,
             verified: isVerified,
             email: email,
-          }
-          const update = await updateCollectionInfo(data)
-          console.log('update', update)
+          };
+          const update = await updateCollectionInfo(data);
+          console.log("update", update);
         }
-      handleVerifyWithSocial();
-    }
-    if(
-      urlParams.get('googleVerify') === 'true'
-  ) {
-      console.log('userSettings=true')
-      async function handleVerifyWithSocial() {
-        const store_info = await getCollectionOwner(userPublicKey);
-        console.log('store info', store_info)
-        const result = await magic.oauth.getRedirectResult();
-        const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
-        console.log("profile", profile);
-        const email = result.oauth.userInfo.email;
-        const isVerified = true;
-        setVerified(isVerified);
-        const name = result.oauth.userInfo.name;
-        // setUserName(name);
-        const data = {
-          ...newCollectionInfo,
-          id: store_info.collections[0].id,
-          banner : store_info.collections[0].banner,
-          description: store_info.collections[0].description,
-          verified: isVerified,
-          email: email,
-        }
-        const update = await updateCollectionInfo(data);
-        console.log('update', update)
-        setVerified(update.updateCollection.verified)
-        setUserEmail(update.updateCollection.email)
+        handleVerifyWithSocial();
       }
-    handleVerifyWithSocial();
-  }
-  }
-}, [userPublicKey]);
+      if (urlParams.get("googleVerify") === "true") {
+        console.log("userSettings=true");
+        async function handleVerifyWithSocial() {
+          const store_info = await getCollectionOwner(userPublicKey);
+          console.log("store info", store_info);
+          const result = await magic.oauth.getRedirectResult();
+          const profile = JSON.stringify(result.oauth.userInfo, undefined, 2);
+          console.log("profile", profile);
+          const email = result.oauth.userInfo.email;
+          const isVerified = true;
+          setVerified(isVerified);
+          const name = result.oauth.userInfo.name;
+          // setUserName(name);
+          const data = {
+            ...newCollectionInfo,
+            id: store_info.collections[0].id,
+            banner: store_info.collections[0].banner,
+            description: store_info.collections[0].description,
+            verified: isVerified,
+            email: email,
+          };
+          const update = await updateCollectionInfo(data);
+          console.log("update", update);
+          setVerified(update.updateCollection.verified);
+          setUserEmail(update.updateCollection.email);
+        }
+        handleVerifyWithSocial();
+      }
+    }
+  }, [userPublicKey]);
 
   return (
     <div>
-      {userPublicKey &&
-      isOwner &&
-      !loading &&
-      !confirmationModal 
+      {userPublicKey && isOwner && !loading && !confirmationModal
         ? renderStoreSettings()
         : null}
       {confirmationModal ? renderConfirmationModal() : null}
