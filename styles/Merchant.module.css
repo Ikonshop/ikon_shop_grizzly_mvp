@@ -384,7 +384,6 @@
   display: flex;
   gap: 30px;
   align-items: center;
-  width: calc(100% + 30px);
 }
 
 .sol_balance {
@@ -460,8 +459,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   padding: 20px 20px 20px 20px;
-  height: 100vh;
-  gap: 20px;
+  height: 90vh;
   /* gap: 5vw; */
   width: 100%;
 }
@@ -1204,11 +1202,16 @@
   }
 
   .atadian_credit {
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-around;
     width: 100%;
+    align-items: center;
   }
 
   .total_container {
     display: flex;
+    justify-content: space-around;
     width: 100%;
   }
 
@@ -1228,7 +1231,6 @@
   .dash_container {
     /* flex-direction: column; */
     flex-wrap: wrap;
-    padding-bottom: 1200px !important;
   }
   .links {
     min-width: 100%;

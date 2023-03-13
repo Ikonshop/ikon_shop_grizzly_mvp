@@ -87,17 +87,6 @@ export default function SingleProductViewer({}) {
     <div className={styles.product_details_container}>
       <div className={styles.product_details_row}>
         <div className={styles.product_details_col}>
-          <div className={styles.back_wrapper}>
-            <FontAwesomeIcon icon={faArrowLeft} />
-            <button
-              className={styles.prod_back_to_shop}
-              onClick={() => router.back()}
-            >
-              <a>
-                <p className={styles.prod_back_to_shop}>Back</p>
-              </a>
-            </button>
-          </div>
           <div className={styles.product_details_img}>
             <div className={styles.prod_img}>
               <img src={product.imageUrl} alt={product.name} />
