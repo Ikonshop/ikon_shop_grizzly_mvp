@@ -34,14 +34,6 @@
   z-index: 3;
 }
 
-.menuContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .menuOverlay {
   position: absolute;
   top: 0;
@@ -86,17 +78,16 @@
 
 .toggleItem {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 20px;
   cursor: pointer;
 }
 
 .toggleItem > span {
-  font-family: "Manrope", sans-serif;
-  font-size: 12px;
+  font-family: "Manrope";
+  font-size: 16px;
   font-weight: 600;
-  color: black;
+  color: #130b46;
   cursor: pointer;
 }
 
@@ -107,10 +98,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  gap: 5px;
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
+  gap: 20px;
 }
 
 .menuItem a {
@@ -137,8 +125,8 @@
 }
 
 .socialIcon {
-  font-size: 40px;
-  color: black;
+  font-size: 24px;
+  color: #130b46;
   cursor: pointer;
 }
 
@@ -150,7 +138,7 @@
   cursor: pointer;
 }
 
-.loginOptions_overlay {
+/* .loginOptions_overlay {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -161,46 +149,81 @@
   place-items: center;
   z-index: 12000;
   backdrop-filter: blur(10px);
-}
+} */
 
 .loginOptions {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  /* middle of screen */
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+.loginOptions_container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  position: absolute;
-  /* middle of screen */
-  top: 50%;
-  left: 50%;
-  width: 400px;
+  width: fit-content;
   height: fit-content;
   padding: 30px;
   background-color: rgb(255, 255, 255);
   border-radius: 15px;
-  transform: translate(-50%, -50%);
-  z-index: 100;
 }
 
-.loginOption {
+.loginOptions_select h3 {
+  font-size: 20px;
+}
+
+.loginOption1 {
+  border-radius: 50px;
+  background: #14d19e;
+  width: 240px;
+  height: 60px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loginOption2 {
+  border-radius: 50px;
+  background: #130b46;
+  width: 240px;
+  height: 60px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loginOption_ind {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  gap: 10px;
-  cursor: pointer;
-  background: transparent;
+  gap: 20px;
 }
 
-.loginOption > span {
+.loginOption_ind_flex {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  cursor: pointer;
-  background: transparent;
+  gap: 5px;
+}
+
+.loginOption1 span,
+.loginOption2 span {
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -214,12 +237,6 @@
 .not_registered span {
   color: #4891ff;
   font-weight: bold;
-}
-
-.loginOption > a,
-.loginOption > span {
-  text-decoration: none;
-  color: #4891ff;
 }
 
 .closeButton {
@@ -274,12 +291,6 @@
     cursor: pointer;
   }
 
-  .loginOptions {
-    width: 60vw;
-    height: fit-content;
-    padding: 20px;
-  }
-
   .walletItem {
     display: none;
   }
@@ -305,11 +316,9 @@
 }
 
 .menuContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .menu {
@@ -344,35 +353,6 @@
   gap: 5px;
 }
 
-.toggleItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.toggleItem > span {
-  font-family: "Manrope", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: black;
-  cursor: pointer;
-}
-
-.socialItem {
-  /* display at bottom of screen*/
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  gap: 5px;
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
-}
-
 .menuItem a {
   color: black;
   text-decoration: none;
@@ -395,13 +375,6 @@
   color: black;
   cursor: pointer;
 }
-
-.socialIcon {
-  font-size: 40px;
-  color: black;
-  cursor: pointer;
-}
-
 .userDashboardOption {
   font-family: "Manrope", sans-serif;
   font-size: 12px;
@@ -410,17 +383,30 @@
   cursor: pointer;
 }
 
-.loginOption {
+.loginOptions_select {
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  cursor: pointer;
+  gap: 30px;
 }
 
-.loginOption > a,
-.loginOption > span {
-  text-decoration: none;
-  color: blue;
+@media screen and (max-width: 960px) {
+  .menuContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .loginOptions_select {
+    width: fit-content;
+    padding: 10px;
+  }
+
+  .loginOption1,
+  .loginOption2 {
+    width: 200px;
+  }
 }

@@ -218,8 +218,10 @@ const LoginMagic = (req) => {
           alignItems: "center",
           backgroundColor: "#8affcb",
           color: "#130b46",
+          fontWeight: "600",
+          fontSize: "16px",
           border: "none",
-          borderRadius: "10px",
+          borderRadius: "50px",
           height: "45px",
           padding: "30px 50px",
         }}
