@@ -234,7 +234,7 @@ function UserDashboard() {
   const renderCreateLinkComponent = () => {
     return (
       <>
-        <div className="create-component">
+        <div className={styles.create_component}>
           <CreateLink type={createLinkType} />
         </div>
       </>
@@ -289,7 +289,7 @@ function UserDashboard() {
                 style={{ display: balanceHide ? "none" : "flex" }}
               >
                 <img src="/sol.png" />
-                <h3>{magicBalance ? magicBalance.toFixed(2) : '---'}</h3>
+                <h3>{magicBalance ? magicBalance.toFixed(2) : "---"}</h3>
               </div>
               <div
                 className={styles.sol_balance_fig}
@@ -305,7 +305,7 @@ function UserDashboard() {
               className={styles.usdc_balance}
               style={{ display: balanceHide ? "none" : "flex" }}
             >
-              ${magicBalanceUSD ? magicBalanceUSD.toFixed(2) : '---'}
+              ${magicBalanceUSD ? magicBalanceUSD.toFixed(2) : "---"}
             </p>
             <p
               className={styles.usdc_balance}
@@ -363,11 +363,13 @@ function UserDashboard() {
           <div className={styles.atadian_checks}>
             <div className={styles.payreq_chart_explainer1}>
               <span></span>
-              <p>Paylink</p> <p className={styles.mobile_total}>${totalLinkSales }</p>
+              <p>Paylink</p>{" "}
+              <p className={styles.mobile_total}>${totalLinkSales}</p>
             </div>
             <div className={styles.payreq_chart_explainer2}>
               <span></span>
-              <p>TipJar</p><p className={styles.mobile_total}>${totalTipJarSales}</p>
+              <p>TipJar</p>
+              <p className={styles.mobile_total}>${totalTipJarSales}</p>
             </div>
           </div>
         </div>
@@ -384,99 +386,105 @@ function UserDashboard() {
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
-          {!linksLoading && userLinks.length < 1 && userTipJar.length < 1 ? renderNoLinks() : null}
-          {!linksLoading && userLinks.slice(0, 1).map((product, index) => (
-            <div key={index} className={styles.links}>
-              <div className="link_tip">
-                <IoLink
-                  style={{
-                    color: "#fff",
-                    fontSize: "20px",
-                    marginTop: "7px",
-                    marginLeft: "5px",
-                  }}
-                  className="link_icon_tip"
-                  onClick={() => router.push(`/product/${product.id}`)}
-                />
-              </div>
-              <button
-                className={styles.link_button}
-                onClick={() => {
-                  router.push(`/product/${product.id}`);
-                }}
-              >
-                {product.name}
-              </button>
-              <div className="pay_icons">
-                <IoTrashBin
-                  style={{
-                    color: "#676767",
-                    fontSize: "20px",
-                    marginLeft: "2px",
-                    marginTop: "-2px",
-                    cursor: "pointer",
-                  }}
+          {!linksLoading && userLinks.length < 1 && userTipJar.length < 1
+            ? renderNoLinks()
+            : null}
+          {!linksLoading &&
+            userLinks.slice(0, 1).map((product, index) => (
+              <div key={index} className={styles.links}>
+                <div className="link_tip">
+                  <IoLink
+                    style={{
+                      color: "#fff",
+                      fontSize: "20px",
+                      marginTop: "7px",
+                      marginLeft: "5px",
+                    }}
+                    className="link_icon_tip"
+                    onClick={() => router.push(`/product/${product.id}`)}
+                  />
+                </div>
+                <button
+                  className={styles.link_button}
                   onClick={() => {
-                    if (
-                      confirm("Are you sure you want to delete this link?") ==
-                      true
-                    ) {
-                      deleteSingleProduct(product.id),
-                        // delete product from userLinks using it's index position
-                        setUserLinks(userLinks.filter((_, i) => i !== index));
-                    } else {
-                      return;
-                    }
+                    router.push(`/product/${product.id}`);
                   }}
-                />
+                >
+                  {product.name}
+                </button>
+                <div className="pay_icons">
+                  <IoTrashBin
+                    style={{
+                      color: "#676767",
+                      fontSize: "20px",
+                      marginLeft: "2px",
+                      marginTop: "-2px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      if (
+                        confirm("Are you sure you want to delete this link?") ==
+                        true
+                      ) {
+                        deleteSingleProduct(product.id),
+                          // delete product from userLinks using it's index position
+                          setUserLinks(userLinks.filter((_, i) => i !== index));
+                      } else {
+                        return;
+                      }
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-          {!linksLoading && userTipJar.slice(0, 1).map((product, index) => (
-            <div key={index} className={styles.links}>
-              <div className="link_gift">
-                <IoGift
-                  style={{
-                    color: "#fff",
-                    fontSize: "20px",
-                    marginTop: "7px",
-                    marginLeft: "5px",
-                  }}
-                  className="gift_icon_tip"
+            ))}
+          {!linksLoading &&
+            userTipJar.slice(0, 1).map((product, index) => (
+              <div key={index} className={styles.links}>
+                <div className="link_gift">
+                  <IoGift
+                    style={{
+                      color: "#fff",
+                      fontSize: "20px",
+                      marginTop: "7px",
+                      marginLeft: "5px",
+                    }}
+                    className="gift_icon_tip"
+                    onClick={() => router.push(`/product/${product.id}`)}
+                  />
+                </div>
+                <button
+                  className={styles.link_button}
                   onClick={() => router.push(`/product/${product.id}`)}
-                />
+                >
+                  {product.name}
+                </button>
+                <div className="pay_icons">
+                  <IoTrashBin
+                    style={{
+                      color: "#676767",
+                      fontSize: "20px",
+                      marginLeft: "2px",
+                      marginTop: "-2px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      if (
+                        confirm("Are you sure you want to delete this link?") ==
+                        true
+                      ) {
+                        deleteSingleProduct(product.id),
+                          // delete product from userLinks using it's index position
+                          setUserTipJar(
+                            userTipJar.filter((_, i) => i !== index)
+                          );
+                      } else {
+                        return;
+                      }
+                    }}
+                  />
+                </div>
               </div>
-              <button
-                className={styles.link_button}
-                onClick={() => router.push(`/product/${product.id}`)}
-              >
-                {product.name}
-              </button>
-              <div className="pay_icons">
-                <IoTrashBin
-                  style={{
-                    color: "#676767",
-                    fontSize: "20px",
-                    marginLeft: "2px",
-                    marginTop: "-2px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    if (
-                      confirm("Are you sure you want to delete this link?") ==
-                      true
-                    ) {
-                      deleteSingleProduct(product.id),
-                        // delete product from userLinks using it's index position
-                        setUserTipJar(userTipJar.filter((_, i) => i !== index));
-                    } else {
-                      return;
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
 
           <div className={styles.btn_container_wrap}>
             <div className="btn_container pay_btn">
@@ -576,14 +584,14 @@ function UserDashboard() {
     } catch (error) {
       console.log("error: ", error);
     }
-  } 
+  }
 
   useEffect(() => {
     if (publicKey) {
       console.log("publicKey", publicKey.toString());
       setUserPublicKey(publicKey.toString());
     }
-    if(userPublicKey){
+    if (userPublicKey) {
       setCurrentWallet(userPublicKey);
       const owner = userPublicKey;
       const getAllProducts = async () => {
@@ -640,7 +648,7 @@ function UserDashboard() {
         const mintLoverScoreData = await GetPublickeyMintLoverScore(
           userPublicKey
         );
-        console.log('mintLoverScoreData', mintLoverScoreData)
+        console.log("mintLoverScoreData", mintLoverScoreData);
         // const tokenRoyaltyContributionData = await GetTokenAddressRoyaltyContribution(userPublicKey);
         // console.log('tokenRoyaltyContributionData', tokenRoyaltyContributionData)
         // const wealthData = await GetPublickeyWealth(userPublicKey);
@@ -670,7 +678,6 @@ function UserDashboard() {
         // setCreditProb(creditScoreData.credit_prob);
       }
       getAtadiaData();
-
     }
   }, [publicKey, userPublicKey]);
 
