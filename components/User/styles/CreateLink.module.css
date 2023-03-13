@@ -32,6 +32,10 @@
   padding: 0px 0 0 20px;
 }
 
+.render_links {
+  margin: 0 20px !important;
+}
+
 .paylink_green {
   width: 500px;
   height: 300px;
@@ -792,8 +796,6 @@
     margin-top: 0;
     margin-bottom: 0;
   }
-
-  
 }
 
 /* For Mobile Landscape View */

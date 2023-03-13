@@ -7,7 +7,12 @@ import { getCollectionOwner } from "../../lib/api";
 import Loading from "../../components/Loading";
 import CurrentLinks from "../../components/User/CurrentLinks";
 import * as web3 from "@solana/web3.js";
-import { IoArrowForward, IoArrowBack, IoCopyOutline, IoCheckmark } from "react-icons/io5";
+import {
+  IoArrowForward,
+  IoArrowBack,
+  IoCopyOutline,
+  IoCheckmark,
+} from "react-icons/io5";
 
 const CreateLink = () => {
   const router = useRouter();
@@ -88,10 +93,22 @@ const CreateLink = () => {
           <div className={styles.link}>
             <div className={styles.link_img}>
               <div className={styles.link_img_overlay}></div>
-              <img src={newProduct.type === 'link' ? "/paylink_bg.png" : "/tipjar_bg.png"} />
+              <img
+                src={
+                  newProduct.type === "link"
+                    ? "/paylink_bg.png"
+                    : "/tipjar_bg.png"
+                }
+              />
             </div>
-            <h5>Your {newProduct.type === 'link' ? 'PayRequest' : 'Tip Jar'} has been created!</h5>
-            <p>Your {newProduct.type === 'link' ? 'PayRequest' : 'Tip Jar'} was successfully created and is live.</p>
+            <h5>
+              Your {newProduct.type === "link" ? "PayRequest" : "Tip Jar"} has
+              been created!
+            </h5>
+            <p>
+              Your {newProduct.type === "link" ? "PayRequest" : "Tip Jar"} was
+              successfully created and is live.
+            </p>
             <div className={styles.share_link}>
               <div
                 style={{
@@ -117,9 +134,9 @@ const CreateLink = () => {
               {!copied && (
                 <IoCopyOutline
                   className={styles.copyIcon}
-                  onClick={() => handleCopy(
-                    `https://www.ikonshop.io/product/${payLink.id}`
-                  )}
+                  onClick={() =>
+                    handleCopy(`https://www.ikonshop.io/product/${payLink.id}`)
+                  }
                 />
               )}
             </div>
@@ -211,7 +228,9 @@ const CreateLink = () => {
       >
         {showCurrentLinks ? "Hide Links" : "View Current Links"}
       </button> */}
-      <CurrentLinks />
+      <div className={styles.render_links}>
+        <CurrentLinks />
+      </div>
     </>
   );
 
@@ -253,9 +272,9 @@ const CreateLink = () => {
                     type="text"
                     placeholder="Title"
                     onChange={(e) => {
-                      setNewProduct({ 
-                        ...newProduct, 
-                        name: e.target.value ,
+                      setNewProduct({
+                        ...newProduct,
+                        name: e.target.value,
                         owner: userPublicKey.toString(),
                       });
                     }}
@@ -459,17 +478,19 @@ const CreateLink = () => {
   }, [publicKey]);
 
   useEffect(() => {
-    if(!publicKey) {
-      if(localStorage.getItem('userMagicMetadata')){
-        const publicAddress = JSON.parse(localStorage.getItem('userMagicMetadata')).publicAddress
+    if (!publicKey) {
+      if (localStorage.getItem("userMagicMetadata")) {
+        const publicAddress = JSON.parse(
+          localStorage.getItem("userMagicMetadata")
+        ).publicAddress;
         const publicKey = new web3.PublicKey(publicAddress);
-        setUserPublicKey(publicKey.toString())
-        console.log('public key from local storage', publicKey.toString())
+        setUserPublicKey(publicKey.toString());
+        console.log("public key from local storage", publicKey.toString());
       }
     } else {
-      setUserPublicKey(publicKey.toString())
+      setUserPublicKey(publicKey.toString());
     }
-  }, [publicKey])
+  }, [publicKey]);
 
   return (
     <>
@@ -479,6 +500,7 @@ const CreateLink = () => {
       {/* {!loading && !showLink && !showForm && showCurrentLinks && (
         
       )} */}
+
       {showLink ? renderLink() : null}
     </>
   );
