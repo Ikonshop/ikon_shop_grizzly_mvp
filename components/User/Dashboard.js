@@ -69,6 +69,7 @@ const rpcUrl =
 function UserDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [linksLoading, setLinksLoading] = useState(true);
   const [checkingForWallet, setCheckingForWallet] = useState(true);
   const [allowance, setAllowance] = useState(false);
   const [currentWallet, setCurrentWallet] = useState([]);
@@ -288,7 +289,7 @@ function UserDashboard() {
                 style={{ display: balanceHide ? "none" : "flex" }}
               >
                 <img src="/sol.png" />
-                <h3>{magicBalance ? magicBalance.toFixed(2) : 'Nope'}</h3>
+                <h3>{magicBalance ? magicBalance.toFixed(2) : '---'}</h3>
               </div>
               <div
                 className={styles.sol_balance_fig}
@@ -304,7 +305,7 @@ function UserDashboard() {
               className={styles.usdc_balance}
               style={{ display: balanceHide ? "none" : "flex" }}
             >
-              ${magicBalanceUSD ? magicBalanceUSD.toFixed(2) : 'nope'}
+              ${magicBalanceUSD ? magicBalanceUSD.toFixed(2) : '---'}
             </p>
             <p
               className={styles.usdc_balance}
@@ -324,7 +325,7 @@ function UserDashboard() {
       </div>
       {/* </div> */}
 
-      <div className={styles.atadian_credit}>
+      <div className={styles.total_container}>
         <div className={styles.paylink_head}>
           <h4 className={styles.paylink_header}>Total Recieved</h4>
         </div>
@@ -362,11 +363,11 @@ function UserDashboard() {
           <div className={styles.atadian_checks}>
             <div className={styles.payreq_chart_explainer1}>
               <span></span>
-              <p>Paylink</p>
+              <p>Paylink</p> <p className={styles.mobile_total}>${totalLinkSales }</p>
             </div>
             <div className={styles.payreq_chart_explainer2}>
               <span></span>
-              <p>TipJar</p>
+              <p>TipJar</p><p className={styles.mobile_total}>${totalTipJarSales}</p>
             </div>
           </div>
         </div>
@@ -383,8 +384,8 @@ function UserDashboard() {
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
-          {!loading && userLinks.length < 1 && userTipJar.length < 1 ? renderNoLinks() : null}
-          {userLinks.slice(0, 1).map((product, index) => (
+          {!linksLoading && userLinks.length < 1 && userTipJar.length < 1 ? renderNoLinks() : null}
+          {!linksLoading && userLinks.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_tip">
                 <IoLink
@@ -431,7 +432,7 @@ function UserDashboard() {
               </div>
             </div>
           ))}
-          {userTipJar.slice(0, 1).map((product, index) => (
+          {!linksLoading && userTipJar.slice(0, 1).map((product, index) => (
             <div key={index} className={styles.links}>
               <div className="link_gift">
                 <IoGift
@@ -579,13 +580,15 @@ function UserDashboard() {
 
   useEffect(() => {
     if (publicKey) {
-      // checkOwnership();
       console.log("publicKey", publicKey.toString());
       setUserPublicKey(publicKey.toString());
-      setCurrentWallet(publicKey.toString());
-      const owner = publicKey.toString();
+    }
+    if(userPublicKey){
+      setCurrentWallet(userPublicKey);
+      const owner = userPublicKey;
       const getAllProducts = async () => {
         const products = await getCollectionOwner(owner);
+        console.log("products", products);
         for (let i = 0; i < products.products.length; i++) {
           if (products.products[i].type === "link") {
             userLinks.push(products.products[i]);
@@ -597,7 +600,7 @@ function UserDashboard() {
             ownerProducts.push(products.products[i]);
           }
         }
-        // setLoading(false);
+        setLinksLoading(false);
       };
 
       if (userLinks.length > 0 && userTipJar.length > 0) {
@@ -605,12 +608,12 @@ function UserDashboard() {
       }
 
       const getTotals = async () => {
-        const tjTotatls = await GetUserDashTipjarTotals(publicKey.toString());
+        const tjTotatls = await GetUserDashTipjarTotals(userPublicKey);
         console.log("tjTotatls", tjTotatls);
         setTotalTipJarSales(tjTotatls.totalTipjarSales);
         setTotalTipJarCount(tjTotatls.totalTipjars);
 
-        const linkTotals = await GetUserDashLinkTotals(publicKey.toString());
+        const linkTotals = await GetUserDashLinkTotals(userPublicKey);
         console.log("linkTotals", linkTotals);
         setTotalLinkSales(linkTotals.totalLinkSales);
         setTotalLinkCount(linkTotals.totalLinks);
@@ -622,43 +625,54 @@ function UserDashboard() {
       // ATADIA API CALLS
       async function getAtadiaData() {
         setAtadiaLoading(true);
-        const creditScoreData = await GetPublickeyCreditScore(
-          publicKey.toString()
-        );
-        const twitterPfpScoreDataData = await GetPublickeyTwitterPfpScore(
-          publicKey.toString()
-        );
-        const diamondHandScoreData = await GetPublickeyDiamondHandScore(
-          publicKey.toString()
-        );
+        // const creditScoreData = await GetPublickeyCreditScore(
+        //   userPublicKey
+        // );
+        // console.log("creditScoreData", creditScoreData);
+        // const twitterPfpScoreDataData = await GetPublickeyTwitterPfpScore(
+        //   userPublicKey
+        // );
+        // console.log('twitterPfpScoreDataData', twitterPfpScoreDataData)
+        // const diamondHandScoreData = await GetPublickeyDiamondHandScore(
+        //   userPublicKey
+        // );
+        // console.log("diamondHandScoreData", diamondHandScoreData);
         const mintLoverScoreData = await GetPublickeyMintLoverScore(
-          publicKey.toString()
+          userPublicKey
         );
-        const tokenRoyaltyContributionData =
-          await GetTokenAddressRoyaltyContribution(publicKey.toString());
-        const wealthData = await GetPublickeyWealth(publicKey.toString());
-        const demographicData = await GetPublickeyDemographics(
-          publicKey.toString()
-        );
-        const txnFreqData = await GetPublickeyTransactionFrequency(
-          publicKey.toString()
-        );
-        const txnVolumeData = await GetPublickeyTransactionVolume(
-          publicKey.toString()
-        );
-        const secondaryMktActData = await GetPublickeySecondaryMarketActivity(
-          publicKey.toString()
-        );
-        const profitLossData = await GetPublickeyProfitLoss(
-          publicKey.toString()
-        );
+        console.log('mintLoverScoreData', mintLoverScoreData)
+        // const tokenRoyaltyContributionData = await GetTokenAddressRoyaltyContribution(userPublicKey);
+        // console.log('tokenRoyaltyContributionData', tokenRoyaltyContributionData)
+        // const wealthData = await GetPublickeyWealth(userPublicKey);
+        // console.log('wealthData', wealthData)
+        // const demographicData = await GetPublickeyDemographics(
+        //   userPublicKey
+        // );
+        // console.log('demographicData', demographicData)
+        // const txnFreqData = await GetPublickeyTransactionFrequency(
+        //   userPublicKey
+        // );
+        // console.log('txnFreqData', txnFreqData)
+        // const txnVolumeData = await GetPublickeyTransactionVolume(
+        //   userPublicKey
+        // );
+        // console.log('txnVolumeData', txnVolumeData)
+        // const secondaryMktActData = await GetPublickeySecondaryMarketActivity(
+        //   userPublicKey
+        // );
+        // console.log('secondaryMktActData', secondaryMktActData)
+        // const profitLossData = await GetPublickeyProfitLoss(
+        //   userPublicKey
+        // );
+        // console.log('profitLossData', profitLossData)
 
-        setCreditScore(creditScoreData.credit_score);
-        setCreditProb(creditScoreData.credit_prob);
+        // setCreditScore(creditScoreData.credit_score);
+        // setCreditProb(creditScoreData.credit_prob);
       }
-      // getAtadiaData();
+      getAtadiaData();
+
     }
-  }, [publicKey]);
+  }, [publicKey, userPublicKey]);
 
   useEffect(() => {
     // SETTINGS

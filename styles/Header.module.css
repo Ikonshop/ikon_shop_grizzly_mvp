@@ -21,7 +21,8 @@
 }
 
 .smallLogo {
-  display: none;
+  width: 75px;
+  margin-left: 100%;
 }
 
 .hamburger {
@@ -255,6 +256,7 @@
   .bigLogo {
     width: 100px;
     margin-left: 20px;
+    /* display: none; */
   }
 
   .menu {
@@ -275,7 +277,7 @@
     display: flex;
     height: auto;
     width: 5vw;
-    margin-left: 7vw;
+    margin-left: 20px;
   }
 
   .menuItem span {
