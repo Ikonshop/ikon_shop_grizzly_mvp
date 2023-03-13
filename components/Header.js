@@ -145,7 +145,7 @@ export default function HeaderComponent() {
 
         {/* if currentpath is /dashboard then renderDashToggle */}
         {userPublicKey && currentPath === "/dashboard" && renderDashToggle()}
-        {userPublicKey && !merchant && (
+        {userPublicKey && !merchant && currentPath != "/dashboard" && (
           <Link href="/dashboard">
             <a
               // onClick={() => (
@@ -160,7 +160,7 @@ export default function HeaderComponent() {
             </a>
           </Link>
         )}
-        {userPublicKey && merchant && (
+        {userPublicKey && merchant && currentPath != "/dashboard" && (
           <Link href="/dashboard">
             <a
               // onClick={() => (
