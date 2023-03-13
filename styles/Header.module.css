@@ -5,6 +5,7 @@
   height: 5rem;
   background-color: transparent;
   color: black;
+  font-family: "Manrope" !important;
 }
 
 .logo {
@@ -90,6 +91,7 @@
   font-weight: 600;
   color: #130b46;
   cursor: pointer;
+  font-family: "Manrope" !important;
 }
 
 .socialItem {
@@ -122,6 +124,7 @@
 .icon {
   font-size: 20px;
   color: black;
+  font-family: "Manrope" !important;
   cursor: pointer;
 }
 
@@ -129,6 +132,7 @@
   font-size: 24px;
   color: #130b46;
   cursor: pointer;
+  font-family: "Manrope" !important;
 }
 
 .userDashboardOption {
@@ -136,6 +140,7 @@
   font-size: 12px;
   font-weight: 100;
   color: black;
+  font-family: "Manrope" !important;
   cursor: pointer;
 }
 
@@ -194,6 +199,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-family: "Manrope" !important;
 }
 
 .loginOption2 {
@@ -207,6 +213,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-family: "Manrope" !important;
 }
 
 .loginOption_ind {
@@ -226,6 +233,7 @@
 .loginOption2 span {
   font-size: 16px;
   font-weight: 600;
+  font-family: "Manrope" !important;
 }
 
 .not_registered {
@@ -238,6 +246,7 @@
 .not_registered span {
   color: #4891ff;
   font-weight: bold;
+  font-family: "Manrope" !important;
 }
 
 .closeButton {
@@ -305,6 +314,7 @@
   height: 5rem;
   background-color: transparent;
   color: black;
+  font-family: "Manrope" !important;
 }
 
 .hamburger {
