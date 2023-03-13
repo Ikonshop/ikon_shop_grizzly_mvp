@@ -236,7 +236,7 @@ export default function HeaderComponent() {
     return (
       <div className={styles.loginOptions_select}>
         Browser Wallet:
-        <WalletMultiButton className={styles.loginOption2} />
+        <WalletMultiButton style={{ borderRadius: '50px', background:'#130b46', width:'240px', height:'60px', display: 'flex', alignItems:'center', justifyContent:'center', fontFamily: 'Manrope'}} />
         <div
           onClick={() => setLoginOptionSelected("")}
           className={styles.loginOption_ind_flex}
