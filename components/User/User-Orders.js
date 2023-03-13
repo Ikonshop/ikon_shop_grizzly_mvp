@@ -55,28 +55,41 @@ function UserOrders() {
               orders.map((orders, index) => (
                 <tr key={index}>
                   <td>
-                    <a
-                      href={
-                        new Date(orders.createdAt)> new Date('2023-02-22T00:00:00.000Z')
-                          ? `https://solana.fm/tx/${orders.orderID}`
-                          : `https://solana.fm/address/${orders.orderID}`
-                      }
-                      target="_blank"
-                    >
-                      {
-                        orders.orderID?.slice(0, 4) + "..." + orders.orderID?.slice(orders.orderID.length - 4)
-                      }
-                    </a>
+                    {orders.createdAt ? (
+                      <a
+                        href={
+                          new Date(orders.createdAt)> new Date('2023-02-22T00:00:00.000Z')
+                            ? `https://solana.fm/tx/${orders.orderID}`
+                            : `https://solana.fm/address/${orders.orderID}`
+                        }
+                        target="_blank"
+                      >
+                        {
+                          orders.orderID?.slice(0, 4) + "..." + orders.orderID?.slice(orders.orderID.length - 4)
+                        }
+                      </a>
+                    ) : 'N/A'}
                   </td>
-                  <td>{orders.productid[0].name}</td>
                   <td>
-                    {orders.price} {orders.token}
+                    {orders.productid[0] ? (
+                      orders.productid[0].name
+                    ) : 'N/A'}
+                  </td>
+                  <td>
+                    {orders.price ? (
+                    `${orders.price} ${orders.token}`
+                    ) : 'N/A'}
                   </td>
                   {/* make date string like 1/2/2023 */}
-                  <td>{new Date(orders.createdAt).toLocaleDateString()}</td>
-
                   <td>
-                    <a href={`/product/${orders.productid[0].id}`} target='blank'>View</a>
+                    {orders.createdAt ? (
+                      new Date(orders.createdAt).toLocaleDateString()
+                    ) : 'N/A'}
+                  </td>
+                  <td>
+                    {orders.productid[0] ? (
+                      <a href={`/product/${orders.productid[0].id}`} target='blank'>View</a>
+                    ) : 'N/A'}
                   </td>
                 </tr>
               ))

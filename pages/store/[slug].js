@@ -156,7 +156,7 @@ function Store() {
             <img className="banner-container" src={banner} alt="banner" />
           </div> */}
       <Container>
-        <div className="search_container">
+        {/* <div className="search_container">
           <div className="input_wrap">
             <input
               type="text"
@@ -164,13 +164,13 @@ function Store() {
               placeholder="Search products"
             />
           </div>
-        </div>
+        </div> */}
         <div className="products-container">
           {products.map((product, index) => (
             <Product key={index} product={product} />
           ))}
         </div>
-        {!loading && allSubs.length > 0 && (
+        {/* {!loading && allSubs.length > 0 && (
           <div className="sub_div">
             <h6 className="subscriptions_header">SUBSCRIPTIONS</h6>
             <TicketOutline style={{ marginTop: "-10px", marginLeft: "16px" }} />
@@ -182,7 +182,7 @@ function Store() {
             allSubs.map((sub, index) => (
               <SubscriptionCard key={index} sub={sub} />
             ))}
-        </div>
+        </div> */}
       </Container>
     </>
   );
