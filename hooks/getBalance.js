@@ -28,14 +28,9 @@ export async function getUsdcBalance(pubKey) {
         usdcAddress,
         pubKey
       );
-      console.log(
-        "associatedTokenAddress: ",
-        associatedTokenAddress.toString()
-      );
       const usdcBalance = await connection.getTokenAccountBalance(
         associatedTokenAddress
       );
-      console.log("usdcBalance: ", usdcBalance.value.uiAmount);
       const convertedUsdcBalance = usdcBalance.value.uiAmount;
       return convertedUsdcBalance;
     } catch (error) {
