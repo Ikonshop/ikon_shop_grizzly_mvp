@@ -16,8 +16,7 @@
 }
 
 .bigLogo {
-  height: auto;
-  width: 10vw;
+  width: 140px;
   margin-left: 2vw;
 }
 
@@ -194,7 +193,7 @@
   background: transparent;
 }
 
-.loginOption > span{
+.loginOption > span {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -237,7 +236,7 @@
 /* media screen for mobile */
 @media screen and (max-width: 768px) {
   .bigLogo {
-    width: 20vw;
+    width: 100px;
     margin-left: 20px;
   }
 
@@ -293,24 +292,6 @@
   height: 5rem;
   background-color: transparent;
   color: black;
-}
-
-.logo {
-  /* stays top left of parent div */
-  font-size: 1.5rem;
-  font-weight: 700;
-  z-index: 3000;
-  cursor: pointer;
-}
-
-.bigLogo {
-  height: auto;
-  width: 10vw;
-  margin-left: 2vw;
-}
-
-.smallLogo {
-  display: none;
 }
 
 .hamburger {
@@ -442,63 +423,4 @@
 .loginOption > span {
   text-decoration: none;
   color: blue;
-}
-
-/* media screen for mobile */
-@media screen and (max-width: 768px) {
-  .bigLogo {
-    width: 20vw;
-    margin-left: 20px;
-  }
-
-  .menu {
-    display: flex;
-    position: fixed;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: left;
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 40vw;
-    z-index: 1000;
-    background-color: #ffffff;
-  }
-
-  .smallLogo {
-    display: flex;
-    height: auto;
-    width: 5vw;
-    margin-left: 7vw;
-  }
-
-  .menuItem span {
-    font-family: "Manrope", sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: black;
-  }
-
-  .icon {
-    font-size: 30px;
-    color: black;
-    cursor: pointer;
-  }
-
-  .loginOptions {
-    width: 300px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1200;
-    height: fit-content;
-    padding: 20px;
-    /* box-shadow: 1px 5px 48px 19px rgba(198, 198, 198, 0.3);
-    -webkit-box-shadow: 1px 5px 48px 19px rgba(198, 198, 198, 0.3);
-    -moz-box-shadow: 1px 5px 48px 19px rgba(198, 198, 198, 0.3); */
-  }
-
-  .walletItem {
-    display: none;
-  }
 }

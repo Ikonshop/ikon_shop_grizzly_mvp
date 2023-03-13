@@ -5,14 +5,16 @@ import {
   deleteSingleProduct,
 } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLink,
-  faFilter,
-  faJar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLink, faFilter, faJar } from "@fortawesome/free-solid-svg-icons";
 import styles from "../Merchant/styles/PayRequests.module.css";
 import { useRouter } from "next/router";
-import { IoCopy, IoEye, IoLinkOutline, IoTrashBin, IoCheckmark  } from "react-icons/io5";
+import {
+  IoCopy,
+  IoEye,
+  IoLinkOutline,
+  IoTrashBin,
+  IoCheckmark,
+} from "react-icons/io5";
 
 export default function PayRequests(publicKey) {
   const router = useRouter();
@@ -75,99 +77,109 @@ export default function PayRequests(publicKey) {
   }, []);
 
   return (
-    <div className={styles.links_container}>
-      {/*  */}
+    <div>
+      <br />
       {renderFilter()}
-      {showPayRequests &&
-        payRequests.map((payRequest, index) => (
-          <div className={styles.link} key={index}>
-            <div className={styles.payreq_col1}>
-              <div className={styles.payreq_bg}>
-                <IoLinkOutline
-                  style={{
-                    transform: "rotate(-45deg)",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    fontSize: "24px",
+      <br />
+      <div className={styles.links_container}>
+        {showPayRequests &&
+          payRequests.map((payRequest, index) => (
+            <div className={styles.link} key={index}>
+              <div className={styles.payreq_col1}>
+                <div className={styles.payreq_bg}>
+                  <IoLinkOutline
+                    style={{
+                      transform: "rotate(-45deg)",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: "24px",
+                    }}
+                    className={styles.link_icon}
+                    icon={faLink}
+                  />
+                </div>
+                <div className={styles.link_name}>
+                  {payRequest.name.length > 15
+                    ? payRequest.name.substring(0, 15) + "..."
+                    : payRequest.name}
+                </div>
+              </div>
+              <div className={styles.icon_container}>
+                {copied ? (
+                  <IoCheckmark className={styles.copyIconCheck} />
+                ) : null}
+                {!copied && (
+                  <IoCopy
+                    className={styles.link_icon}
+                    onClick={() =>
+                      handleCopy(
+                        `https://www.ikonshop.io/product/${payRequest.id}`
+                      )
+                    }
+                  />
+                )}
+                <IoEye
+                  className={styles.link_icon}
+                  onClick={() => router.push(`/product/${payRequest.id}`)}
+                />
+                <IoTrashBin
+                  className={styles.link_icon}
+                  onClick={() => {
+                    deleteSingleProduct(payRequest.id),
+                      setPayRequests(payRequests.filter((_, i) => i !== index));
                   }}
-                  className={styles.link_icon}
-                  icon={faLink}
                 />
               </div>
-              <div className={styles.link_name}>
-                {payRequest.name.length > 15
-                  ? payRequest.name.substring(0, 15) + "..."
-                  : payRequest.name}
+            </div>
+          ))}
+        {showTipJarLinks &&
+          tipJarLinks.map((tipJarLink, index) => (
+            <div className={styles.link} key={index}>
+              <div className={styles.payreq_col1}>
+                <div className={styles.tipjar_bg}>
+                  <FontAwesomeIcon
+                    style={{
+                      color: "#fff",
+                    }}
+                    className={styles.link_icon}
+                    icon={faJar}
+                  />
+                </div>
+                <div className={styles.link_name}>
+                  {tipJarLink.name.length > 15
+                    ? tipJarLink.name.substring(0, 15) + "..."
+                    : tipJarLink.name}
+                </div>
               </div>
-            </div>
-            <div className={styles.icon_container}>
-              {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
-              {!copied && (
-                <IoCopy
+              <div className={styles.icon_container}>
+                {copied ? (
+                  <IoCheckmark className={styles.copyIconCheck} />
+                ) : null}
+                {!copied && (
+                  <IoCopy
+                    className={styles.link_icon}
+                    onClick={() =>
+                      handleCopy(
+                        `https://www.ikonshop.io/product/${tipJarLink.id}`
+                      )
+                    }
+                  />
+                )}
+                <IoEye
                   className={styles.link_icon}
-                  onClick={() => handleCopy(
-                    `https://www.ikonshop.io/product/${payRequest.id}`
-                  )}
+                  onClick={() => router.push(`/product/${tipJarLink.id}`)}
                 />
-              )}
-              <IoEye
-                className={styles.link_icon}
-                onClick={() => router.push(`/product/${payRequest.id}`)}
-              />
-              <IoTrashBin
-                className={styles.link_icon}
-                onClick={() => {
-                  deleteSingleProduct(payRequest.id),
-                    setPayRequests(payRequests.filter((_, i) => i !== index));
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      {showTipJarLinks &&
-        tipJarLinks.map((tipJarLink, index) => (
-          <div className={styles.link} key={index}>
-            <div className={styles.payreq_col1}>
-              <div className={styles.tipjar_bg}>
-                <FontAwesomeIcon
-                  style={{
-                    color: "#fff",
+                <IoTrashBin
+                  className={styles.link_icon}
+                  onClick={() => {
+                    deleteSingleProduct(tipJarLink.id),
+                      setTipJarLinks(tipJarLinks.filter((_, i) => i !== index));
                   }}
-                  className={styles.link_icon}
-                  icon={faJar}
                 />
               </div>
-              <div className={styles.link_name}>
-                {tipJarLink.name.length > 15
-                  ? tipJarLink.name.substring(0, 15) + "..."
-                  : tipJarLink.name}
-              </div>
             </div>
-            <div className={styles.icon_container}>
-              
-              {copied ? <IoCheckmark className={styles.copyIconCheck} /> : null}
-              {!copied && (
-                <IoCopy
-                  className={styles.link_icon}
-                  onClick={() => handleCopy(
-                    `https://www.ikonshop.io/product/${tipJarLink.id}`
-                  )}
-                />
-              )}
-              <IoEye
-                className={styles.link_icon}
-                onClick={() => router.push(`/product/${tipJarLink.id}`)}
-              />
-              <IoTrashBin
-                className={styles.link_icon}
-                onClick={() => {
-                  deleteSingleProduct(tipJarLink.id),
-                    setTipJarLinks(tipJarLinks.filter((_, i) => i !== index));
-                }}
-              />
-            </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 }

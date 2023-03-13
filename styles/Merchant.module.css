@@ -1213,6 +1213,21 @@
     flex-wrap: wrap;
     padding-bottom: 1200px !important;
   }
+  .links {
+    min-width: 100%;
+    justify-content: center;
+  }
+  .link_button {
+    margin: 0 auto;
+  }
+  .paylink_container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 430px) {

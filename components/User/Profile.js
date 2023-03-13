@@ -150,8 +150,8 @@ const Profile = (userPubKey) => {
                 />
               </div>
             </div>
-            <div className={styles.profile_body_right_bottom}>
-              <div className={styles.profile_body_right_bottom_left}>
+            <div className={styles.split_rows}>
+              <div className={styles.column_field}>
                 <p>Name</p>
                 <input
                   type="text"
@@ -160,7 +160,7 @@ const Profile = (userPubKey) => {
                   onChange={(e) => setUserName(e.target.value)}
                 />
               </div>
-              <div className={styles.profile_body_right_bottom_right}>
+              <div className={styles.column_field}>
                 <p>
                   Email <span>{verified ? "Verified" : "Unverified"}</span>
                 </p>
@@ -172,29 +172,33 @@ const Profile = (userPubKey) => {
                 />
                 {!verified && (
                   <>
-                    <p>
-                      Verify with:
-                      <span
-                        style={{ color: "#14D19E", cursor: "pointer" }}
-                        onClick={() => handleVerifyWithDiscord()}
-                      >
-                        {" "}
-                        <IoLogoDiscord />
-                      </span>
-                      <span
-                        style={{ color: "#14D19E", cursor: "pointer" }}
-                        onClick={() => handleVerifyWithGoogle()}
-                      >
-                        {" "}
-                        <IoLogoGoogle />
-                      </span>
-                    </p>
+                    <div className={styles.verify_text}>
+                      <p>Verify with:</p>
+                      <div className={styles.verify_icons}>
+                        <div
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleVerifyWithDiscord()}
+                        >
+                          <span className={styles.verify_icon}>
+                            <IoLogoDiscord />
+                          </span>
+                        </div>
+                        <div
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleVerifyWithGoogle()}
+                        >
+                          <span className={styles.verify_icon}>
+                            <IoLogoGoogle />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </>
                 )}
               </div>
             </div>
-            <br />
-            <div className={styles.profile_description}>
+
+            <div className={styles.column_field}>
               <p>Description</p>
               <textarea
                 className={styles.profile_body_right_textarea}
@@ -202,7 +206,7 @@ const Profile = (userPubKey) => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
-            <div className={styles.profile_link_list}>
+            <div className={styles.column_field}>
               <p>Social Links</p>
               <textarea
                 className={styles.profile_body_right_textarea}
@@ -210,7 +214,7 @@ const Profile = (userPubKey) => {
                 onChange={(e) => setSocialLinks(e.target.value)}
               />
             </div>
-            <div className={styles.profile_link_list}>
+            <div className={styles.column_field}>
               <p>Crypto Links</p>
               <textarea
                 className={styles.profile_body_right_textarea}
@@ -278,13 +282,14 @@ const Profile = (userPubKey) => {
   const renderCurrentMenu = () => {
     if (activeDash === "Edit Profile") {
       return renderEditProfile();
-    } else if (activeDash === "Connectivity") {
-      return renderConnectivity();
-    } else if (activeDash === "Notifications") {
-      return renderNotifications();
-    } else if (activeDash === "Password & Security") {
-      return renderPasswordAndSecurity();
     }
+    // else if (activeDash === "Connectivity") {
+    //   return renderConnectivity();
+    // } else if (activeDash === "Notifications") {
+    //   return renderNotifications();
+    // } else if (activeDash === "Password & Security") {
+    //   return renderPasswordAndSecurity();
+    // }
   };
 
   useEffect(() => {
