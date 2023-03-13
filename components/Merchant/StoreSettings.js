@@ -319,7 +319,7 @@ const StoreSettings = () => {
       // Please select a store to edit
       return (
         <div className={styles.settings_container}>
-          <h3>Please select a store to edit</h3>
+          <h3>Uh oh error, <br />have you registerd as a Merchant?</h3>
         </div>
       );
     }
@@ -380,7 +380,13 @@ const StoreSettings = () => {
         >
           <button
             className={styles.update_button}
-            onClick={() => updateCollectionInfo(newCollectionInfo)}
+            onClick={() => (
+              setLoading(true),
+              updateCollectionInfo(newCollectionInfo).then(() => {
+                setLoading(false);
+                setConfirmationModal(false);
+              })
+            )}
           >
             Update
           </button>
