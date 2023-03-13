@@ -314,7 +314,9 @@ export default function HeaderComponent() {
                 </div>
               )}
             </div>
-            <span>{showStoreSymbol ? "Merchant" : "User"}</span>
+            <span>
+              {showStoreSymbol ? "Switch to User" : "Switch to Merchant"}
+            </span>
           </div>
         )}
       </>
