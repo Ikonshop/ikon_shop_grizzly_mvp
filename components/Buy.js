@@ -139,7 +139,7 @@ export default function Buy({
       // console.log("orderID", orderID);
       
       console.log(
-        `Transaction sent: https://solscan.io/tx/${txHash}?cluster=mainnet`
+        `Transaction sent: https://solana.fm/tx/${txHash}?cluster=mainnet`
       );
       setStatus(STATUS.Submitted);
     } catch (error) {

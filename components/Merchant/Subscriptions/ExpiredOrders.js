@@ -66,12 +66,12 @@ const ExpiredOrders = (publicKey) => {
                             <tr key={index}>
                                 <td data-th="Name">{sub.sub.name}</td>
                                 {/* sub.buyer.owner first 4 and last 4 */}
-                                <td data-th="Wallet"><a href={`https://solscan.io/account/${sub.buyer.owner}`} target="_blank" rel="no referrer">{sub.buyer.owner.substring(0, 4)}...{sub.buyer.owner.substring(sub.buyer.owner.length - 4)}</a></td>
+                                <td data-th="Wallet"><a href={`https://solana.fm/account/${sub.buyer.owner}`} target="_blank" rel="no referrer">{sub.buyer.owner.substring(0, 4)}...{sub.buyer.owner.substring(sub.buyer.owner.length - 4)}</a></td>
                                 <td data-th="Purchase Date">{new Date(sub.purchaseDate).toDateString()}</td>
                                 {/* sub.expireDate is in ISO format we need to convert it into date format */}
                                 <td data-th="Expire Date">{new Date(sub.expireDate).toDateString()}</td>
                                 
-                                <td data-th="OrderID"><a href={`https://solscan.io/tx/${sub.orderID}`} target="_blank" rel="no referrer">{sub.orderID.slice(0,4)}</a></td>
+                                <td data-th="OrderID"><a href={`https://solana.fm/tx/${sub.orderID}`} target="_blank" rel="no referrer">{sub.orderID.slice(0,4)}</a></td>
                                 <td data-th="Actions">
                                     <button
                                         className={styles.view_button}

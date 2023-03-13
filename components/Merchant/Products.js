@@ -228,7 +228,7 @@ function myProducts() {
         <div key={index} className={styles.order_containter}>
           <a
             className={styles.order_buyer}
-            href={`https://solscan.io/account/${orders.buyer}?cluster=mainnet`}
+            href={`https://solana.fm/account/${orders.buyer}?cluster=mainnet`}
             target="_blank"
           >
             {orders.buyer.slice(0, 4)}...{orders.buyer.slice(-5)}

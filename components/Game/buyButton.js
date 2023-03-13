@@ -45,7 +45,7 @@ const BuyButton = ({listing}) => {
     //       // console.log("orderID", orderID);
           
     //       console.log(
-    //         `Transaction sent: https://solscan.io/tx/${txHash}?cluster=mainnet`
+    //         `Transaction sent: https://solana.fm/tx/${txHash}?cluster=mainnet`
     //       );
     //       setStatus(STATUS.Submitted);
     //     } catch (error) {
@@ -90,7 +90,7 @@ const BuyButton = ({listing}) => {
             order.orderID = txHash;
             console.log("txHash", txHash);
             console.log("orderID", orderID);
-            console.log(`Transaction sent: https://solscan.io/tx/${txHash}?cluster=mainnet`);
+            console.log(`Transaction sent: https://solana.fm/tx/${txHash}?cluster=mainnet`);
             setStatus(STATUS.Submitted);
         }
         catch (error) {

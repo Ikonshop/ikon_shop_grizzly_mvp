@@ -75,7 +75,7 @@ function OrderDetails({ id }) {
                 <span>{orderDetails.id}</span>
               </div>
               <a
-                href={`https://solscan.io/tx/${orderDetails.orderID}`}
+                href={`https://solana.fm/tx/${orderDetails.orderID}`}
                 target="_blank"
                 className={styles.order_id_link}
               >

@@ -92,7 +92,7 @@ function SubscriptionOrderDetails({ id }) {
                 </span>
               </p>
               <a
-                href={`https://solscan.io/tx/${orderDetails.orderID}`}
+                href={`https://solana.fm/tx/${orderDetails.orderID}`}
                 target="_blank"
                 className={styles.order_id_link}
               >

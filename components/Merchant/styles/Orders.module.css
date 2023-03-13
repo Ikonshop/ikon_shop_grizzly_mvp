@@ -545,7 +545,7 @@
   }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 768px) {
   .inputSection {
     position: relative;
     background: #f3f3f3;
@@ -553,6 +553,44 @@
     width: 300px !important;
     height: 50px;
     cursor: pointer;
+  }
+  .order_container {
+    padding: 10px 0px;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .orders_table {
+    margin: 0px 0 0px 0;
+    width: 80%;
+  }
+  .blank {
+    font-size: 1.2rem;
+  }
+  .checkmark {
+    width: 20px;
+    height: 20px;
+  }
+
+  .table_text {
+    font-size: 0.8rem;
+  }
+
+  .orders_container {
+    width: 100%;
+    padding: 40px 0px;
+  }
+
+  .orders_table th,
+  .orders_table td {
+    padding: .5em .5em !important;
+  }
+
+  .searchBarSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    flex-direction: row;
   }
 }
 

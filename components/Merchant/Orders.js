@@ -96,7 +96,6 @@ function Orders() {
           <tbody>
             <tr styles={{ backgroundColor: "red" }}>
               <th>Order</th>
-              <th>Txn</th>
               <th>
                 <TodayOutline
                   color={"#494671"}
@@ -151,28 +150,24 @@ function Orders() {
             {ownerOrders.length > 0
               ? ownerOrders.map((order, index) => (
                   <tr key={index}>
-                    <td data-th="Id">
-                      {order.id.slice(0, 3) + "..." + order.id.slice(-3)}
-                    </td>
-                    <td data-th="Txn">
+                    <td data-th="Id" className={styles.orders_td}>
                       <a
                         className={styles.order_id}
-                        href={`https://solscan.io/tx/${order.orderID}`}
+                        href={
+                          new Date(order.createdAt) > new Date('2023-02-22T00:00:00.000Z')
+                            ? `https://solana.fm/tx/${order.orderID}`
+                            : `https://solana.fm/address/${order.orderID}`
+                        }
                         target="_blank"
                       >
-                        {/* show the first 2 digits and last 2 digits of {order.orderID} */}
-                        {/* {order.orderID.slice(0, 3) +
-                          "..." +
-                          order.orderID.slice(-3)} */}
-
-                        <IoArrowUp style={{ transform: "rotate(45deg)" }} />
+                        {order.id.slice(0, 3) + "..." + order.id.slice(-3)}
                       </a>
                     </td>
                     {/* if order.productid has more than one, then display Multiple Products for a name */}
 
                     {/* show order.createdAt as a date string mm/dd/yy*/}
                     <td data-th="Created At">
-                      {new Date(order.createdAt).toLocaleDateString()}
+                      <p className={styles.table_text}>{new Date(order.createdAt).toLocaleDateString()}</p>
                     </td>
 
                     <td data-th="Price">
@@ -219,9 +214,9 @@ function Orders() {
                     <td data-th="Status">
                       {/* if order.fulfilled is true then display a checkmark, else display a - */}
                       {order.fulfilled ? (
-                        <p style={{ color: "#14D19E" }}>Fulfilled</p>
+                        <p className={styles.table_text} style={{ color: "#14D19E" }}>Fulfilled</p>
                       ) : (
-                        <p style={{ color: "#FF5E4A" }}>Unfulfilled</p>
+                        <p className={styles.table_text} style={{ color: "#FF5E4A" }}>Unfulfilled</p>
                       )}
                     </td>
                     <td data-th="Details">
@@ -411,7 +406,7 @@ function Orders() {
           order.email ? order.email : ""
         },${shippingString},${order.note ? order.note : ""},${new Date(
           order.createdAt
-        ).toLocaleDateString()},https://solscan.io/tx/${order.orderID}`;
+        ).toLocaleDateString()},https://solana.fm/tx/${order.orderID}`;
       });
       const csv = csvContent + header + data.join("");
       const encodedUri = encodeURI(csv);

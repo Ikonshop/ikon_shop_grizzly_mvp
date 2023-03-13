@@ -669,7 +669,7 @@ function UserDashboard() {
         // setCreditScore(creditScoreData.credit_score);
         // setCreditProb(creditScoreData.credit_prob);
       }
-      getAtadiaData();
+      // getAtadiaData();
 
     }
   }, [publicKey, userPublicKey]);

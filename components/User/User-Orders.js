@@ -43,8 +43,8 @@ function UserOrders() {
         <table className={styles.orders_table}>
           <tbody>
             <tr>
-              <th>Order ID</th>
-              <th>To wallet</th>
+              <th>Order</th>
+              <th>Item</th>
               <th>Price</th>
               <th>Date</th>
               <th></th>
@@ -68,15 +68,15 @@ function UserOrders() {
                       }
                     </a>
                   </td>
-                  <td>{orders.productid[0]?.owner.slice(0, 4) + "..." + orders.productid[0]?.owner.slice(-4)}</td>
+                  <td>{orders.productid[0].name}</td>
                   <td>
                     {orders.price} {orders.token}
                   </td>
-                  <td>{new Date(orders.createdAt).toDateString()}</td>
+                  {/* make date string like 1/2/2023 */}
+                  <td>{new Date(orders.createdAt).toLocaleDateString()}</td>
 
                   <td>
-                    {/* <a href={`/order/${orders.id}`}>View Details</a> */}
-                    Detailed View Coming Soon
+                    <a href={`/product/${orders.productid[0].id}`} target='blank'>View</a>
                   </td>
                 </tr>
               ))
@@ -118,7 +118,7 @@ function UserOrders() {
       //                 </p>
       //               </Link>
 
-      //               <Link href={`https://solscan.io/account/${orders.orderID}`}>
+      //               <Link href={`https://solana.fm/account/${orders.orderID}`}>
       //                 <p className={styles.txn_details}>Txn Details</p>
       //               </Link>
       //             </div>
@@ -139,6 +139,7 @@ function UserOrders() {
       setCurrentWallet(owner);
       const getOrders = async () => {
         const orders = await getBuyerOrders(owner);
+        console.log('orders', orders)
         if (orders.length > 0) {
           setOrders(orders);
 
@@ -146,9 +147,11 @@ function UserOrders() {
           setProductIdArray(productIds);
 
           setNoOrders(false);
+          setLoading(false);
 
         } else {
           setNoOrders(true);
+          setLoading(false);
         }
       };
       getOrders();

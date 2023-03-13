@@ -152,7 +152,7 @@ const Overview = (req) => {
                 <td>
                   <a
                     className={styles.order_id}
-                    href={`https://solscan.io/tx/${order.orderID}`}
+                    href={`https://solana.fm/tx/${order.orderID}`}
                     target="_blank"
                   >
                     <p

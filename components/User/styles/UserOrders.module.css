@@ -349,7 +349,7 @@
   }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 768px) {
   .inputSection {
     position: relative;
     background: #f3f3f3;
@@ -358,6 +358,11 @@
     height: 50px;
     cursor: pointer;
   }
+  .order_container {
+    padding: 0px 0px 0 0px;
+    width: 100%;
+    min-height: 100vh !important;
+  } 
 }
 
 @media screen and (max-width: 500px) {

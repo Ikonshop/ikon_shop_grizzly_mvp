@@ -62,7 +62,7 @@ function Orders() {
                   </td>
                   <td data-th="Buyer">
                     {/* new Date in mm/dd/yyyy format */}
-                    <a href={`https://solscan.io/account/${order.buyer}`}>
+                    <a href={`https://solana.fm/account/${order.buyer}`}>
                       {order.buyer.slice(0, 4)}..{order.buyer.slice(-5)}
                     </a>
                   </td>
