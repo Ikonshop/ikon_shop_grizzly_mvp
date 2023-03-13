@@ -18,7 +18,6 @@
 
 .bigLogo {
   width: 140px;
-  margin-left: 2vw;
 }
 
 .smallLogo {
@@ -264,8 +263,6 @@
 @media screen and (max-width: 768px) {
   .bigLogo {
     width: 100px;
-    margin-left: 20px;
-    /* display: none; */
   }
 
   .menu {

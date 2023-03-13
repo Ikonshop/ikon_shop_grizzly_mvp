@@ -11,8 +11,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IoArrowForward } from "react-icons/io5";
 import * as web3 from "@solana/web3.js";
 import Loading from "../Loading";
-import { CreateCollectionFromMagic, CheckForCollectionByOwner  } from "../../lib/api";
-
+import {
+  CreateCollectionFromMagic,
+  CheckForCollectionByOwner,
+} from "../../lib/api";
 
 const Overview = (req) => {
   const publicKey = req.publicKey;
@@ -262,7 +264,7 @@ const Overview = (req) => {
   };
 
   useEffect(() => {
-    if(publicKey){
+    if (publicKey) {
       (async () => {
         if (document.getElementById("salesChart")) {
           document.getElementById("salesChart").remove();
@@ -283,7 +285,7 @@ const Overview = (req) => {
         setLoading(false);
       })();
     }
-    if(!publicKey && userPublicKey.toString()){
+    if (!publicKey && userPublicKey.toString()) {
       (async () => {
         if (document.getElementById("salesChart")) {
           document.getElementById("salesChart").remove();
@@ -294,7 +296,7 @@ const Overview = (req) => {
         const salesChartElement = document.createElement("canvas");
 
         salesChartElement.id = "salesChart";
-        const owner = userPublicKey.toString()
+        const owner = userPublicKey.toString();
         const response = await GetMerchantOverview(owner);
         //sort the response into orders and products
         setOrders(response.orders);
@@ -306,7 +308,7 @@ const Overview = (req) => {
     }
   }, [publicKey, userPublicKey]);
 
-  const checkMagicLogin = async() => {
+  const checkMagicLogin = async () => {
     if (localStorage.getItem("userMagicMetadata")) {
       const userMagicMetadata = JSON.parse(
         localStorage.getItem("userMagicMetadata")
@@ -315,16 +317,16 @@ const Overview = (req) => {
       const magicPubKey = new web3.PublicKey(userMagicMetadata.publicAddress);
       setCurrentWallet(magicPubKey.toString());
       setUserPublicKey(magicPubKey.toString());
-      
+
       const data = await CheckForCollectionByOwner(magicPubKey.toString());
-      console.log('data', data);
-      
+      console.log("data", data);
+
       console.log("userMagicMetadata", userMagicMetadata);
     }
   };
 
   useEffect(() => {
-    if(!publicKey) {
+    if (!publicKey) {
       checkMagicLogin();
     }
     window.addEventListener("magic-logged-in", () => {
@@ -336,11 +338,10 @@ const Overview = (req) => {
       setCurrentWallet(null);
       localStorage.removeItem("userMagicMetadata");
     });
-
   }, []);
 
   useEffect(() => {
-    if(publicKey){
+    if (publicKey) {
       setUserPublicKey(publicKey.toString());
     }
   }, [publicKey]);
@@ -356,11 +357,12 @@ const Overview = (req) => {
       {!loading && userPublicKey && (
         <div className={styles.overview_container}>
           {/* Sales Container  */}
-          <div className={styles.sales_container}>
-            <div className={styles.left_container}>
-              <div className={styles.banner_container}>
-                <div className={styles.banner_left_container}>
-                  <h4>Explore your dashboard</h4>
+          {/* <div className={styles.sales_container}> */}
+          <div className={styles.left_container}>
+            <div className={styles.new_banner_container}>
+              {/* <div className={styles.banner_container}> */}
+              {/* <div className={styles.banner_left_container}> */}
+              {/* <h4>Explore your dashboard</h4>
                   <p>Keep track of your orders, community, and much more</p>
                   <button
                     className={styles.learn_more_button}
@@ -375,68 +377,73 @@ const Overview = (req) => {
                       }}
                       icon={faPlayCircle}
                     />
-                  </button>
+                  </button> */}
 
-                  <div className={styles.merchant_quick_actions}>
-                    <div className={styles.merchant_quick_action_header}>
-                      <h4>Quick Actions</h4>
-                    </div>
-                    <div className={styles.merchant_quick_action_button_container}>
-                      <button
-                        className={styles.quick_action_button}
-                        onClick={() => window.dispatchEvent(new Event("merchant_show_create"))}
-                      >
-                        Create a Product
-                      </button>
-                      <button
-                        className={styles.quick_action_button}
-                        onClick={() => window.dispatchEvent(new Event("merchant_show_settings"))}
-                      >
-                        Store Settings
-                      </button>
-                    </div>
-                  </div>
+              <div className={styles.merchant_quick_actions}>
+                <div className={styles.merchant_quick_action_header}>
+                  <h4>Quick Actions</h4>
                 </div>
+                <div className={styles.merchant_quick_action_button_container}>
+                  <button
+                    className={styles.quick_action_button}
+                    onClick={() =>
+                      window.dispatchEvent(new Event("merchant_show_create"))
+                    }
+                  >
+                    Create a Product
+                  </button>
+                  <button
+                    className={styles.quick_action_button}
+                    onClick={() =>
+                      window.dispatchEvent(new Event("merchant_show_settings"))
+                    }
+                  >
+                    Store Settings
+                  </button>
+                </div>
+                {/* </div> */}
+                {/* </div> */}
+              </div>
 
-                <img
+              {/* <img
                   src="/pc.png"
                   alt="banner"
                   className={styles.banner_image}
-                />
-              </div>
-              <div className={styles.best_selling_container}>
-                <p className={styles.best_selling_header_text}>
-                  Best selling products
-                </p>
-                {renderBestSellingTable()}
-              </div>
+                /> */}
             </div>
-            <div className={styles.right_container}>
-              <div className={styles.overall_sales_container}>
-                <p className={styles.header_text}>Overall Sales</p>
-                {/* <p className={styles.sub_header_text}>${totalSalesForYear}</p> */}
-                {renderSalesChart()}
+            <div className={styles.best_selling_container}>
+              <p className={styles.best_selling_header_text}>
+                Best selling products
+              </p>
+              {renderBestSellingTable()}
+            </div>
+          </div>
+          <div className={styles.right_container}>
+            <div className={styles.overall_sales_container}>
+              <p className={styles.header_text}>Overall Sales</p>
+              {/* <p className={styles.sub_header_text}>${totalSalesForYear}</p> */}
+              {renderSalesChart()}
+            </div>
+            <div className={styles.recent_sales_container}>
+              <div className={styles.recent_sales_header}>
+                <p className={styles.header_text}>Recent Sales</p>
+                <p
+                  className={styles.view_all_button}
+                  onClick={() => {
+                    //dispatch event to view_all_orders
+                    const event = new CustomEvent("view_all_orders");
+                    window.dispatchEvent(event);
+                    console.log("view all orders");
+                  }}
+                >
+                  See All
+                </p>
               </div>
-              <div className={styles.recent_sales_container}>
-                <div className={styles.recent_sales_header}>
-                  <p className={styles.header_text}>Recent Sales</p>
-                  <p
-                    className={styles.view_all_button}
-                    onClick={() => {
-                      //dispatch event to view_all_orders
-                      const event = new CustomEvent("view_all_orders");
-                      window.dispatchEvent(event);
-                      console.log("view all orders");
-                    }}
-                  >
-                    See All
-                  </p>
-                </div>
-                {renderRecentSalesTable()}
-              </div>
+              {renderRecentSalesTable()}
             </div>
           </div>
         </div>
+        // </div>
       )}
     </>
   );
