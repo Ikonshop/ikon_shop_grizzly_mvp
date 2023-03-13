@@ -65,7 +65,7 @@ export default function HeaderComponent() {
   const [showLoginOptions, setShowLoginOptions] = useState(false);
   const [loginOptionSelected, setLoginOptionSelected] = useState("");
   const [userPublicKey, setUserPublicKey] = useState("");
-  const [merchant, setMerchant] = useState(false);
+  const [merchant, setMerchant] = useState(null);
   const [user, setUser] = useState(false);
   const [loading, setLoading] = useState(false);
   // BROWSER WALLET
@@ -372,6 +372,9 @@ export default function HeaderComponent() {
           (collectionData) => {
             if (collectionData) {
               setMerchant(true);
+            }
+            else {
+              setMerchant(false);
             }
           }
         );
