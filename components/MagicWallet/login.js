@@ -5,6 +5,7 @@ import * as web3 from "@solana/web3.js";
 import { CreateCollectionFromMagic, GetCollectionByEmail } from "../../lib/api";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import Loading from "../Loading";
+import { useRouter } from "next/router";
 import { IoPersonCircle, IoLogIn } from "react-icons/io5";
 
 const rpcUrl =
@@ -23,7 +24,7 @@ const LoginMagic = (req) => {
   const [txHash, setTxHash] = useState("");
   const [sendingTransaction, setSendingTransaction] = useState(false);
   const [disabled, setDisabled] = useState(false);
-
+  const router = useRouter();
   const connection = new web3.Connection(rpcUrl);
 
   const login = async (e) => {
@@ -44,6 +45,7 @@ const LoginMagic = (req) => {
     getUsdcBalance(pubFromMetadata);
     window.dispatchEvent(new Event("magic-logged-in"));
     setIsLoggedIn(true);
+    router.push('/dashboard')
   };
 
   const logout = async (e) => {
