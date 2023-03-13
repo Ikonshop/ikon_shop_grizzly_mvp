@@ -67,6 +67,7 @@ export default function PayRequests(publicKey) {
   }, [copied]);
 
   useEffect(() => {
+    if(publicKey){
     async function getData() {
       const payRequests = await getAllPayRequests(publicKey);
       setPayRequests(...[payRequests]);
@@ -74,6 +75,7 @@ export default function PayRequests(publicKey) {
       setTipJarLinks(tipJarLinks);
     }
     getData();
+    }
   }, []);
 
   return (

@@ -49,7 +49,7 @@ function Orders() {
             <th>Date</th>
             <th>Buyer</th>
             <th>Amount</th>
-            <th>Req. Name</th>
+            <th>Item</th>
             <th>Txn</th>
           </tr>
           {ownerOrders.length > 0
@@ -72,11 +72,11 @@ function Orders() {
                     </td>
                   ) : null}
 
-                  <td data-th="Req. Name">
+                  <td data-th="Item">
                     {order.productid.map((item, index) => (
                       <p key={index}>
                         {/* first 7 letters then ... */}
-                        <a href={`/products/${item.id}`}>
+                        <a href={`/product/${item.id}`}>
                           {item.name.slice(0, 7)}..
                         </a>
                       </p>
