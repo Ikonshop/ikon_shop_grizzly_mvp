@@ -749,6 +749,15 @@
   width: 400px;
 }
 
+.total_container {
+  padding: 10px 30px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 20px;
+  height: 400px;
+  width: 400px;
+}
+
 .paylink_head {
   display: flex;
   align-items: center;
@@ -794,6 +803,7 @@
   align-items: flex-start;
   gap: 10px;
 }
+
 
 .royalties_paid img {
   width: 20px;
@@ -1170,6 +1180,9 @@
   .atadian_credit {
     height: fit-content;
   }
+  .total_container {
+    height: fit-content;
+  }
 }
 @media screen and (max-width: 768px) {
   .merchant_dashboard {
@@ -1192,6 +1205,11 @@
   }
 
   .atadian_credit {
+    width: 100%;
+  }
+
+  .total_container {
+    display: flex;
     width: 100%;
   }
 
@@ -1228,54 +1246,24 @@
     gap: 30px;
     width: 100%;
   }
+
+  .royalties_paid {
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .royalties_paid div h3{
+    font-size: 24px;
+    margin-right: 5px;
+  }
 }
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 768px) {
   .total_wrapper {
-    width: 150px;
-    height: 150px;
-    background: #8affcb;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    transform: rotate(108deg);
-    margin-top: 30px;
+    display: none;
   }
-  .total_wrapper .d1 {
-    width: 400px;
-    height: 400px;
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    transform: rotate(0deg);
-  }
-  .total_wrapper .d1 div {
-    width: 400px;
-    height: 400px;
-  }
-
-  .total_wrapper .d2 {
-    width: 400px;
-    height: 400px;
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    transform: rotate(147.6deg);
-  }
-  .total_wrapper .d2 div {
-    width: 400px;
-    height: 400px;
-  }
-}
-
-@media screen and (max-width: 410px) {
-  #full_screen {
-    font-size: 10px !important;
-  }
-}
-
-@media screen and (max-width: 380px) {
-  .atadian_report {
-    flex-direction: column;
+  .mobile_total {
+    background-color: transparent;
   }
 }

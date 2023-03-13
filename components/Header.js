@@ -398,8 +398,11 @@ export default function HeaderComponent() {
   return (
     <div className={styles.navbar}>
       <div onClick={() => router.push("/")} className={styles.logo}>
-        <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
-        {/* <img className={styles.smallLogo} src="/newlogo.png" alt="logo" /> */}
+        {!showMenu ? (
+          <img className={styles.bigLogo} src="/newlogo.png" alt="logo" />
+        ) : (
+          <img className={styles.smallLogo} src="/iklogo.png" alt="logo" />
+        )}
       </div>
       <div className={styles.hamburger} onClick={() => setShowMenu(!showMenu)}>
         <IoMenuOutline size={30} />

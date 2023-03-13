@@ -325,7 +325,7 @@ function UserDashboard() {
       </div>
       {/* </div> */}
 
-      <div className={styles.atadian_credit}>
+      <div className={styles.total_container}>
         <div className={styles.paylink_head}>
           <h4 className={styles.paylink_header}>Total Recieved</h4>
         </div>
@@ -363,11 +363,11 @@ function UserDashboard() {
           <div className={styles.atadian_checks}>
             <div className={styles.payreq_chart_explainer1}>
               <span></span>
-              <p>Paylink</p>
+              <p>Paylink</p> <p className={styles.mobile_total}>${totalLinkSales }</p>
             </div>
             <div className={styles.payreq_chart_explainer2}>
               <span></span>
-              <p>TipJar</p>
+              <p>TipJar</p><p className={styles.mobile_total}>${totalTipJarSales}</p>
             </div>
           </div>
         </div>
