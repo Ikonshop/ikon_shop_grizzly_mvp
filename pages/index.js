@@ -20,7 +20,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import { IoPlayCircle } from "react-icons/io5";
+import { IoPerson, IoPlayCircle, IoStorefront } from "react-icons/io5";
 import AccordionItem from "../components/FAQ";
 
 // Constants
@@ -135,7 +135,10 @@ const App = (props) => {
               <img src="/img1.png" alt="" />
             </div>
             <div className="container_main">
-              <p className="info_small_header">Merchant</p>
+              <div className="info_small_header">
+                <IoStorefront />
+                <span>Merchant</span>
+              </div>
               <h1>
                 Create a Storefront, create physical/digital products and sell.
               </h1>
@@ -160,7 +163,10 @@ const App = (props) => {
 
           <section className="info_section">
             <div className="container_main2">
-              <p className="info_small_header">Consumer</p>
+              <div className="info_small_header2">
+                <IoPerson />
+                <span>Consumer</span>
+              </div>
               <h1>
                 Receive payments, tipjars, and get useful insights on your
                 dashboard.

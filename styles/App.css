@@ -2794,6 +2794,7 @@ button:disabled {
 .info_section {
   display: flex;
   align-items: center;
+  /* overflow: hidden; */
 }
 
 .container_info {
@@ -2825,8 +2826,7 @@ button:disabled {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 60px 0 0 80px;
-  margin-bottom: 40px;
+  padding-left: 80px;
   /* z-index: 1; */
 }
 
@@ -2851,39 +2851,50 @@ button:disabled {
 .container_main {
   position: relative;
   width: 50%;
-  min-height: 100vh;
+  min-height: fit-content;
   background: #1b162f;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding-left: 80px;
-  padding-right: 20px;
+  padding: 150px 20px 150px 80px;
+  margin-bottom: -40px;
 }
 
 .container_main2 {
   position: relative;
   width: 50%;
-  min-height: 100vh;
+  min-height: fit-content;
   background: #fcf4ff;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding-left: 80px;
-  padding-right: 20px;
+  padding: 150px 20px 150px 80px;
 }
 
 .info_small_header {
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #130b46;
+  color: #fec75c;
   font-size: 14px;
-  background: #fec75c;
-  padding: 10px 20px;
-  border-radius: 10px;
   max-width: 200px;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info_small_header2 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #14d19e;
+  font-size: 14px;
+  max-width: 200px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .container_main3 h1 {
@@ -4041,6 +4052,12 @@ button:disabled {
 }
 
 /* mobile devices */
+@media screen and (max-width: 620px) {
+  .container_main,
+  .container_main2 {
+    min-height: 90vh;
+  }
+}
 @media screen and (max-width: 600px) {
   .banner-container {
     background-size: cover;
@@ -4230,6 +4247,13 @@ button:disabled {
     top: 18px;
     left: 0;
     height: 16px;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .container_main,
+  .container_main2 {
+    min-height: 100vh;
   }
 }
 
