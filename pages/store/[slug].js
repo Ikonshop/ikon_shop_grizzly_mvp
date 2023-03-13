@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GetCollectionSubs, fetchProductsByCollectionId } from "../../lib/api";
+import { GetCollectionSubs, fetchProductsByCollectionId,fetchProductsByCollectionSlug } from "../../lib/api";
 import styles from "../../styles/Product.module.css";
 import Product from "../../components/Product/Product";
 import SubscriptionCard from "../../components/SubscriptionCard";
@@ -34,8 +34,8 @@ function Store() {
     setLoading(true);
     async function showProductDetails() {
       const url = window.location.href;
-      const collectionId = url.split("/")[4].split("?")[0];
-      const collection = await fetchProductsByCollectionId(collectionId);
+      const slug = url.split("/")[4].split("?")[0];
+      const collection = await fetchProductsByCollectionSlug(slug);
       setProducts(collection.products);
      
       setBanner(collection.banner);
