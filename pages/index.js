@@ -28,12 +28,7 @@ export const GRAPHCMS_TOKEN = process.env.NEXT_PUBLIC_GRAPHCMS_TOKEN;
 export const WEB3STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN;
 
 const App = (props) => {
-  const keywords = [
-    "Tips",
-    "Pay Links",
-    "Products",
-    "Life"
-  ];
+  const keywords = ["Tips", "Pay Links", "Products", "Life"];
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
@@ -56,8 +51,6 @@ const App = (props) => {
 
   const [active, setActive] = useState(null);
   const [activeWord, setActiveWord] = useState(keywords[0]);
-
-  
 
   const faqs = [
     {
@@ -100,17 +93,19 @@ const App = (props) => {
           <section className="info_section">
             <div className="container_main3">
               <h1>
-                Create, Receive, and Manage : <span className="active_span">{activeWord}</span><br />
+                Create, Receive, and Manage :{" "}
+                <span className="active_span">{activeWord}</span>
+                <br />
                 on <span className="sol_span">Solana</span>
               </h1>
               <p className="info_body3">
-                IkonShop brings the benefits of blockchain technology to
-                your online consumer experience.
+                IkonShop brings the benefits of blockchain technology to your
+                online consumer experience.
               </p>
 
               <br />
               <br />
-              <button 
+              <button
                 className="signup_button"
                 onClick={() => {
                   router.push("/register");
@@ -152,7 +147,7 @@ const App = (props) => {
 
               <br />
               <br />
-              <button 
+              <button
                 className="signup_button"
                 onClick={() => {
                   router.push("/register/merchant");
@@ -179,7 +174,7 @@ const App = (props) => {
               <br />
               <div className="buttons">
                 <a href="https://rapisurv.com">
-                  <button 
+                  <button
                     className="signup_button"
                     onClick={() => {
                       router.push("/register/user");
@@ -268,7 +263,7 @@ const App = (props) => {
             </Container>
           </div> */}
 
-          <div className="why_section">
+          {/* <div className="why_section">
             <div className="ft_bigred" data-aos="fade-down-right"></div>
             <div className="ft_outlineblue" data-aos="fade-left"></div>
             <Container>
@@ -284,11 +279,7 @@ const App = (props) => {
                       </div>
                       <div>
                         <p>Search and Discover</p>
-                        {/* <p>
-                          Search for your favorite products or browse to
-                          discover new favorites! You'll find everything from
-                          IRL products to digital goods & services.
-                        </p> */}
+                       
                       </div>
                     </div>
                     <div
@@ -301,10 +292,7 @@ const App = (props) => {
                       </div>
                       <div>
                         <p>Browse and Choose</p>
-                        {/* <p>
-                          Click on a product/service to view details and a
-                          description on what you'll be receiving.
-                        </p> */}
+                     
                       </div>
                     </div>
 
@@ -318,10 +306,7 @@ const App = (props) => {
                       </div>
                       <div>
                         <p>Multi-Store Cart</p>
-                        {/* <p>
-                          Add the product to your cart. Continue shopping or
-                          View Your Cart to complete your order.
-                        </p> */}
+                      
                       </div>
                     </div>
                     <div
@@ -334,20 +319,16 @@ const App = (props) => {
                       </div>
                       <div>
                         <p>Wallet Based Payments</p>
-                        {/* <p>
-                          Go to the Checkout to easily & securely connect your
-                          wallet & input your shipping information. Pay directly
-                          with your wallet.
-                        </p> */}
+                      
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </Container>
-          </div>
+          </div> */}
 
-          <div className="compatible">
+          {/* <div className="compatible">
             <div className="comp_smallred"></div>
             <div className="comp_outlineblue"></div>
             <Container>
@@ -375,10 +356,10 @@ const App = (props) => {
                 <img src="/shopify.png" />
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="features features_ft2">
-            {/* <div className="ft_bg"></div> */}
+          {/* <div className="features features_ft2">
+          
             <Container>
               <div className="features_container">
                 <div class="avatars">
@@ -408,7 +389,7 @@ const App = (props) => {
                 </a>
               </div>
             </Container>
-          </div>
+          </div> */}
         </div>
       </>
     );

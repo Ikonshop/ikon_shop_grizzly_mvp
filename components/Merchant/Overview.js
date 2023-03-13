@@ -52,7 +52,7 @@ const Overview = (req) => {
                 <img
                   className={styles.best_selling_product_img}
                   src={product.imageUrl}
-                  alt="product image"
+                  alt=""
                 />
               </td>
               <td
@@ -66,17 +66,25 @@ const Overview = (req) => {
                 style={{
                   width: "100px",
                 }}
+                className={styles.sol_usdc_container}
               >
-                {product.price}{" "}
+                <span>{product.price}</span>
                 {product.token === "sol" ? (
                   <img
                     src={solana_logo}
                     alt="solana logo"
                     width={20}
                     height={20}
+                    className={styles.sol_usdc}
                   />
                 ) : (
-                  <img src={usdc_logo} alt="usdc logo" width={20} height={20} />
+                  <img
+                    src={usdc_logo}
+                    alt="usdc logo"
+                    width={20}
+                    height={20}
+                    className={styles.sol_usdc}
+                  />
                 )}
               </td>
               <td
