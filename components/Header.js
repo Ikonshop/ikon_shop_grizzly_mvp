@@ -97,6 +97,27 @@ export default function HeaderComponent() {
   const rpcUrl =
     "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
 
+
+  const handleLogout = async () => {
+    if(publicKey){
+      await disconnect();
+      setUserPublicKey('');
+      setMerchant(false);
+    }
+    if(magicUser){
+      const magic = new Magic("pk_live_CD0FA396D4966FE0", {
+        extensions: {
+          solana: new SolanaExtension({
+          rpcUrl
+          })
+      }});
+      await magic.user.logout();
+      localStorage.setItem("userMagicMetadata", null);
+      window.dispatchEvent(new CustomEvent("magic-logged-out"));
+      setMagicPublicKey('');
+      setMagicUser(false);
+    }
+  }  
   const renderQuickActions = () => {
     return (
       <div className={styles.quickActions}>
@@ -195,7 +216,7 @@ export default function HeaderComponent() {
         {userPublicKey != "" && (
           <div
             onClick={() => (
-              setShowLoginOptions(true), setShowQuickActions(false)
+              handleLogout(), setShowQuickActions(false)
             )}
             className="nav-links"
           >
