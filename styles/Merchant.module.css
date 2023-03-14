@@ -458,9 +458,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
-  padding: 20px 20px 20px 20px;
-  height: 90vh;
-  /* gap: 5vw; */
+  padding: 20px 20px 100px 20px;
+  height: fit-content;
+  gap: 20px;
   width: 100%;
 }
 
@@ -738,7 +738,8 @@
   margin-top: 15px;
 } */
 
-.atadian_credit {
+.atadian_credit,
+.atadian_credit2 {
   padding: 10px 30px;
   background: #fff;
   border: 1px solid #e6e6e6;
@@ -1174,7 +1175,8 @@
 }
 
 @media screen and (max-width: 1102px) {
-  .atadian_credit {
+  .atadian_credit,
+  .atadian_credit2 {
     height: fit-content;
   }
   .total_container {
@@ -1202,17 +1204,25 @@
   }
 
   .atadian_credit {
-    padding: 10px 30px;
+    padding: 20px;
+    justify-content: space-between;
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+  }
+
+  .atadian_credit2 {
+    padding: 10px 20px;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
   }
 
   .total_container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+    padding: 10px 20px;
   }
 
   .ikonshop_users {
@@ -1257,13 +1267,31 @@
     font-size: 24px;
     margin-right: 5px;
   }
-}
 
-@media screen and (max-width: 768px) {
   .total_wrapper {
     display: none;
   }
   .mobile_total {
     background-color: transparent;
+    font-weight: bold;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .atadian_credit {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .atadian_credit2 {
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+
+  .total_container {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

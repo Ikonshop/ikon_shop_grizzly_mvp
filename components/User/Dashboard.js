@@ -363,12 +363,12 @@ function UserDashboard() {
           <div className={styles.atadian_checks}>
             <div className={styles.payreq_chart_explainer1}>
               <span></span>
-              <p>Paylink</p>{" "}
+              <p>Paylink:</p>{" "}
               <p className={styles.mobile_total}>${totalLinkSales}</p>
             </div>
             <div className={styles.payreq_chart_explainer2}>
               <span></span>
-              <p>TipJar</p>
+              <p>TipJar:</p>
               <p className={styles.mobile_total}>${totalTipJarSales}</p>
             </div>
           </div>
@@ -382,7 +382,7 @@ function UserDashboard() {
 
   const renderProductLinks = () => {
     return (
-      <div className={styles.atadian_credit}>
+      <div className={styles.atadian_credit2}>
         <h4 className={styles.paylink_header}>Pay Requests & TipJar</h4>
         <div className={styles.paylink_container}>
           {/* map the first 3 "products" in userLinks */}
@@ -678,7 +678,6 @@ function UserDashboard() {
         // setCreditProb(creditScoreData.credit_prob);
       }
       // getAtadiaData();
-
     }
   }, [publicKey, userPublicKey]);
 
