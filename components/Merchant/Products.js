@@ -35,6 +35,7 @@ function myProducts() {
   const [currentWallet, setCurrentWallet] = useState();
   const router = useRouter();
   const [ownerProducts, setOwnerProducts] = useState([]);
+  const [lowCountProducts, setLowCountProducts] = useState([]);
   const [singleProductOrderView, setSingleProductOrderView] = useState(false);
   const [ordersToView, setOrdersToView] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,6 +108,7 @@ function myProducts() {
               <OptionsOutline />
             </div>
           </div> */}
+          
           <div className={styles.add_btn}>
             <button
               className={styles.primary_cta}
@@ -119,7 +121,7 @@ function myProducts() {
         {/* <div className="products-container"> */}
         <div className={styles.product_list}>
           {ownerProducts.map((product, index) => (
-            <div key={index} className={styles.product_card}>
+            <div key={index} className={styles.product_card} style={{ border: product.quantity < 11 ? '1px solid red' : 'none'}}>
               {/* Product Image */}
               <div className={styles.product_card_content}>
                 {/* <div
@@ -147,17 +149,17 @@ function myProducts() {
                 <div className={styles.product_details}>
                   {/* Product Name and Description */}
                   <div className={styles.product_text}>
-                    <p className={styles.product_title}>{product.name}</p>
+                    <p className={styles.product_title} style={{ color: product.quantity < 11 ? 'red' : 'black'}}>{product.name}</p>
                     {/* Price */}
-                    <div className={styles.product_price}>
+                    <div className={styles.product_price} style={{ color: product.quantity < 11 ? 'red' : 'black'}}>
                       {product.price} {product.token}
                     </div>
                   </div>
 
                   <div className={styles.remaining}>
-                    <p className={styles.product_remaining}>Remaining:</p>
+                    <p className={styles.product_remaining} style={{ color: product.quantity < 11 ? 'red' : 'black'}}>Remaining:</p>
 
-                    <p className={styles.remaining_amount}>
+                    <p className={styles.remaining_amount} style={{ color: product.quantity < 11 ? 'red' : 'black'}}>
                       {product.quantity}
                     </p>
                   </div>
@@ -314,7 +316,19 @@ function myProducts() {
       console.log('data', data);
       const products = await getCollectionOwner(magicPubKey.toString())
       console.log('products', products.products);
-      setOwnerProducts(products.products);
+      var product_data = []
+      var low_count_products = []
+      for (var i = 0; i < products.products.length; i++) {
+        var product = products.products[i]
+        if(product.type === 'product'){
+          product_data.push(product)
+        }
+        if(product.type === 'product' && product.quantity < 5){
+          low_count_products.push(product)
+        }
+      }
+      setOwnerProducts(product_data);
+      setLowCountProducts(low_count_products);
       console.log("userMagicMetadata", userMagicMetadata);
       setLoading(false);
     }
@@ -329,7 +343,19 @@ function myProducts() {
       console.log('data', data);
       const products = await getCollectionOwner(publicKey.toString())
       console.log('products', products.products);
-      setOwnerProducts(products.products);
+      var product_data = []
+      var low_count_products = []
+      for (var i = 0; i < products.products.length; i++) {
+        var product = products.products[i]
+        if(product.type === 'product'){
+          product_data.push(product)
+        }
+        if(product.type === 'product' && product.quantity < 5){
+          low_count_products.push(product)
+        }
+      }
+      setOwnerProducts(product_data);
+      setLowCountProducts(low_count_products);
       setLoading(false);
     }
   };
