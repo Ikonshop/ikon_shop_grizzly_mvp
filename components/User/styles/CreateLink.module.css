@@ -36,6 +36,13 @@
   margin: 0 20px !important;
 }
 
+.paylink_green_text h3,
+.paylink_green_text p,
+.tipjar_pink_text h3,
+.tipjar_pink_text p {
+  font-size: "Manrope" !important;
+}
+
 .paylink_green {
   width: 500px;
   height: 300px;
@@ -590,6 +597,15 @@
     gap: 0;
   }
 
+  .paylink_green {
+    width: 400px;
+    height: 300px;
+  }
+  .tipjar_pink {
+    width: 400px;
+    height: 300px;
+  }
+
   .col_half {
     width: 100%;
   }
@@ -600,15 +616,6 @@
   }
 }
 @media only screen and (max-width: 470px) {
-  .paylink_green {
-    width: 500px;
-    padding-left: 30px;
-  }
-  .tipjar_pink {
-    width: 500px;
-    padding-left: 30px;
-  }
-
   .paylink_green h3 {
     font-size: 24px;
   }
@@ -625,16 +632,21 @@
     max-width: 220px;
   }
 }
-@media only screen and (max-width: 380px) {
+@media only screen and (max-width: 440px) {
   .paylink_green {
-    width: 500px;
-    padding: 0 20px;
+    width: auto;
+    padding: 0 50px 0 30px;
   }
   .tipjar_pink {
-    width: 500px;
-    padding: 0 20px;
+    width: auto;
+    padding: 0 70px 0 30px;
   }
-
+}
+@media only screen and (max-width: 380px) {
+  .tipjar_pink {
+    width: auto;
+    padding: 0 30px 0 30px;
+  }
   .paylink_green h3 {
     font-size: 20px;
   }

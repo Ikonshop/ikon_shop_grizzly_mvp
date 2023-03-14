@@ -67,14 +67,14 @@ export default function PayRequests(publicKey) {
   }, [copied]);
 
   useEffect(() => {
-    if(publicKey){
-    async function getData() {
-      const payRequests = await getAllPayRequests(publicKey);
-      setPayRequests(...[payRequests]);
-      const tipJarLinks = await getAllTipJarLinks(publicKey);
-      setTipJarLinks(tipJarLinks);
-    }
-    getData();
+    if (publicKey) {
+      async function getData() {
+        const payRequests = await getAllPayRequests(publicKey);
+        setPayRequests(...[payRequests]);
+        const tipJarLinks = await getAllTipJarLinks(publicKey);
+        setTipJarLinks(tipJarLinks);
+      }
+      getData();
     }
   }, []);
 
@@ -95,6 +95,7 @@ export default function PayRequests(publicKey) {
                       color: "#fff",
                       fontWeight: "bold",
                       fontSize: "24px",
+                      marginTop: "10px",
                     }}
                     className={styles.link_icon}
                     icon={faLink}
@@ -142,6 +143,7 @@ export default function PayRequests(publicKey) {
                   <FontAwesomeIcon
                     style={{
                       color: "#fff",
+                      marginTop: "10px",
                     }}
                     className={styles.link_icon}
                     icon={faJar}
