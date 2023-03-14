@@ -223,6 +223,10 @@ const Send = (
             const tx = web3.Transaction.from(signedTransaction.rawTransaction);
             const signature = await connection.sendRawTransaction(tx.serialize());
             console.log(`https://explorer.solana.com/tx/${signature}`);
+            setTxHash(signature);
+            setSuccess(true);
+            addOrder(order);
+            setLoading(false);
           }
     
           // ******************USDC TRANSACTION
