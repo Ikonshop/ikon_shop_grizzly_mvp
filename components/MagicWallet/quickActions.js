@@ -11,6 +11,7 @@ import {
 import { encodeURL, createQR } from "@solana/pay";
 import Send from "./send";
 import { getBalance, getUsdcBalance } from "../../hooks/getBalance";
+import axios from "axios";
 
 const QuickActions = (req) => {
   const [solBalance, setSolBalance] = useState(req.magicBalance);
@@ -31,10 +32,39 @@ const QuickActions = (req) => {
   const usdcAddress = new web3.PublicKey(
     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
   );
-  const connection = new web3.Connection(
-    web3.clusterApiUrl("mainnet-beta"),
-    "confirmed"
-  );
+  // HELIUS API FOR BALANCE UPDATES****************
+  const connection = new web3.Connection(`https://rpc.helius.xyz?api-key=${process.env.NEXT_PUBLIC_HELIUS_KEY}`);
+  const url = `https://api.helius.xyz/v0/addresses/${publicKey}/balances?api-key=${process.env.NEXT_PUBLIC_HELIUS_KEY}`
+  const getBalances = async () => {
+    const { data } = await axios.get(url)
+    console.log("balances: ", data)
+    // returns {tokens: Array(1), nativeBalance: 20795000}
+    //turn nativeBalance into SOL and setSolBalance
+    setSolBalance(data.nativeBalance / 1000000000)
+    // if tokens array is empty, setUsdcBalance to 0
+    if (data.tokens.length === 0) {
+      setUsdcBalance(0)
+    }
+    // if tokens array is not empty, find token with mint address of usdcAddress and setUsdcBalance to that token's balance
+    if (data.tokens.length > 0) {
+      const usdcToken = data.tokens.find(token => token.mint === usdcAddress.toString())
+      setUsdcBalance(usdcToken.amount / 1000000)
+    }
+  }
+  (async () => {
+    try{
+      connection.onAccountChange(
+        new web3.PublicKey(publicKey),
+        (updatedAccountInfo, context) =>
+          console.log("Updated account info: ", updatedAccountInfo),
+          getBalances(),
+        "confirmed"
+      );
+    } catch (err) {
+      console.log(err)
+    }
+  })();
+  // *********************************************
   const handleCopy = (e) => {
     console.log(e);
     //copy to clipboard
