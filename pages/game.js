@@ -2,7 +2,10 @@ import Game from '../components/Game/game';
 
 const GamePage = () => {
     return (
-        <Game />
+        // <Game />
+        <>
+            Game goes here.
+        </>
     )
 }
 
