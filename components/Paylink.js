@@ -243,8 +243,10 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   ) : null}
-                  {magicUser && userPublicKey && parseFloat(tipAmount) > 0 && (
+                  {(magicUser && userPublicKey && parseFloat(tipAmount) > 0 && token === 'usdc' ) ||
+                  (magicUser && userPublicKey && parseFloat(tipAmount) > 0 && token === 'sol' ) &&(
                     <Send
+                      id={id}
                       buyer={userPublicKey}
                       recipient={owner}
                       price={tipAmount}
@@ -253,8 +255,10 @@ export default function PaylinkComponent(product) {
                       product={product.product}
                     />
                   )}
-                  {magicUser && userPublicKey && type != "tipjar" && (
+                  {(magicUser && userPublicKey && type != "tipjar" && token === "sol" ) || 
+                  (magicUser && userPublicKey && type != "tipjar" && token === "usdc" )&& (
                     <Send
+                      id={id}
                       buyer={userPublicKey}
                       recipient={owner}
                       price={price}
@@ -262,6 +266,10 @@ export default function PaylinkComponent(product) {
                       elusiv={false}
                       product={product.product}
                     />
+                  )}
+                  {(magicUser && userPublicKey && token != "sol" && token != "usdc" ) || 
+                  (magicUser && userPublicKey && tokenType != "sol" && tokenType != "usdc" ) && (
+                    <p style={{ color:'red', fontSize:'10px'}}>Email Wallet only allows SOL & USDC currently.</p>
                   )}
                   {/* {publicKey && showElusiv && tipAmount && elusivBalance < tipAmount && (
                     <p style={{

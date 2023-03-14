@@ -9,6 +9,7 @@ import styles from "./styles/SendButton.module.css";
 import { Magic } from 'magic-sdk';
 import { SolanaExtension } from '@magic-ext/solana';
 import Notification from "../Notification/Notification";
+import { addOrder } from "../../lib/api";
 
 
 const rpcUrl = "https://solana-mainnet.g.alchemy.com/v2/7eej6h6KykaIT45XrxF6VHqVVBeMQ3o7";
@@ -26,26 +27,138 @@ const STATUS = {
 
 
 
-const Send = (req) => {
+const Send = (
+  req
+) => {
     console.log('sending', req)
+    
     const orderID = useMemo(() => web3.Keypair.generate().publicKey, []);
     const [loading, setLoading] = useState(false);
-    const [userPublicKey, setUserPublicKey] = useState("");
-    const [userEmail, setUserEmail] = useState("");
+    const [orderComplete, setOrderComplete] = useState(false);
+    const [tipJar, setTipJar] = useState(false);
+    const [tipTokenType, setTipTokenType] = useState();
+    const [tipAmount, setTipAmount] = useState();
+    const [item, setItem] = useState(null); // IPFS hash & filename of the purchased item
+    const [infoCaptured, setInfoCaptured] = useState(true); // Whether the info has been grabbed from the user
+    const [shippingCaptured, setShippingCaptured] = useState(true); // Whether the shipping info has been grabbed from the user
+    const [status, setStatus] = useState(STATUS.Initial); // Tracking transaction status
+  
+    const [showEmail, setShowEmail] = useState(false); // Whether to show the email input form
+    const [email, setEmail] = useState(req.email ? req.email : ""); // Email address of the user
+  
+    const [showNote, setShowNote] = useState(false); // Whether to show the note input form
+    const [note, setNote] = useState(req.note ? req.note : null); // Note to the seller
+    const [noteCaptured, setNoteCaptured] = useState(true); // Whether the note has been grabbed from the user
+  
+    const [showTwitter, setShowTwitter] = useState(false); // Whether to show the twitter input form
+    const [twitter, setTwitter] = useState(req.twitter ? req.twitter : ""); // Twitter handle of the user
+    const [twitterCaptured, setTwitterCaptured] = useState(true); // Whether the twitter handle has been grabbed from the user
+  
+    const [showDiscord, setShowDiscord] = useState(false); // Whether to show the discord input form
+    const [discord, setDiscord] = useState(req.discord ? req.discord : ""); // Discord handle of the user
+    const [discordCaptured, setDiscordCaptured] = useState(true); // Whether the discord handle has been grabbed from the user
+  
+    const [showColorOptions, setShowColorOptions] = useState(false); // Whether to show the color options input form
+    const [colorOption, setColorOption] = useState(req.colorOption ? req.colorOption : ""); // Color option of the user
+  
+    const [showShipping, setShowShipping] = useState(false); // Whether to show the shipping input form
+    const [shipping, setShipping] = useState({
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zip: "",
+      international: false,
+    }); // Shipping address of the user
+    const [shippingInfo, setShippingInfo] = useState(""); // Shipping info of the user in string form
+    const [userPublicKey, setUserPublicKey] = useState(req.userPublicKey ? req.userPublicKey : "");
+    const [userEmail, setUserEmail] = useState(req.email ? req.email : "");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [txHash, setTxHash] = useState("");
-    console.log('reqs are: ', req)
+    // Current Date and time
+    const currentDateAndTime = new Date().toLocaleString();
+    const currentDay = new Date().getDate();
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    const currentHour = new Date().getHours();
+    const currentMinute = new Date().getMinutes();
+    const currentSecond = new Date().getSeconds();
+
+    // concat all of date objects into year-month-day hour:minute:second
+    const currentDateTime =
+      currentYear +
+      "-" +
+      currentMonth +
+      "-" +
+      currentDay +
+      " " +
+      currentHour +
+      ":" +
+      currentMinute +
+      ":" +
+      currentSecond;
+    // convert currentDateTime into ISO format
+    const currentDateTimeISO = new Date(currentDateAndTime).toISOString();
+    var tokenType = req.token.toLowerCase();
+    const id = req.id ? req.id : '';
+    const symbol = '';
+    const product = req.product ? req.product : '';
+    const price = req.price;
+    console.log('token type is: ', tokenType)
+    const buyerAddy = req.buyer;
+    const owner = req.recipient ? req.recipient : '';
+    var itemPrice = req.price ? req.price : 0;
+    var token = req.token ? req.token : '';
+    var noteToOwner = req.noteToOwner ? req.noteToOwner : '';
+    var collection = req.collection ? req.collection : '';
+    const order = useMemo(
+      () => ({
+        id: id,
+        buyer: buyerAddy.toString(),
+        orderID: orderID.toString(),
+        // if product is a tip jar set the price to tip amount and set the token type to the tip jar token type
+        product: product,
+        price: tipJar ? tipAmount : price,
+        token: tipJar ? tipTokenType : token,
+        price: price,
+        owner: owner,
+        token: token,
+        symbol: symbol,
+        email: email,
+        twitter: twitter,
+        discord: discord,
+        shippingInfo: shippingInfo,
+        purchaseDate: currentDateTimeISO,
+        note: note != null ? note : noteToOwner,
+        colorOption: colorOption,
+        collection: collection,
+      }),
+      [
+        userPublicKey,
+        orderID,
+        owner,
+        token,
+        id,
+        symbol,
+        product,
+        email,
+        shippingInfo,
+        twitter,
+        discord,
+        note,
+        tipJar,
+        tipTokenType,
+        tipAmount,
+        price,
+        colorOption,
+      ]
+    );
     const createAndSendTransaction = async () => {
         try{
           setLoading(true);
-         
-          var tokenType = req.token.toLowerCase();
-          console.log('token type is: ', tokenType)
-          const buyerAddy = req.buyer;
-          const owner = req.recipient;
-          var itemPrice = req.price;
 
           const sellerAddress = owner;
           const sellerPublicKey = new web3.PublicKey(sellerAddress);
@@ -212,6 +325,7 @@ const Send = (req) => {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             setTxHash(signature);
             setSuccess(true);
+            addOrder(order);
             setLoading(false);
           }
         } catch (error) {
@@ -252,7 +366,7 @@ const Send = (req) => {
               onClick={()=> createAndSendTransaction()}
               disabled={loading}
           >
-              {loading && !success ? (<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>) : "Pay"}
+              {loading && !success ? (<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>) : `Pay ${itemPrice} ${token.toUpperCase()}`}
           </button>
         )}
         {success && (
