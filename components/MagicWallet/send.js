@@ -252,7 +252,7 @@ const Send = (req) => {
               onClick={()=> createAndSendTransaction()}
               disabled={loading}
           >
-              {loading && !success ? (<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>) : "Send"}
+              {loading && !success ? (<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>) : "Pay"}
           </button>
         )}
         {success && (
