@@ -27,6 +27,46 @@ function Orders() {
   const [owner, setOwner] = useState("");
 
   const renderLoading = () => <Loading />;
+  
+  const checkMagicLogin = async () => {
+    if (localStorage.getItem("userMagicMetadata")) {
+      const userMagicMetadata = JSON.parse(
+        localStorage.getItem("userMagicMetadata")
+      );
+      const magicPubKey = new web3.PublicKey(
+        userMagicMetadata.publicAddress
+      );
+      setUserPublicKey(magicPubKey.toString());
+      const owner = magicPubKey.toString();
+      setCurrentWallet(owner);
+      setUserEmail(userMagicMetadata.email);
+      setOwner(magicPubKey.toString());
+      async function sortedOrders() {
+        const payReqOrders = await GetLinkOrdersForOwner(owner);
+        // console.log("pay req", payReqOrders);
+        for (let i = 0; i < payReqOrders.orders.length; i++) {
+          ownerOrders.push(payReqOrders.orders[i]);
+        }
+        const tipOrders = await GetTipOrdersForOwner(owner);
+        // console.log("link orders", tipOrders);
+        for (let i = 0; i < tipOrders.orders.length; i++) {
+          ownerOrders.push(tipOrders.orders[i]);
+          if (i === tipOrders.orders.length - 1) {
+            setLoading(false);
+          }
+        }
+        if (ownerOrders.length > 0) {
+          setNoOrders(false);
+        }
+        // sort ownersOrders by date
+        const sortedOrders = ownerOrders.sort((a, b) => {
+          return b.purchaseDate - a.purchaseDate;
+        });
+        setSortedOrders(sortedOrders);
+      }
+      sortedOrders();
+    }
+  };
 
   const renderDisplay = () => (
     <div className={styles.order_container}>
@@ -157,45 +197,7 @@ function Orders() {
 
   useEffect(() => {
     if (!publicKey) {
-      const checkMagicLogin = async () => {
-        if (localStorage.getItem("userMagicMetadata")) {
-          const userMagicMetadata = JSON.parse(
-            localStorage.getItem("userMagicMetadata")
-          );
-          const magicPubKey = new web3.PublicKey(
-            userMagicMetadata.publicAddress
-          );
-          setUserPublicKey(magicPubKey.toString());
-          const owner = magicPubKey.toString();
-          setCurrentWallet(owner);
-          setUserEmail(userMagicMetadata.email);
-          setOwner(magicPubKey.toString());
-          async function sortedOrders() {
-            const payReqOrders = await GetLinkOrdersForOwner(owner);
-            // console.log("pay req", payReqOrders);
-            for (let i = 0; i < payReqOrders.orders.length; i++) {
-              ownerOrders.push(payReqOrders.orders[i]);
-            }
-            const tipOrders = await GetTipOrdersForOwner(owner);
-            // console.log("link orders", tipOrders);
-            for (let i = 0; i < tipOrders.orders.length; i++) {
-              ownerOrders.push(tipOrders.orders[i]);
-              if (i === tipOrders.orders.length - 1) {
-                setLoading(false);
-              }
-            }
-            if (ownerOrders.length > 0) {
-              setNoOrders(false);
-            }
-            // sort ownersOrders by date
-            const sortedOrders = ownerOrders.sort((a, b) => {
-              return b.purchaseDate - a.purchaseDate;
-            });
-            setSortedOrders(sortedOrders);
-          }
-          sortedOrders();
-        }
-      };
+      
       checkMagicLogin();
       setLoading(false);
     }

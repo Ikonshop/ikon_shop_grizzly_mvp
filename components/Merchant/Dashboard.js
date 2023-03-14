@@ -407,13 +407,13 @@ function MerchantDashboard() {
   return (
     <div className={styles.parent_container}>
       {/* <DashboardHeader /> */}
-      {userPublicKey && !checkingForWallet && loading ? renderLoading() : null}
-      {checkingForWallet && <CheckingForWallet />}
       {showMerchantDash && !checkingForWallet
         ? renderMerchantDashboard()
         : null}
       <div className={styles.main_container}>
-        {!userPublicKey && !checkingForWallet ? renderNotConnected() : null}
+        {userPublicKey && !checkingForWallet && loading ? renderLoading() : null}
+        {checkingForWallet && <CheckingForWallet />}
+        {!userPublicKey && !checkingForWallet && !loading ? renderNotConnected() : null}
         {userPublicKey && !checkingForWallet && loading
           ? renderLoading()
           : null}

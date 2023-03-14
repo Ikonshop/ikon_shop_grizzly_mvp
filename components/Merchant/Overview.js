@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetMerchantOverview } from "../../lib/api";
 import ChartRender from "../Chart.js";
+import { Bar } from "react-chartjs-2";
 import styles from "./styles/Overview.module.css";
 import {
   faPlay,
@@ -200,12 +201,14 @@ const Overview = (req) => {
   };
 
   const renderSalesChart = () => {
+    // order.purchaseDate is a string like 2023-02-27T16:41:46+00:00
     //organize the orders by month and their total sales calculated by totaling all of the order.productid.price for that month
     const januarySales = orders.filter(
       (order) => order.purchaseDate.slice(5, 7) === "01"
     );
     const februarySales = orders.filter(
-      (order) => order.purchaseDate.slice(5, 7) === "02"
+      
+      (order) =>( order.purchaseDate.slice(5, 7) === "02")
     );
     const marchSales = orders.filter(
       (order) => order.purchaseDate.slice(5, 7) === "03"
@@ -239,16 +242,13 @@ const Overview = (req) => {
     );
 
     const calculateTotalSales = (month) => {
-      return month.reduce((acc, order) => {
-        return (
-          acc +
-          order.productid.reduce((acc, product) => {
-            return acc + parseInt(product.price);
-          }, 0)
-        );
-      }, 0);
+      var sum = 0;
+      for (var i = 0; i < month.length; i++) {
+        sum += month[i].productid[0].price;
+      }
+      return sum;
     };
-
+    console.log('feb sales', calculateTotalSales(februarySales))
     const salesByMonth = [
       calculateTotalSales(januarySales),
       calculateTotalSales(februarySales),
@@ -263,10 +263,39 @@ const Overview = (req) => {
       calculateTotalSales(novemberSales),
       calculateTotalSales(decemberSales),
     ];
+    const labels = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+    // create a bar chart with the salesByMonth data
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Sales",
+          data: salesByMonth,
+          backgroundColor: "#FFD700",
+          borderColor: "#FFD700",
+          borderWidth: 1,
+        },
+      ],
+    };
 
     return (
       <>
-        <ChartRender table_data={salesByMonth} />
+        <div className={styles.sales_chart_container}>
+          <div className={styles.sales_chart}>
+            <Bar
+              data={data}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
       </>
     );
   };
