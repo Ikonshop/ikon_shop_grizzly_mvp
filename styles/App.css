@@ -1445,7 +1445,7 @@ p {
   font-weight: bold;
   font-family: "Manrope" !important;
   margin-bottom: 30px;
-  margin-left: -150px;
+  /* margin-left: -150px; */
 }
 
 .signup_input_container {
@@ -4168,6 +4168,13 @@ button:disabled {
   }
   .signup_row1 input {
     max-width: 300px;
+    margin-bottom: 0;
+  }
+
+  .signup_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 }
 @media screen and (max-width: 450px) {
@@ -4187,8 +4194,9 @@ button:disabled {
   }
 
   .signup_row1 {
-    padding-left: 40px;
+    padding-left: 0;
   }
+
   .signup_container2 {
     display: flex;
     flex-direction: column;
@@ -4397,6 +4405,16 @@ button:disabled {
       2px 2px #a08cf6, 3px 3px #a08cf6, 4px 4px #a08cf6;
     font-size: 60px !important;
   }
+  .signup_header_h1 {
+    font-size: 24px;
+    max-width: 600px;
+    color: #130b46;
+    line-height: 38px;
+    font-weight: bold;
+    font-family: "Manrope" !important;
+    margin-bottom: 30px;
+    /* margin-left: -90px; */
+  }
 }
 @media screen and (max-width: 365px) {
   .signup_row1 input {
@@ -4434,6 +4452,22 @@ button:disabled {
   .rc-accordion-toggle {
     padding: 0 15px !important;
   }
+  .signup_header_h1 {
+    font-size: 24px;
+    max-width: 600px;
+    color: #130b46;
+    line-height: 38px;
+    font-weight: bold;
+    font-family: "Manrope" !important;
+    margin-bottom: 30px;
+    /* margin-left: -220px; */
+  }
+}
+
+.signup_form_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 @media screen and (max-width: 280px) {

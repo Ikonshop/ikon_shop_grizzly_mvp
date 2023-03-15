@@ -35,47 +35,52 @@ const App = () => {
     const renderForm = () => {
       return (
         <>
-          <h1 className="signup_header_h1">
-            Sign Up to start selling your products/services.
-          </h1>
-          <form onSubmit={() => setShowRegister(true)}>
-            {/* EMAIL */}
-            <input
-              type="email"
-              onChange={handleChange}
-              name="email"
-              required="required"
-              placeholder="Enter your email"
-            />
-            {/* NAME */}
-            <input
-              type="text"
-              name="name"
-              onChange={handleChange}
-              required="required"
-              placeholder="Enter your name"
-            />
-            {/* STORE NAME */}
-            <input
-              type="text"
-              name="storeName"
-              onChange={handleChange}
-              placeholder="Enter your store name (optional)"
-            />
-            <br />
-            <div>
-              <a href="/terms">
-                <p>
-                  By signing up, you agree to IkonShop's{" "}
-                  <strong>Terms of Use</strong> and{" "}
-                  <strong>Privacy Policy</strong>
-                </p>
-              </a>
-              <button type="submit" className="signup_button">
-                Proceed
-              </button>
-            </div>
-          </form>
+          <div className="signup_form_container">
+            <h1 className="signup_header_h1">
+              Sign Up to start selling your products/services.
+            </h1>
+            <form
+              className="signup_form"
+              onSubmit={() => setShowRegister(true)}
+            >
+              {/* EMAIL */}
+              <input
+                type="email"
+                onChange={handleChange}
+                name="email"
+                required="required"
+                placeholder="Enter your email"
+              />
+              {/* NAME */}
+              <input
+                type="text"
+                name="name"
+                onChange={handleChange}
+                required="required"
+                placeholder="Enter your name"
+              />
+              {/* STORE NAME */}
+              <input
+                type="text"
+                name="storeName"
+                onChange={handleChange}
+                placeholder="Enter your store name (optional)"
+              />
+              <br />
+              <div>
+                <a href="/terms">
+                  <p>
+                    By signing up, you agree to IkonShop's{" "}
+                    <strong>Terms of Use</strong> and{" "}
+                    <strong>Privacy Policy</strong>
+                  </p>
+                </a>
+                <button type="submit" className="signup_button">
+                  Proceed
+                </button>
+              </div>
+            </form>
+          </div>
         </>
       );
     };
@@ -110,7 +115,8 @@ const App = () => {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
+                    // alignItems: "center",
+                    // paddingLeft: "20px",
                   }}
                 >
                   {!showRegister && renderForm()}
@@ -120,16 +126,16 @@ const App = () => {
               <div className="signup_row2">
                 <div className="signup_row2_text">
                   <h4>
-                    "Our goal is to provide users a seamless transition to 
-                    shopping online using blockchain technology, allowing them to
-                    leverage our tools to grow their business or handle day-to-day tasks."
+                    "Our goal is to provide users a seamless transition to
+                    shopping online using blockchain technology, allowing them
+                    to leverage our tools to grow their business or handle
+                    day-to-day tasks."
                   </h4>
                   <div className="name_and_stars">
                     <div>
                       <h5>Mike Kruz</h5>
                       <p>Founder, IkonShop</p>
                     </div>
-                    
                   </div>
                 </div>
                 <img src="/signup.png" />

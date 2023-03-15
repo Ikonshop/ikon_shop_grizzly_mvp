@@ -105,6 +105,7 @@ const App = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    paddingLeft: "20px",
                   }}
                 >
                   {!showRegister && renderForm()}
@@ -113,23 +114,21 @@ const App = () => {
               </div>
 
               <div className="signup_row2">
-              <div className="signup_row2">
                 <div className="signup_row2_text">
                   <h4>
-                    "Our goal is to provide users a seamless transition to 
-                    shopping online using blockchain technology, allowing them to
-                    leverage our tools to grow their business or handle day-to-day tasks."
+                    "Our goal is to provide users a seamless transition to
+                    shopping online using blockchain technology, allowing them
+                    to leverage our tools to grow their business or handle
+                    day-to-day tasks."
                   </h4>
                   <div className="name_and_stars">
                     <div>
                       <h5>Mike Kruz</h5>
                       <p>Founder, IkonShop</p>
                     </div>
-                    
                   </div>
                 </div>
                 <img src="/signup.png" />
-              </div>
               </div>
             </div>
           </div>
