@@ -2345,7 +2345,9 @@ button:disabled {
   background: #8affcb;
   padding: 12px 20px;
   border-radius: 50px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: #130b46;
   overflow: hidden !important;
@@ -2485,9 +2487,9 @@ button:disabled {
 
 .button_drop p {
   display: inline;
-  margin-right: 75px;
   font-size: 16px;
-  margin-left: 10px;
+  text-align: center;
+  margin: auto;
 }
 
 .dropdown_drop {

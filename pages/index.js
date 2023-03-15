@@ -56,23 +56,58 @@ const App = (props) => {
   const faqs = [
     {
       id: 1,
-      header: "What is Lorem Ipsum?",
-      text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+      header: "What is a Web3 ecommerce platform?",
+      text: `A Web3 ecommerce platform is a decentralized, blockchain-based marketplace that leverages smart contracts and cryptocurrency for secure and transparent transactions between buyers and sellers. It combines the benefits of blockchain technology with traditional ecommerce features to create a more equitable and user-driven online shopping experience.`,
     },
     {
       id: 2,
-      header: "Where does it come from?",
-      text: `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. `,
+      header: "How does a Web3 ecommerce platform work?",
+      text: `A Web3 ecommerce platform connects buyers and sellers directly, without intermediaries. It utilizes blockchain technology and smart contracts to manage transactions, ensuring secure and transparent processing. Buyers use cryptocurrency to purchase products, while sellers receive payments in the form of digital assets.`,
     },
+    // {
+    //   id: 3,
+    //   header: " What are the benefits of using a Web3 ecommerce platform?",
+    //   text: `Some benefits of using IkonShop include:
+    //   - Decentralization: Elimination of middlemen reduces fees and potential for fraud.
+    //   - Security: Blockchain technology ensures secure and transparent transactions.
+    //   - Ownership: Users have full control over their data and digital assets.
+    //   - Incentives: Tokenized rewards systems can encourage user engagement and loyalty.
+    //   - Global accessibility: Anyone with an internet connection and a digital wallet can participate.`,
+    // },
     {
       id: 3,
-      header: "Why do we use it?",
-      text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature,`,
+      header: "What cryptocurrencies are supported on the platform?",
+      text: `Supported cryptocurrencies are stablecoin USD Coin (USDC) and SOL. A seller may also implement other forms SPL tokens to accept in their store.`,
     },
+    // {
+    //   id: 5,
+    //   header: "How do I create an account on IkonShop?",
+    //   text: `To create an account, you will need a digital wallet compatible. For now they are: Phantom, OTHER Wallets.... Once installed, follow the platform's onboarding process, which typically involves connecting your wallet and approving any necessary transactions.`,
+    // },
+    // {
+    //   id: 6,
+    //   header: "How do I buy and sell products on the platform?",
+    //   text: `To buy products, browse the platform's listings, select an item, and complete the checkout process using your digital wallet. To sell products, create a new merchant account. Your digital wallet will be connected to manage transactions and receive payments.`,
+    // },
+    // {
+    //   id: 7,
+    //   header: "How are disputes resolved?",
+    //   text: `Dispute resolution methods may vary depending on the type of Tx. IkonShop implements a decentralized dispute resolution systems and a merit based system. We analyze sellers and their sellers metrics.`,
+    // },
     {
       id: 4,
-      header: "Where can I get some?",
-      text: `There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.`,
+      header: "Are there fees associated with using a IkonShop?",
+      text: `Fees may include transaction costs (such as gas fees for Solana). These fees are usually lower than those on traditional ecommerce platforms, as there are no intermediaries.`,
+    },
+    // {
+    //   id: 9,
+    //   header: "How does the platform handle refunds and returns?",
+    //   text: `Refund and return policies vary depending on the seller. Before making a purchase, review the seller's return policy and any specific guidelines.`,
+    // },
+    {
+      id: 5,
+      header: "Is my personal information safe on IkonShop?",
+      text: `IkonShop is built with user privacy in mind. By design, they minimize the amount of personal information required and give users full control over their data. However, we suggest you review our privacy policy and take necessary precautions, such as using a secure digital wallet and keeping your private keys safe.`,
     },
   ];
 

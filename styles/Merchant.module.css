@@ -21,6 +21,7 @@
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .over_dash_container {
@@ -458,9 +459,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
-  padding: 20px 20px 20px 20px;
-  height: 90vh;
-  /* gap: 5vw; */
+  padding: 20px 20px 100px 20px;
+  height: fit-content;
+  gap: 20px;
   width: 100%;
 }
 
@@ -723,13 +724,13 @@
   border-radius: 10px;
   height: 60px;
   padding: 10px 20px;
-  max-width: 60vw;
+  max-width: 400px;
   gap: 20px;
 }
 
 .links > img {
   width: 20px;
-  margin-right: 2px;
+  /* margin-right: 2px; */
 }
 
 /* .links > p {
@@ -738,7 +739,8 @@
   margin-top: 15px;
 } */
 
-.atadian_credit {
+.atadian_credit,
+.atadian_credit2 {
   padding: 10px 30px;
   background: #fff;
   border: 1px solid #e6e6e6;
@@ -1174,7 +1176,8 @@
 }
 
 @media screen and (max-width: 1102px) {
-  .atadian_credit {
+  .atadian_credit,
+  .atadian_credit2 {
     height: fit-content;
   }
   .total_container {
@@ -1202,17 +1205,25 @@
   }
 
   .atadian_credit {
-    padding: 10px 30px;
+    padding: 20px;
+    justify-content: space-between;
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+  }
+
+  .atadian_credit2 {
+    padding: 10px 20px;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
   }
 
   .total_container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+    padding: 10px 20px;
   }
 
   .ikonshop_users {
@@ -1233,7 +1244,8 @@
     flex-wrap: wrap;
   }
   .links {
-    min-width: 100%;
+    width: fit-content;
+    max-width: 100%;
     justify-content: center;
   }
   .link_button {
@@ -1257,13 +1269,40 @@
     font-size: 24px;
     margin-right: 5px;
   }
-}
 
-@media screen and (max-width: 768px) {
   .total_wrapper {
     display: none;
   }
   .mobile_total {
     background-color: transparent;
+    font-weight: bold;
   }
+}
+
+@media screen and (max-width: 500px) {
+  .atadian_credit {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .atadian_credit2 {
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+
+  .total_container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  /* #full_screen {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 50px;
+  } */
 }

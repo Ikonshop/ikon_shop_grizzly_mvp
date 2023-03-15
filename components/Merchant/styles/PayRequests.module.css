@@ -4,6 +4,7 @@
   gap: 20px;
   flex-wrap: wrap;
   width: 100%;
+  margin-bottom: 200px;
 }
 
 .link {
@@ -14,10 +15,10 @@
   margin-top: 2vh;
   background-color: #f2f2f2;
   border-radius: 15px;
-  min-width: 500px;
-  max-width: 40vw;
+  width: fit-content;
   height: 70px;
   padding: 0 20px;
+  gap: 10px;
 }
 
 .payreq_bg {
@@ -51,7 +52,6 @@
 .link_icon {
   width: 20px;
   height: 20px;
-  margin: 10px 10px 10px 10px;
   /* display at end of parent div */
   cursor: pointer;
   color: #676767;
@@ -59,14 +59,21 @@
 
 .payreq_col1 {
   display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .link_name {
   font-size: 16px;
   font-weight: 500;
   color: #130b46;
-  padding: 5px;
-  margin: 10px 40px 10px 40px;
+  width: 200px;
+}
+
+.icon_container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filter {
@@ -96,8 +103,40 @@
   .filter {
     width: 40vw;
   }
+}
 
+@media screen and (max-width: 540px) {
   .link {
-    width: 60vw;
+    min-width: 300px;
+    justify-content: flex-start;
+  }
+
+  .link_name {
+    font-size: 14px !important;
+
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .link {
+    padding: 0 10px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .payreq_col1 {
+    gap: 10px;
+  }
+  .link {
+    gap: 20px;
+  }
+
+  .link_name {
+    width: 100px;
   }
 }
