@@ -20,7 +20,12 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import { IoPerson, IoPlayCircle, IoStorefront } from "react-icons/io5";
+import {
+  IoCheckmarkCircle,
+  IoPerson,
+  IoPlayCircle,
+  IoStorefront,
+} from "react-icons/io5";
 import AccordionItem from "../components/FAQ";
 
 // Constants
@@ -154,23 +159,35 @@ const App = (props) => {
           }}
         >
           <div className="glass_display_stats">
-            <h3>Featured Stores</h3>
+            <div>
+              <div className="info_small_header_featured">
+                <IoStorefront />
+                <span>Stores</span>
+              </div>
+              <h3 className="glass_display_stats_header">Featured Stores</h3>
+              {/* <p>Your favorite projects are on the Ikonshop</p> */}
+            </div>
 
             <div className="glass_display_item">
               <div className="glass_display_item_inner">
                 <img src={glassDisplaySelected[0].pfp} alt="" />
+                <div className="glass_display_item_inner_overlay"></div>
                 <div className="glass_display_item_inner_text">
-                  <h1>{glassDisplaySelected[0].projectName}</h1>
+                  <h3>{glassDisplaySelected[0].projectName}</h3>
+                  <p>Products: {glassDisplaySelected[0].products.length}</p>
+                  {glassDisplaySelected[0].verified ? (
+                    <div>
+                      <IoCheckmarkCircle />
+                      <span>Verified collection</span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
 
-            <div className="glass_display_item_details">
+            {/* <div className="glass_display_item_details">
               <p>Products: {glassDisplaySelected[0].products.length}</p>
-              {glassDisplaySelected[0].verified ? (
-                <span>Verified collection</span>
-              ) : null}
-            </div>
+            </div> */}
           </div>
         </Glider>
       </div>
