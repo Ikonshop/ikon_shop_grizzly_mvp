@@ -64,26 +64,21 @@ const App = (props) => {
       header: "How does a Web3 ecommerce platform work?",
       text: `A Web3 ecommerce platform connects buyers and sellers directly, without intermediaries. It utilizes blockchain technology and smart contracts to manage transactions, ensuring secure and transparent processing. Buyers use cryptocurrency to purchase products, while sellers receive payments in the form of digital assets.`,
     },
-    // {
-    //   id: 3,
-    //   header: " What are the benefits of using a Web3 ecommerce platform?",
-    //   text: `Some benefits of using IkonShop include:
-    //   - Decentralization: Elimination of middlemen reduces fees and potential for fraud.
-    //   - Security: Blockchain technology ensures secure and transparent transactions.
-    //   - Ownership: Users have full control over their data and digital assets.
-    //   - Incentives: Tokenized rewards systems can encourage user engagement and loyalty.
-    //   - Global accessibility: Anyone with an internet connection and a digital wallet can participate.`,
-    // },
     {
       id: 3,
-      header: "What cryptocurrencies are supported on the platform?",
-      text: `Supported cryptocurrencies are stablecoin USD Coin (USDC) and SOL. A seller may also implement other forms SPL tokens to accept in their store.`,
+      header: " What are the benefits of using a Web3 ecommerce platform?",
+      text: "Some benefits of using IkonShop include:  ➊ Decentralization: Elimination of middlemen reduces fees and potential for fraud.  ➋ Security: Blockchain technology ensures secure and transparent transactions.  ➌ Ownership: Users have full control over their data and digital assets.  ➍ Incentives: Tokenized rewards systems can encourage user engagement and loyalty.  ➎ Global accessibility: Anyone with an internet connection and a digital wallet can participate.",
     },
     // {
-    //   id: 5,
-    //   header: "How do I create an account on IkonShop?",
-    //   text: `To create an account, you will need a digital wallet compatible. For now they are: Phantom, OTHER Wallets.... Once installed, follow the platform's onboarding process, which typically involves connecting your wallet and approving any necessary transactions.`,
+    //   id: 4,
+    //   header: "What cryptocurrencies are supported on the platform?",
+    //   text: `Supported cryptocurrencies are stablecoin USD Coin (USDC) and SOL. A seller may also implement other forms SPL tokens to accept in their store.`,
     // },
+    {
+      id: 4,
+      header: "How do I create an account on IkonShop?",
+      text: `To create an account, you will need a digital wallet compatible. For now they are: Phantom, OTHER Wallets.... Once installed, follow the platform's onboarding process, which typically involves connecting your wallet and approving any necessary transactions.`,
+    },
     // {
     //   id: 6,
     //   header: "How do I buy and sell products on the platform?",
@@ -94,21 +89,21 @@ const App = (props) => {
     //   header: "How are disputes resolved?",
     //   text: `Dispute resolution methods may vary depending on the type of Tx. IkonShop implements a decentralized dispute resolution systems and a merit based system. We analyze sellers and their sellers metrics.`,
     // },
-    {
-      id: 4,
-      header: "Are there fees associated with using a IkonShop?",
-      text: `Fees may include transaction costs (such as gas fees for Solana). These fees are usually lower than those on traditional ecommerce platforms, as there are no intermediaries.`,
-    },
+    // {
+    //   id: 4,
+    //   header: "Are there fees associated with using a IkonShop?",
+    //   text: `Fees may include transaction costs (such as gas fees for Solana). These fees are usually lower than those on traditional ecommerce platforms, as there are no intermediaries.`,
+    // },
     // {
     //   id: 9,
     //   header: "How does the platform handle refunds and returns?",
     //   text: `Refund and return policies vary depending on the seller. Before making a purchase, review the seller's return policy and any specific guidelines.`,
     // },
-    {
-      id: 5,
-      header: "Is my personal information safe on IkonShop?",
-      text: `IkonShop is built with user privacy in mind. By design, they minimize the amount of personal information required and give users full control over their data. However, we suggest you review our privacy policy and take necessary precautions, such as using a secure digital wallet and keeping your private keys safe.`,
-    },
+    // {
+    //   id: 5,
+    //   header: "Is my personal information safe on IkonShop?",
+    //   text: `IkonShop is built with user privacy in mind. By design, they minimize the amount of personal information required and give users full control over their data. However, we suggest you review our privacy policy and take necessary precautions, such as using a secure digital wallet and keeping your private keys safe.`,
+    // },
   ];
 
   const handleToggle = (index) => {
