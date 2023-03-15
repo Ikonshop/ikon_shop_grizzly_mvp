@@ -59,6 +59,7 @@
     "react-bootstrap": "^2.6.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-glider": "^4.0.2",
     "react-icons": "^4.7.1",
     "react-ionicons": "^4.2.0",
     "react-is": "^18.2.0",

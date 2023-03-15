@@ -3,7 +3,7 @@ import Link from "next/link";
 import HeadComponent from "../components/Head";
 import Loading from "../components/Loading";
 import styles from "../styles/Store.module.css";
-import { getStoreTeaser } from "../lib/api";
+import { GetGlassWindowDisplay } from "../lib/api";
 import { useRouter } from "next/router";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { LogoTwitter, LogoDiscord } from "react-ionicons";
@@ -14,7 +14,7 @@ import Products from "../components/Merchant/Products";
 // USER COMPONENTS
 import UserOrders from "../components/User/User-Orders";
 import CreateLink from "../components/User/Create-Link";
-// import Glider from "react-glider";
+import Glider from "react-glider";
 // import "glider-js/glider.min.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -36,8 +36,9 @@ const App = (props) => {
   const { publicKey } = useWallet();
   const [accessGranted, setAccessGranted] = useState(true);
   const [activeWallet, setActiveWallet] = useState(null);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const [glassDisplay, setGlassDisplay] = useState([]);
+  const [glassDisplaySelected, setGlassDisplaySelected] = useState([]);
   // MERCHANT DASHBOARD CONSTANTS
   const [showMerchantDash, setShowMerchantDash] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
@@ -81,6 +82,73 @@ const App = (props) => {
     } else {
       setActive(index);
     }
+  };
+
+  const handleRotateGlassDisplay = () => {
+    // the current glassDisplaySelected is the first item in the glassDisplay array
+    // every second we want to rotate the glassDisplaySelected to the next item in the array
+    // if the current glassDisplaySelected is the last item in the array, then we want to rotate the glassDisplaySelected to the first item in the array
+
+    // get the index of the current glassDisplaySelected
+    const currentIndex = glassDisplay.indexOf(glassDisplaySelected[0]);
+
+    // if the current glassDisplaySelected is the last item in the array
+    if (currentIndex === glassDisplay.length - 1) {
+      // set the glassDisplaySelected to the first item in the array
+      setGlassDisplaySelected([glassDisplay[0]]);
+    } else {
+      // set the glassDisplaySelected to the next item in the array
+      setGlassDisplaySelected([glassDisplay[currentIndex + 1]]);
+    }
+  };
+
+  const renderGlassDisplay = () => {
+    // console.log("glassDisplay", glassDisplay);
+    // glassDisplay is an array of objects (each object is a store)
+    // each store object has a projectName, banner
+    // return a carousel of store banners with the projectName displayed under each banner
+    console.log("glassDisplaySelected", glassDisplaySelected)
+    return (
+      <div className="glass_display">
+        <Glider
+          hasArrows
+          hasDots
+          slidesToShow={1}
+          slidesToScroll={1}
+          draggable
+          scrollLock
+          dots=".dots"
+          arrows={{
+            prev: ".glider-prev",
+            next: ".glider-next",
+          }}
+        >
+          <div className="glass_display_stats">
+            <h3>Featured Stores</h3>
+          
+         
+              <div className="glass_display_item">
+                <div className="glass_display_item_inner">
+                  <img src={glassDisplaySelected[0].pfp} alt="" />
+                  <div className="glass_display_item_inner_text">
+                    <h1>{glassDisplaySelected[0].projectName}</h1>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass_display_item_details">
+                <p>Products: {glassDisplaySelected[0].products.length}</p>
+                {glassDisplaySelected[0].verified ? (
+                  <span>Verified collection</span>
+                ) : (
+                  null
+                )}
+              </div>
+          </div>
+          
+        </Glider>
+      </div>
+    );
   };
 
   // CONNECTED DISPLAY
@@ -129,7 +197,7 @@ const App = (props) => {
               </div>
             </div>
           </Container> */}
-
+          
           <section className="info_section section2">
             <div className="container_info_img">
               <img src="/img1.png" alt="" />
@@ -160,7 +228,8 @@ const App = (props) => {
               </button>
             </div>
           </section>
-
+          {renderGlassDisplay()}
+          
           <section className="info_section">
             <div className="container_main2">
               <div className="info_small_header2">
@@ -400,137 +469,6 @@ const App = (props) => {
       </>
     );
   };
-
-  // MERCHANT DASHBOARD
-  const renderMerchantDashboard = () => {
-    return (
-      <>
-        <div className="merchant-dashboard">
-          <button
-            className="close-button"
-            onClick={() => setShowMerchantDash(false)}
-          >
-            X
-          </button>
-          <button className="dash-button" onClick={() => setShowCreate(true)}>
-            Create a Product
-          </button>
-          <button className="dash-button" onClick={() => setShowOrders(true)}>
-            Show Orders
-          </button>
-          <button
-            className="dash-button"
-            onClick={() => setShowInventory(true)}
-          >
-            Show Inventory
-          </button>
-        </div>
-      </>
-    );
-  };
-
-  const renderCreateComponent = () => {
-    return (
-      <>
-        <div className="create-component">
-          <button className="close-button" onClick={() => setShowCreate(false)}>
-            X
-          </button>
-          <Create />
-        </div>
-      </>
-    );
-  };
-
-  const renderOrdersComponent = () => {
-    return (
-      <>
-        <div className="merchant-component">
-          <button className="close-button" onClick={() => setShowOrders(false)}>
-            X
-          </button>
-          <Orders />
-        </div>
-      </>
-    );
-  };
-
-  const renderInventoryComponent = () => {
-    return (
-      <>
-        <div className="merchant-component">
-          <button
-            className="close-button"
-            onClick={() => setShowInventory(false)}
-          >
-            X
-          </button>
-          <Products />
-        </div>
-      </>
-    );
-  };
-
-  // USER DASHBOARD
-  const renderUserDashboard = () => {
-    return (
-      <>
-        <div className="merchant-dashboard">
-          <button
-            className="close-button"
-            onClick={() => setShowUserDash(false)}
-          >
-            X
-          </button>
-          <button
-            className="dash-button"
-            onClick={() => setShowUserOrders(true)}
-          >
-            Show Orders
-          </button>
-          <button
-            className="dash-button"
-            onClick={() => setShowCreateLink(true)}
-          >
-            Create Pay Link
-          </button>
-        </div>
-      </>
-    );
-  };
-
-  const renderUserOrdersComponent = () => {
-    return (
-      <>
-        <div className="merchant-component">
-          <button
-            className="close-button"
-            onClick={() => setShowUserOrders(false)}
-          >
-            X
-          </button>
-          <UserOrders />
-        </div>
-      </>
-    );
-  };
-
-  const renderCreateLinkComponent = () => {
-    return (
-      <>
-        <div className="create-component">
-          <button
-            className="close-button"
-            onClick={() => setShowCreateLink(false)}
-          >
-            X
-          </button>
-          <CreateLink />
-        </div>
-      </>
-    );
-  };
-
   useEffect(() => {
     // every 1s, rotate the set the activeWord to the next word in the keyword array
     // if the activeWord is the last word in the array, set it to the first word
@@ -540,31 +478,38 @@ const App = (props) => {
           ? keywords[0]
           : keywords[keywords.indexOf(activeWord) + 1]
       );
+
     }, 1200);
     return () => clearInterval(interval);
   }, [activeWord]);
+
+  useEffect(() => {
+    //every 1s handleRotateGlassWindow
+    const interval = setInterval(() => {
+      handleRotateGlassDisplay();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [glassDisplaySelected]);
+
+  useEffect(() => {
+    async function getGlassWindowDisplay() {
+      const data = await GetGlassWindowDisplay();
+      console.log('data', data);
+
+      setGlassDisplay(data);
+      setGlassDisplaySelected(data);
+      setLoading(false)
+    }
+    getGlassWindowDisplay();
+  }, []);
 
   return (
     <div className="App">
       <HeadComponent />
       {/* <div className="container"> */}
       <main>
-        {!loading && !showCreate && !showCreateLink
-          ? renderStoreContainer()
-          : null}
-
+        {!loading ? renderStoreContainer() : null}
         {loading ? <Loading /> : null}
-        {showMerchantDash && !showCreate && !showOrders && !showInventory
-          ? renderMerchantDashboard()
-          : null}
-        {showCreate && renderCreateComponent()}
-        {showOrders && renderOrdersComponent()}
-        {showInventory && renderInventoryComponent()}
-        {showUserDash && !showUserOrders && !showCreateLink
-          ? renderUserDashboard()
-          : null}
-        {showUserOrders && renderUserOrdersComponent()}
-        {showCreateLink && renderCreateLinkComponent()}
       </main>
       {/* </div> */}
     </div>

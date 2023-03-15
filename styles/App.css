@@ -4581,3 +4581,126 @@ button:disabled {
   left: -8px;
   background-color: #000;
 }
+/* 
+
+// glassDisplay is an array of objects (each object is a store)
+    // each store object has a projectName, banner
+    // return a carousel of store banners with the projectName displayed under each banner
+    return (
+      <div className="glass_display">
+        <Glider
+          hasArrows
+          hasDots
+          slidesToShow={1}
+          slidesToScroll={1}
+          draggable
+          scrollLock
+          dots=".dots"
+          arrows={{
+            prev: ".glider-prev",
+            next: ".glider-next",
+          }}
+        >
+          {glassDisplay.map((store, index) => {
+            return (
+              <div className="glass_display_item" key={index}>
+                <div className="glass_display_item_inner">
+                  <img src={store.banner} alt="" />
+                  <div className="glass_display_item_inner_text">
+                    <h1>{store.projectName}</h1>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </Glider>
+      </div>
+    ); */
+
+/* //glass display should be a carousel of store banners with the projectName displayed under each banner */
+
+.glass_display {
+  width: 100vw;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  justify-content: space-around;
+}
+
+.glass_display_stats {
+  display: flex;
+  width: 100vw;
+  flex-direction: row;
+  background-color: transparent;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.glass_display_stats > h3 {
+  font-family: 'Manrope', sans-serif;
+  width:30%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.glass_display_item_inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass_display_item_details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  background-color: #000000a6;
+  color: #fff;
+  font-family: 'Manrope', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 1;
+  padding: 10px 10px;
+  border-radius: 30px;
+}
+
+.glass_display_item_details > span {
+  font-size: 10px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: none;
+  text-align: center;
+  z-index: 1;
+  border-radius: 30px;
+  color: rgb(69, 218, 69);
+}
+
+.glass_display_item_inner > img {
+  height: 200px;
+  border-radius: 30px;
+} 
+
+.glass_display_item_inner_text{
+
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  white-space: nowrap;
+  align-items: center;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  z-index: 1;
+  background-color: #000000a6;
+  font-family: 'Manrope', sans-serif;
+  padding: 0 10px;
+  border-radius: 30px;
+}
+
