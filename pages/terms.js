@@ -237,8 +237,8 @@ const App = () => {
               <p className="spl">
                 Our platform and all content and materials contained within it,
                 including trademarks, logos, and other intellectual property,
-                are owned by [Company Name] or its partners. You agree not to
-                use any of our intellectual property without our express written
+                are owned by IkonShop or its partners. You agree not to use any
+                of our intellectual property without our express written
                 consent.
               </p>
             </div>

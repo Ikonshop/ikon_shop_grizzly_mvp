@@ -142,7 +142,7 @@ const App = (props) => {
     // glassDisplay is an array of objects (each object is a store)
     // each store object has a projectName, banner
     // return a carousel of store banners with the projectName displayed under each banner
-    console.log("glassDisplaySelected", glassDisplaySelected)
+    console.log("glassDisplaySelected", glassDisplaySelected);
     return (
       <div className="glass_display">
         <Glider
@@ -160,27 +160,23 @@ const App = (props) => {
         >
           <div className="glass_display_stats">
             <h3>Featured Stores</h3>
-          
-         
-              <div className="glass_display_item">
-                <div className="glass_display_item_inner">
-                  <img src={glassDisplaySelected[0].pfp} alt="" />
-                  <div className="glass_display_item_inner_text">
-                    <h1>{glassDisplaySelected[0].projectName}</h1>
-                  </div>
+
+            <div className="glass_display_item">
+              <div className="glass_display_item_inner">
+                <img src={glassDisplaySelected[0].pfp} alt="" />
+                <div className="glass_display_item_inner_text">
+                  <h1>{glassDisplaySelected[0].projectName}</h1>
                 </div>
               </div>
+            </div>
 
-              <div className="glass_display_item_details">
-                <p>Products: {glassDisplaySelected[0].products.length}</p>
-                {glassDisplaySelected[0].verified ? (
-                  <span>Verified collection</span>
-                ) : (
-                  null
-                )}
-              </div>
+            <div className="glass_display_item_details">
+              <p>Products: {glassDisplaySelected[0].products.length}</p>
+              {glassDisplaySelected[0].verified ? (
+                <span>Verified collection</span>
+              ) : null}
+            </div>
           </div>
-          
         </Glider>
       </div>
     );
@@ -232,7 +228,7 @@ const App = (props) => {
               </div>
             </div>
           </Container> */}
-          
+
           <section className="info_section section2">
             <div className="container_info_img">
               <img src="/img1.png" alt="" />
@@ -264,7 +260,7 @@ const App = (props) => {
             </div>
           </section>
           {renderGlassDisplay()}
-          
+
           <section className="info_section">
             <div className="container_main2">
               <div className="info_small_header2">
@@ -283,17 +279,16 @@ const App = (props) => {
               <br />
               <br />
               <div className="buttons">
-                <a href="https://rapisurv.com">
-                  <button
-                    className="signup_button"
-                    onClick={() => {
-                      router.push("/register/user");
-                    }}
-                  >
-                    Get Started
-                  </button>
-                </a>
-                <button className="signup_button secondary_btn">
+                <button
+                  className="signup_button"
+                  onClick={() => {
+                    router.push("/register/user");
+                  }}
+                >
+                  Get Started
+                </button>
+
+                {/* <button className="signup_button secondary_btn">
                   <IoPlayCircle
                     style={{
                       fontSize: "24px",
@@ -306,7 +301,7 @@ const App = (props) => {
                   >
                     Learn how
                   </p>
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="container_info_img">
@@ -513,7 +508,6 @@ const App = (props) => {
           ? keywords[0]
           : keywords[keywords.indexOf(activeWord) + 1]
       );
-
     }, 1200);
     return () => clearInterval(interval);
   }, [activeWord]);
@@ -529,11 +523,11 @@ const App = (props) => {
   useEffect(() => {
     async function getGlassWindowDisplay() {
       const data = await GetGlassWindowDisplay();
-      console.log('data', data);
+      console.log("data", data);
 
       setGlassDisplay(data);
       setGlassDisplaySelected(data);
-      setLoading(false)
+      setLoading(false);
     }
     getGlassWindowDisplay();
   }, []);
